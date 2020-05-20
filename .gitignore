@@ -1,0 +1,10 @@
+# Ignore the .oh-my-zsh directory. I don't want to track Oh-My-Zsh in my
+# dotfiles, becuase I want to install Oh-My-Zsh *before* deploying my
+# dotfiles. Except, I have some custom aliases and plugins I want to
+# add that are in config/zsh/.oh-my-zsh/custom. Apprarently there is
+# a way to get .gitignore to ignore everything in config/zsh/.oh-my-zsh
+# *except* config/zsh/.oh-my-zsh/custom, but I cannot figure out how. :(*
+config/zsh/.oh-my-zsh/
+
+# We don't need to save shell history
+config/zsh/.zsh_history

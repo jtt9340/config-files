@@ -1,0 +1,33 @@
+" Hybrid line numbers outside of INSERT mode and absolute line numbers inside INSERT numbers
+set number relativenumber
+
+augroup numbertoggle
+	autocmd!
+	autocmd BufEnter,FocusGained,InsertLeave * set relativenumber
+	autocmd BufLeave,FocusLost,InsertEnter * set norelativenumber
+augroup END
+
+" Make backspace work like in most programs (apparently Vim has a feature that tries
+" to prevent you from unintentionally removing indentation exept it makes using backspace
+" really annoying)
+set backspace=indent,eol,start
+
+" UTF-8 encoding
+set encoding=utf-8
+
+" Settings to make Vim respect the XDG base directory specification
+set undodir=$XDG_DATA_HOME/vim/undo
+set directory=$XDG_DATA_HOME/vim/swap
+set backupdir=$XDG_DATA_HOME/vim/backup
+set viewdir=$XDG_DATA_HOME/vim/view
+set viminfo+='1000,n$XDG_DATA_HOME/vim/viminfo
+set runtimepath=$XDG_CONFIG_HOME/vim,$VIMRUNTIME,$XDG_CONFIG_HOME/vim/after
+
+" Enable autocompletion
+set wildmode=longest,list,full
+
+" Syntax highlighting
+syntax on
+
+" Make a tab appear to be 4 spaces wide (https://stackoverflow.com/questions/1878974/redefine-tab-as-4-spaces)
+set tabstop=4 softtabstop=0 noexpandtab shiftwidth=4
