@@ -15,17 +15,18 @@ config:
   link_on_import: link
   longkey: true
 dotfiles:
-  f_vimrc:
-    src: config/vim/vimrc
-    dst: ~/.config/vim/vimrc
+  f_library_preferences_org.vim.Vim_vimrc:
+    src: Library/Preferences/org.vim.Vim/vimrc
+    dst: ~/Library/Preferences/org.vim.Vim/vimrc
   f_zshenv:
     src: zshenv
     dst: ~/.zshenv
-  d_zsh:
-    src: config/zsh
-    dst: ~/.config/zsh
+  d_library_preferences_net.sourceforge.zsh.Zsh:
+    src: Library/Preferences/net.sourceforge.zsh.Zsh
+    dst: ~/Library/Preferences/net.sourceforge.zsh.Zsh
     instignore:
     - "*/.zsh_history"
+    - "*/.zcompdump*"
     - "*/.oh-my-zsh/.editorconfig"
     - "*/.oh-my-zsh/.git/"
     - "*/.oh-my-zsh/.github/"
@@ -44,6 +45,7 @@ dotfiles:
     - "*/.oh-my-zsh/tools/"
     cmpignore:
     - "*/.zsh_history"
+    - "*/.zcompdump*"
     - "*/.oh-my-zsh/.editorconfig"
     - "*/.oh-my-zsh/.git/*"
     - "*/.oh-my-zsh/.github/*"
@@ -62,23 +64,24 @@ dotfiles:
     - "*/.oh-my-zsh/tools/*"
     upignore:
     - "*/.zsh_history"
+    - "*/.zcompdump*"
     actions:
     - install-zsh-z
     - install-you-should-use
     - install-zsh-autosuggestions
     - install-zsh-history-substring-search
     - install-zsh-syntax-highlighting
-  f_config.yaml:
-    src: config/dotdrop/config.yaml
-    dst: ~/.config/dotdrop/config.yaml
+  f_library_preferences_re.deadc0de.dotdrop_config.yaml:
+    src: Library/Preferences/re.deadc0de.dotdrop/config.yaml
+    dst: ~/Library/Preferences/re.deadc0de.dotdrop/config.yaml
   f_library_preferences_org.dystroy.broot_conf.toml:
     src: Library/Preferences/org.dystroy.broot/conf.toml
     dst: ~/Library/Preferences/org.dystroy.broot/conf.toml
 profiles:
   Joeys-MacBook-Pro-2.local:
     dotfiles:
-    - f_vimrc
+    - f_library_preferences_org.vim.Vim_vimrc
     - f_zshenv
-    - d_zsh
-    - f_config.yaml
+    - d_library_preferences_net.sourceforge.zsh.Zsh
+    - f_library_preferences_re.deadc0de.dotdrop_config.yaml
     - f_library_preferences_org.dystroy.broot_conf.toml

@@ -2,10 +2,10 @@
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
-export ZSH="${XDG_CONFIG_HOME:-/Users/josephterrito/.config}/zsh/.oh-my-zsh"
+export ZSH="${XDG_CONFIG_HOME:-/Users/josephterrito/Library/Preferences}/net.sourceforge.zsh.Zsh/.oh-my-zsh"
 
 # Enabling shell completions for Rust
-fpath+=~/.config/zsh/.zfunc
+fpath+=$ZSH/.zfunc
 
 # Enabling shell completions for Homebrew
 if type brew &>/dev/null; then
@@ -98,7 +98,7 @@ source $ZSH/oh-my-zsh.sh
 
 # User configuration
 
-# export MANPATH="/usr/local/man:$MANPATH"
+export MANPATH="/usr/local/gnupg-2.2/share/man:$MANPATH"
 
 # You may need to manually set your language environment
 # export LANG=en_US.UTF-8
