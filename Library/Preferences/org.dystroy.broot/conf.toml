@@ -1,4 +1,4 @@
-
+{%@@ if profile == "macos" @@%}
 # This configuration file lets you define new commands
 # or change the shortcut or triggering keys of built-in verbs.
 # You can change the colors of broot too.
@@ -14,11 +14,48 @@
 #  pattern.
 # Example:
 #  execution = "/usr/bin/nvim {file}"
+{%@@ elif profile == "nixos" @@%}
+###############################################################
+# This configuration file lets you
+# - define new commands
+# - change the shortcut or triggering keys of built-in verbs
+# - change the colors
+# - set default values for flags
+#
+# Configuration documentation is available at
+#     https://dystroy.org/broot
+###############################################################
+
+###############################################################
+# Default flags
+# You can set up flags you want broot to start with by
+# default, for example `default_flags="ihp"` if you usually want
+# to see hidden and gitignored files and the permissions (then
+# if you don't want the hidden files you can launch `br -H`
+#
+default_flags = ""
+
+###############################################################
+# Verbs and shortcuts
+
+# If $EDITOR isn't set on your computer, you should either set it using
+#  something similar to
+#   export EDITOR=/usr/bin/nvim
+#  or just replace it with your editor of choice in the 'execution'
+#  pattern.
+# Example:
+#  execution = "/usr/bin/nvim {file}"
+#
+{%@@ endif @@%}
 [[verbs]]
 invocation = "edit"
 key = "F2"
 shortcut = "e"
+{%@@ if profile == "macos" @@%}
 execution = "/usr/bin/vim {file}"
+{%@@ elif profile == "nixos" @@%}
+execution = "$EDITOR {file}"
+{%@@ endif @@%}
 
 [[verbs]]
 key = "ctrl-c"
@@ -26,9 +63,18 @@ execution = ":quit"
 
 [[verbs]]
 invocation = "create {subpath}"
+{%@@ if profile == "macos" @@%}
 # $EDITOR isn't set :(
 # execution = "$EDITOR {directory}/{subpath}"
 execution = "/usr/bin/vim {directory}/{subpath}"
+{%@@ elif profile == "nixos" @@%}
+execution = "$EDITOR {directory}/{subpath}"
+{%@@ endif @@%}
+
+[[verbs]]
+invocation = "git_diff"
+shortcut = "gd"
+execution = "git diff {file}"
 
 # If $PAGER isn't set on your computer, you should either set it
 #  or just replace it with your viewer of choice in the 'execution'
@@ -43,7 +89,50 @@ execution = "$PAGER {file}"
 [[verbs]]
 name = "bat"
 invocation = "bat"
+{%@@ if profile == "macos" @@%}
 execution = "/Users/josephterrito/.local/share/cargo/bin/bat {file}"
+{%@@ elif profile == "nixos" @@%}
+execution = "/run/current-system/sw/bin/bat {file}"
+{%@@ endif @@%}
+
+{%@@ if profile == "nixos" @@%}
+# If you uncomment the two next shortcuts, the left
+# and right arrow keys will be used to go to the parent
+# directory or to open a selected one:
+#
+# [[verbs]]
+# key = "left"
+# execution = ":parent"
+#
+# [[verbs]]
+# key = "right"
+# execution = ":focus"
+
+# Another popular set of shorctuts for going up and down:
+#
+# [[verbs]]
+# key = "ctrl-j"
+# execution = ":line_down"
+#
+# [[verbs]]
+# key = "ctrl-k"
+# execution = ":line_up"
+#
+# [[verbs]]
+# key = "ctrl-d"
+# execution = ":page_down"
+#
+# [[verbs]]
+# key = "ctrl-u"
+# execution = ":page_up"
+
+# If you develop using git, you might like to often switch
+# to the "git status" filter:
+#
+# [[verbs]]
+# key = "ctrl-g"
+# execution = ":toggle_git_status"
+{%@@ endif @@%}
 
 #####################
 # Skin
@@ -62,7 +151,14 @@ execution = "/Users/josephterrito/.local/share/cargo/bin/bat {file}"
 # exe = "rgb(17, 164, 181) none"
 # link = "Magenta none"
 # pruning = "rgb(89, 73, 101) none Italic"
+{%@@ if profile == "nixos" @@%}
+# perm__ = "gray(5) None"
+# perm_r = "ansi(94) None"
+# perm_w = "ansi(132) None"
+# perm_x = "ansi(65) None"
+{%@@ elif profile == "macos" @@%}
 # permissions = "gray(12) none "
+{%@@ endif @@%}
 # owner = "gray(12) none "
 # group = "gray(12) none "
 # selected_line = "none gray(3)"

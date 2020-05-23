@@ -9,7 +9,7 @@ config:
   backup: true
   banner: false
   create: true
-  dotpath: /Users/josephterrito/config-files
+  dotpath: ~/config-files
   keepdot: false
   link_dotfile_default: link
   link_on_import: link
@@ -18,6 +18,9 @@ dotfiles:
   f_library_preferences_org.vim.Vim_vimrc:
     src: Library/Preferences/org.vim.Vim/vimrc
     dst: ~/Library/Preferences/org.vim.Vim/vimrc
+  f_config_vim_vimrc:
+    src: Library/Preferences/org.vim.Vim/vimrc
+    dst: ~/.config/vim/vimrc
   f_zshenv:
     src: zshenv
     dst: ~/.zshenv
@@ -74,14 +77,39 @@ dotfiles:
   f_library_preferences_re.deadc0de.dotdrop_config.yaml:
     src: Library/Preferences/re.deadc0de.dotdrop/config.yaml
     dst: ~/Library/Preferences/re.deadc0de.dotdrop/config.yaml
+  f_config_dotdrop_config.yaml:
+    src: Library/Preferences/re.deadc0de.dotdrop/config.yaml
+    dst: ~/.config/dotdrop/config.yaml
   f_library_preferences_org.dystroy.broot_conf.toml:
     src: Library/Preferences/org.dystroy.broot/conf.toml
     dst: ~/Library/Preferences/org.dystroy.broot/conf.toml
+  f_config_broot_conf.toml:
+    src: Library/Preferences/org.dystroy.broot/conf.toml
+    dst: ~/.config/broot/conf.toml
+  f_etc_nixos_configuration.nix:
+    src: etc/nixos/configuration.nix
+    dst: /etc/nixos/configuration.nix
+    link: nolink
+  f_etc_nixos_joeyt.nix:
+    src: etc/nixos/joeyt.nix
+    dst: /etc/nixos/joeyt.nix
+    link: nolink
+  f_config_nixpkgs_config.nix:
+    src: config/nixpkgs/config.nix
+    dst: ~/.config/nixpkgs/config.nix
 profiles:
-  Joeys-MacBook-Pro-2.local:
+  macos:
     dotfiles:
     - f_library_preferences_org.vim.Vim_vimrc
     - f_zshenv
     - d_library_preferences_net.sourceforge.zsh.Zsh
     - f_library_preferences_re.deadc0de.dotdrop_config.yaml
     - f_library_preferences_org.dystroy.broot_conf.toml
+  nixos:
+    dotfiles:
+    - f_config_vim_vimrc
+    - f_config_dotdrop_config.yaml
+    - f_config_broot_conf.toml
+    - f_etc_nixos_configuration.nix
+    - f_etc_nixos_joeyt.nix
+    - f_config_nixpkgs_config.nix
