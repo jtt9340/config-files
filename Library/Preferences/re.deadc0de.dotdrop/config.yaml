@@ -97,6 +97,7 @@ dotfiles:
   f_config_nixpkgs_config.nix:
     src: config/nixpkgs/config.nix
     dst: ~/.config/nixpkgs/config.nix
+    link: nolink
 profiles:
   macos:
     dotfiles:
