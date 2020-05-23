@@ -4,3 +4,6 @@ Library/Preferences/net.sourceforge.zsh.Zsh/.zcompdump*
 
 # Or this thing
 **/.DS_Store
+
+# Or the Python virtualenv
+env
