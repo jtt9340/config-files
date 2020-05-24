@@ -1,18 +1,20 @@
 actions:
   pre:
     install-zsh-z: git clone https://github.com/agkozak/zsh-z $ZSH_CUSTOM/plugins/zsh-z
-    install-you-should-use: git clone https://github.com/MichaelAquilina/zsh-you-should-use.git $ZSH_CUSTOM/plugins/you-should-use
-    install-zsh-autosuggestions: git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
-    install-zsh-history-substring-search: git clone https://github.com/zsh-users/zsh-history-substring-search ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-history-substring-search
-    install-zsh-syntax-highlighting: git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+    install-you-should-use: git clone https://github.com/MichaelAquilina/zsh-you-should-use.git
+      $ZSH_CUSTOM/plugins/you-should-use
+    install-zsh-autosuggestions: git clone https://github.com/zsh-users/zsh-autosuggestions
+      ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+    install-zsh-history-substring-search: git clone https://github.com/zsh-users/zsh-history-substring-search
+      ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-history-substring-search
+    install-zsh-syntax-highlighting: git clone https://github.com/zsh-users/zsh-syntax-highlighting.git
+      ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
 config:
   backup: true
   banner: false
   create: true
   dotpath: ~/config-files
   keepdot: false
-  link_dotfile_default: link
-  link_on_import: link
   longkey: true
 dotfiles:
   f_library_preferences_org.vim.Vim_vimrc:
@@ -28,46 +30,46 @@ dotfiles:
     src: Library/Preferences/net.sourceforge.zsh.Zsh
     dst: ~/Library/Preferences/net.sourceforge.zsh.Zsh
     instignore:
-    - "*/.zsh_history"
-    - "*/.zcompdump*"
-    - "*/.oh-my-zsh/.editorconfig"
-    - "*/.oh-my-zsh/.git/"
-    - "*/.oh-my-zsh/.github/"
-    - "*/.oh-my-zsh/.gitignore"
-    - "*/.oh-my-zsh/CODE_OF_CONDUCT.md"
-    - "*/.oh-my-zsh/CONTRIBUTING.md"
-    - "*/.oh-my-zsh/LICENSE.txt"
-    - "*/.oh-my-zsh/README.md"
-    - "*/.oh-my-zsh/cache/"
-    - "*/.oh-my-zsh/lib/"
-    - "*/.oh-my-zsh/log/"
-    - "*/.oh-my-zsh/oh-my-zsh.sh"
-    - "*/.oh-my-zsh/plugins/"
-    - "*/.oh-my-zsh/templates/"
-    - "*/.oh-my-zsh/themes/"
-    - "*/.oh-my-zsh/tools/"
+    - '*/.zsh_history'
+    - '*/.zcompdump*'
+    - '*/.oh-my-zsh/.editorconfig'
+    - '*/.oh-my-zsh/.git/'
+    - '*/.oh-my-zsh/.github/'
+    - '*/.oh-my-zsh/.gitignore'
+    - '*/.oh-my-zsh/CODE_OF_CONDUCT.md'
+    - '*/.oh-my-zsh/CONTRIBUTING.md'
+    - '*/.oh-my-zsh/LICENSE.txt'
+    - '*/.oh-my-zsh/README.md'
+    - '*/.oh-my-zsh/cache/'
+    - '*/.oh-my-zsh/lib/'
+    - '*/.oh-my-zsh/log/'
+    - '*/.oh-my-zsh/oh-my-zsh.sh'
+    - '*/.oh-my-zsh/plugins/'
+    - '*/.oh-my-zsh/templates/'
+    - '*/.oh-my-zsh/themes/'
+    - '*/.oh-my-zsh/tools/'
     cmpignore:
-    - "*/.zsh_history"
-    - "*/.zcompdump*"
-    - "*/.oh-my-zsh/.editorconfig"
-    - "*/.oh-my-zsh/.git/*"
-    - "*/.oh-my-zsh/.github/*"
-    - "*/.oh-my-zsh/.gitignore"
-    - "*/.oh-my-zsh/CODE_OF_CONDUCT.md"
-    - "*/.oh-my-zsh/CONTRIBUTING.md"
-    - "*/.oh-my-zsh/LICENSE.txt"
-    - "*/.oh-my-zsh/README.md"
-    - "*/.oh-my-zsh/cache/*"
-    - "*/.oh-my-zsh/lib/*"
-    - "*/.oh-my-zsh/log/*"
-    - "*/.oh-my-zsh/oh-my-zsh.sh"
-    - "*/.oh-my-zsh/plugins/*"
-    - "*/.oh-my-zsh/templates/*"
-    - "*/.oh-my-zsh/themes/*"
-    - "*/.oh-my-zsh/tools/*"
+    - '*/.zsh_history'
+    - '*/.zcompdump*'
+    - '*/.oh-my-zsh/.editorconfig'
+    - '*/.oh-my-zsh/.git/*'
+    - '*/.oh-my-zsh/.github/*'
+    - '*/.oh-my-zsh/.gitignore'
+    - '*/.oh-my-zsh/CODE_OF_CONDUCT.md'
+    - '*/.oh-my-zsh/CONTRIBUTING.md'
+    - '*/.oh-my-zsh/LICENSE.txt'
+    - '*/.oh-my-zsh/README.md'
+    - '*/.oh-my-zsh/cache/*'
+    - '*/.oh-my-zsh/lib/*'
+    - '*/.oh-my-zsh/log/*'
+    - '*/.oh-my-zsh/oh-my-zsh.sh'
+    - '*/.oh-my-zsh/plugins/*'
+    - '*/.oh-my-zsh/templates/*'
+    - '*/.oh-my-zsh/themes/*'
+    - '*/.oh-my-zsh/tools/*'
     upignore:
-    - "*/.zsh_history"
-    - "*/.zcompdump*"
+    - '*/.zsh_history'
+    - '*/.zcompdump*'
     actions:
     - install-zsh-z
     - install-you-should-use
@@ -90,14 +92,18 @@ dotfiles:
     src: etc/nixos/configuration.nix
     dst: /etc/nixos/configuration.nix
     link: nolink
-  f_etc_nixos_joeyt.nix:
-    src: etc/nixos/joeyt.nix
-    dst: /etc/nixos/joeyt.nix
-    link: nolink
   f_config_nixpkgs_config.nix:
     src: config/nixpkgs/config.nix
     dst: ~/.config/nixpkgs/config.nix
-    link: nolink
+  f_etc_nixos_joeyt_default.nix:
+    src: etc/nixos/joeyt/default.nix
+    dst: /etc/nixos/joeyt/default.nix
+  f_etc_nixos_joeyt_z-lua.nix:
+    src: etc/nixos/joeyt/z-lua.nix
+    dst: /etc/nixos/joeyt/z-lua.nix
+  f_etc_nixos_joeyt_zsh.nix:
+    src: etc/nixos/joeyt/zsh.nix
+    dst: /etc/nixos/joeyt/zsh.nix
 profiles:
   macos:
     dotfiles:
@@ -109,8 +115,10 @@ profiles:
   nixos:
     dotfiles:
     - f_config_vim_vimrc
-    - f_config_dotdrop_config.yaml
     - f_config_broot_conf.toml
+    - f_config_dotdrop_config.yaml
     - f_etc_nixos_configuration.nix
-    - f_etc_nixos_joeyt.nix
     - f_config_nixpkgs_config.nix
+    - f_etc_nixos_joeyt_default.nix
+    - f_etc_nixos_joeyt_z-lua.nix
+    - f_etc_nixos_joeyt_zsh.nix

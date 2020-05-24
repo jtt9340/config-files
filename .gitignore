@@ -7,3 +7,6 @@ Library/Preferences/net.sourceforge.zsh.Zsh/.zcompdump*
 
 # Or the Python virtualenv
 env
+
+# Or this result from NixOS
+result

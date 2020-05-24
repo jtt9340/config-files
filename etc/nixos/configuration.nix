@@ -133,7 +133,7 @@
   };
 
   # Configure the Joey T user a little bit
-  home-manager.users.joeyt = import ./joeyt.nix;
+  home-manager.users.joeyt = import ./joeyt/default.nix;
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
