@@ -16,12 +16,22 @@ set backspace=indent,eol,start
 set encoding=utf-8
 
 " Settings to make Vim respect the XDG base directory specification
+{%@@ if profile == "macos" @@%}
 set undodir=$XDG_DATA_HOME/vim/undo
 set directory=$XDG_DATA_HOME/vim/swap
 set backupdir=$XDG_DATA_HOME/vim/backup
 set viewdir=$XDG_DATA_HOME/vim/view
 set viminfo+='1000,n$XDG_DATA_HOME/vim/viminfo
 set runtimepath=$XDG_CONFIG_HOME/vim,$VIMRUNTIME,$XDG_CONFIG_HOME/vim/after
+{%@@ elif profile == "nixos" @@%}
+set undodir=/home/joeyt/.local/share/vim/undo
+" For some reason Vim doesn't like the following
+set directory=/home/joeyt/.local/share/vim/swap
+set backupdir=/home/joeyt/.local/share/vim/backup
+set viewdir=/home/joeyt/.local/share/vim/view
+set viminfo+='1000,n/home/joeyt/.local/share/vim/viminfo
+set runtimepath=/home/joeyt/.config/vim,$VIMRUNTIME,/home/joeyt/.config/vim/after
+{%@@ endif @@%}
 
 " Enable autocompletion
 set wildmode=longest,list,full
