@@ -90,7 +90,7 @@ execution = "$PAGER {file}"
 name = "bat"
 invocation = "bat"
 {%@@ if profile == "macos" @@%}
-execution = "/Users/josephterrito/.local/share/cargo/bin/bat {file}"
+execution = "/Users/josephterrito/Library/Cargo/bin/bat {file}"
 {%@@ elif profile == "nixos" @@%}
 execution = "/run/current-system/sw/bin/bat {file}"
 {%@@ endif @@%}
