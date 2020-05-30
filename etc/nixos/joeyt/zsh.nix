@@ -36,8 +36,6 @@ fetchFromGitHub:
 
   # Extra commands that should be added to .zshrc
   initExtra = ''
-    RPS1=%(?.%F{green}%?%f.%F{red}%?%f)
-
     # Run ls every time you cd
     function cd {
 	builtin cd "$@" && ls
@@ -102,6 +100,7 @@ fetchFromGitHub:
   shellAliases = {
     rm = "rm -v";
     mv = "mv -v";
+    cp = "cp -v";
     nixconfig = "sudo nixos-rebuild edit";
     diff = "diff --color --report-identical-files";
   };
@@ -111,10 +110,13 @@ fetchFromGitHub:
     # We want to use Oh-My-Zsh
     enable = true;
 
+    # Needed for my custom "joeys-avit" theme below
+    custom = "\$HOME/.config/zsh";
+
     # Which Oh-My-Zsh plugins to use
     plugins = [
       "git" "cargo"
     ];
-    theme = "pygmalion";
+    theme = "joeys-avit";
   };
 }

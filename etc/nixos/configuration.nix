@@ -118,6 +118,10 @@
   # "On 64-bit systems, if you want OpenGL for 32-bit programs such as in Wine, you should also set the following"
   hardware.opengl.driSupport32Bit = true;
 
+  # Automatically keep NixOS up-to-date, but don't automatically reboot
+  system.autoUpgrade.enable = true;
+  system.autoUpgrade.allowReboot = false;
+
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users = {
     # Zsh is the default shell for everyone...mwah ha ha!
