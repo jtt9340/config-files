@@ -22,14 +22,24 @@ fetchFromGitHub:
   # Where the .zsh_history file is saved
   history.path = ".local/share/zsh/zsh_history";
 
-  # Environment variables that will be set for zsh session
-  sessionVariables = {
-    EDITOR = "vim";
+  # Extra commands that should be added to .zshenv
+  envExtra = ''
     # Tell z.lua where to store its data file
-    _ZL_DATA = "\$HOME/.local/share/z.txt";
+    export _ZL_DATA="$HOME/.local/share/z.txt"
     # Tell Vim where its config file is
-    VIMINIT = "source \$HOME/.config/vim/vimrc";
-  };
+    export VIMINIT="source $HOME/.config/vim/vimrc"
+    # Move KDE from ~/.kde to ~/.config/kde
+    export KDEHOME="$HOME/.config/kde"
+    # I'm confused why there's a ~/.gtkrc-2.0 and a ~/config/gtkrc-2.0
+    export GTK2_RC_FILES="$HOME/.config/gtk-2.0/gtkrc"
+    # Move less' history file
+    export LESSKEY="$HOME/.cache/less/lesskey"
+    export LESSHISTFILE="$HOME/.cache/less/history"
+    # Move ~/.compose-cache to ~/.cache/X11/xcompose
+    export XCOMPOSECACHE="$HOME/.cache/X11/xcompose"
+    # Tell Cargo where its files are
+    export CARGO_HOME="$HOME/.local/share/cargo"
+  '';
 
   # Extra local variables defined at the top of .zshrc
   # localVariables = {};
@@ -103,6 +113,8 @@ fetchFromGitHub:
     cp = "cp -v";
     nixconfig = "sudo nixos-rebuild edit";
     diff = "diff --color --report-identical-files";
+    tree = "br --cmd :pt";
+    ldot = "ls -ld .*";
   };
 
   # Configure Oh-My-Zsh
