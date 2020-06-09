@@ -1,15 +1,15 @@
 actions:
   pre:
-    # None of these work becuase $ZSH_CUTOM isn't exported as an environment variable
-    install-zsh-z: git clone https://github.com/agkozak/zsh-z {{@@ env['ZSH'] @@}}/custom/plugins/zsh-z
-    install-you-should-use: git clone https://github.com/MichaelAquilina/zsh-you-should-use.git
-      {{@@ env['ZSH'] @@}}/custom/plugins/you-should-use
-    install-zsh-autosuggestions: git clone https://github.com/zsh-users/zsh-autosuggestions
-      {{@@ env['ZSH'] @@}}/custom/plugins/zsh-autosuggestions
-    install-zsh-history-substring-search: git clone https://github.com/zsh-users/zsh-history-substring-search
-      {{@@ env['ZSH'] @@}}/custom/plugins/zsh-history-substring-search
-    install-zsh-syntax-highlighting: git clone https://github.com/zsh-users/zsh-syntax-highlighting.git
-      {{@@ env['ZSH'] @@}}/custom/plugins/zsh-syntax-highlighting
+    install-zsh-z: test -d {{@@ env['ZSH'] @@}}/custom/plugins/zsh-z ||
+      git clone https://github.com/agkozak/zsh-z {{@@ env['ZSH'] @@}}/custom/plugins/zsh-z
+    install-you-should-use: test -d {{@@ env['ZSH'] @@}}/custom/plugins/you-should-use ||
+      git clone https://github.com/MichaelAquilina/zsh-you-should-use.git {{@@ env['ZSH'] @@}}/custom/plugins/you-should-use
+    install-zsh-autosuggestions: test -d {{@@ env['ZSH'] @@}}/custom/plugins/zsh-autosuggestions ||
+      git clone https://github.com/zsh-users/zsh-autosuggestions {{@@ env['ZSH'] @@}}/custom/plugins/zsh-autosuggestions
+    install-zsh-history-substring-search: test -d {{@@ env['ZSH'] @@}}/custom/plugins/zsh-history-substring-search ||
+      git clone https://github.com/zsh-users/zsh-history-substring-search {{@@ env['ZSH'] @@}}/custom/plugins/zsh-history-substring-search
+    install-zsh-syntax-highlighting: test -d {{@@ env['ZSH'] @@}}/custom/plugins/zsh-syntax-highlighting ||
+      git clone https://github.com/zsh-users/zsh-syntax-highlighting.git {{@@ env['ZSH'] @@}}/custom/plugins/zsh-syntax-highlighting
 config:
   backup: true
   banner: false
@@ -33,44 +33,69 @@ dotfiles:
     instignore:
     - '*/.zsh_history'
     - '*/.zcompdump*'
+    - '*/.zfunc'
     - '*/.oh-my-zsh/.editorconfig'
-    - '*/.oh-my-zsh/.git/'
-    - '*/.oh-my-zsh/.github/'
+    - '*/.oh-my-zsh/.git'
+    - '*/.oh-my-zsh/.github'
     - '*/.oh-my-zsh/.gitignore'
     - '*/.oh-my-zsh/CODE_OF_CONDUCT.md'
     - '*/.oh-my-zsh/CONTRIBUTING.md'
     - '*/.oh-my-zsh/LICENSE.txt'
     - '*/.oh-my-zsh/README.md'
-    - '*/.oh-my-zsh/cache/'
-    - '*/.oh-my-zsh/lib/'
-    - '*/.oh-my-zsh/log/'
+    - '*/.oh-my-zsh/cache'
+    - '*/.oh-my-zsh/lib'
+    - '*/.oh-my-zsh/log'
     - '*/.oh-my-zsh/oh-my-zsh.sh'
-    - '*/.oh-my-zsh/plugins/'
-    - '*/.oh-my-zsh/templates/'
-    - '*/.oh-my-zsh/themes/'
-    - '*/.oh-my-zsh/tools/'
+    - '*/.oh-my-zsh/*/example*'
+    - '*/.oh-my-zsh/plugins'
+    - '*/.oh-my-zsh/custom/plugins'
+    - '*/.oh-my-zsh/templates'
+    - '*/.oh-my-zsh/themes'
+    - '*/.oh-my-zsh/tools'
     cmpignore:
     - '*/.zsh_history'
     - '*/.zcompdump*'
+    - '*/.zfunc'
     - '*/.oh-my-zsh/.editorconfig'
-    - '*/.oh-my-zsh/.git/*'
-    - '*/.oh-my-zsh/.github/*'
+    - '*/.oh-my-zsh/.git'
+    - '*/.oh-my-zsh/.github'
     - '*/.oh-my-zsh/.gitignore'
     - '*/.oh-my-zsh/CODE_OF_CONDUCT.md'
     - '*/.oh-my-zsh/CONTRIBUTING.md'
     - '*/.oh-my-zsh/LICENSE.txt'
     - '*/.oh-my-zsh/README.md'
-    - '*/.oh-my-zsh/cache/*'
-    - '*/.oh-my-zsh/lib/*'
-    - '*/.oh-my-zsh/log/*'
+    - '*/.oh-my-zsh/cache'
+    - '*/.oh-my-zsh/lib'
+    - '*/.oh-my-zsh/log'
     - '*/.oh-my-zsh/oh-my-zsh.sh'
-    - '*/.oh-my-zsh/plugins/*'
-    - '*/.oh-my-zsh/templates/*'
-    - '*/.oh-my-zsh/themes/*'
-    - '*/.oh-my-zsh/tools/*'
+    - '*/.oh-my-zsh/*/example*'
+    - '*/.oh-my-zsh/plugins'
+    - '*/.oh-my-zsh/custom/plugins'
+    - '*/.oh-my-zsh/templates'
+    - '*/.oh-my-zsh/themes'
+    - '*/.oh-my-zsh/tools'
     upignore:
     - '*/.zsh_history'
     - '*/.zcompdump*'
+    - '*/.zfunc'
+    - '*/.oh-my-zsh/.editorconfig'
+    - '*/.oh-my-zsh/.git'
+    - '*/.oh-my-zsh/.github'
+    - '*/.oh-my-zsh/.gitignore'
+    - '*/.oh-my-zsh/CODE_OF_CONDUCT.md'
+    - '*/.oh-my-zsh/CONTRIBUTING.md'
+    - '*/.oh-my-zsh/LICENSE.txt'
+    - '*/.oh-my-zsh/README.md'
+    - '*/.oh-my-zsh/cache'
+    - '*/.oh-my-zsh/lib'
+    - '*/.oh-my-zsh/log'
+    - '*/.oh-my-zsh/oh-my-zsh.sh'
+    - '*/.oh-my-zsh/*/example*'
+    - '*/.oh-my-zsh/plugins'
+    - '*/.oh-my-zsh/custom/plugins'
+    - '*/.oh-my-zsh/templates'
+    - '*/.oh-my-zsh/themes'
+    - '*/.oh-my-zsh/tools'
     actions:
     - install-zsh-z
     - install-you-should-use

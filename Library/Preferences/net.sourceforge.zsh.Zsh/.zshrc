@@ -5,7 +5,7 @@
 export ZSH="${XDG_CONFIG_HOME:-/Users/josephterrito/Library/Preferences}/net.sourceforge.zsh.Zsh/.oh-my-zsh"
 
 # Enabling shell completions for Rust
-fpath+=$ZSH/.zfunc
+fpath+=$ZDOTDIR/.zfunc
 
 # Enabling shell completions for Homebrew
 if type brew &>/dev/null; then
@@ -19,11 +19,8 @@ fi
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
-ZSH_THEME="pygmalion"
-
-# Show the status code of the previously executed command on the right side
-# (green if it is a successful status, red otherwise)
-RPROMPT=%(?.%F{green}%?%f.%F{red}%?%f)
+# ZSH_THEME=pygmalion-virtualenv
+ZSH_THEME=joeys-avit
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -37,7 +34,7 @@ ZSH_THEME_RANDOM_CANDIDATES=(dst kphoen rkj-repos funky duellj crunch pmcgee pyg
 
 # Uncomment the following line to use hyphen-insensitive completion.
 # Case-sensitive completion must be off. _ and - will be interchangeable.
-# HYPHEN_INSENSITIVE="true"
+HYPHEN_INSENSITIVE="true"
 
 # Uncomment the following line to disable bi-weekly auto-update checks.
 # DISABLE_AUTO_UPDATE="true"
@@ -122,12 +119,7 @@ export MANPATH="/usr/local/gnupg-2.2/share/man:$MANPATH"
 alias zshconfig="${EDITOR:-vim} $ZDOTDIR/.zshrc"
 alias ohmyzsh="${EDITOR:-vim} $ZSH"
 
-# Automatically run ls upon running cd
-function cd {
-	builtin cd "$@" && ls
-}
-
-# Use zsh-z as cd; forst attempt o cd to the given directory, if that fails
+# Use zsh-z as cd; first attempt to cd to the given directory, if that fails
 # use zsh-z instead.
 function j {
 	if [[ "$argv[1]" == "-"* ]]; then
@@ -135,6 +127,7 @@ function j {
 	else
 		cd "$@" 2> /dev/null || z "$@"
 	fi
+	command ls -GF
 }
 
 # Spell check
