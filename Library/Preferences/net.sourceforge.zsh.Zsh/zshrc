@@ -1,0 +1,114 @@
+##############################################################################################################################
+# This .zshrc requires Zgen, a program that makes it easy to manage Zsh plugins. If it is not installed, it will be installed.
+##############################################################################################################################
+[[ -d $ZGEN_DIR || -d $ZDOTDIR/zgen || -d $HOME/.zgen ]] || {
+  [[ -z "$ZGEN_DIR" ]] && {
+    [[ -n "$ZDOTDIR" ]] && ZGEN_DIR="${ZDOTDIR}/zgen" || ZGEN_DIR="${HOME}/.zgen"
+  }
+  git clone https://github.com/tarjoilija/zgen.git $ZGEN_DIR 
+}
+
+#############################
+# These are part of Oh-My-Zsh
+#############################
+# Display little red dots while waiting for Zsh to fill in a completion
+COMPLETION_WAITING_DOTS=true
+# This probably does something useful
+DISABLE_UNTRACKED_FILES_DIRTY=true
+# Make hyphens and underscores indistuinguishable completion-wise
+HYPHEN_INSENSITIVE=true
+
+###################################################################################################################
+# Source the init script created by zgen; this loads all the plugins specified in the "if ! zgen saved" block below 
+###################################################################################################################
+source "${ZGEN_DIR}/zgen.zsh"
+
+######################################################################################################################
+# If the init script exists, skip the following. Otherwise, we will download and use the following themes/plugins/etc.
+######################################################################################################################
+if ! zgen saved; then
+  # Per the zgen documentation: "It's a good idea to load the base components before specifying any plugins"
+  zgen oh-my-zsh
+
+  # Specify plugins part of oh-my-zsh
+  zgen oh-my-zsh plugins/git
+  zgen oh-my-zsh plugins/cargo
+
+  # So when you use `zsh-users/zsh-syntax-highlighting` it needs to be
+  # sourced last. I'm not sure if that's the same for fast-syntax-highlighing,
+  # but might as well adhere to that.
+  zgen loadall <<EOPLUGINS
+    MichaelAquilina/zsh-you-should-use
+    agkozak/zsh-z
+    zsh-users/zsh-autosuggestions
+    zsh-users/zsh-history-substring-search
+    zdharma/fast-syntax-highlighting
+EOPLUGINS
+
+  # Set the theme
+  # TODO: figure out why this theme only sort-of works when using 'zgen load', for now I am resorting back to
+  # normal source
+  # By 'sort-of works' I mean the variables declared with 'typeset +H' at the top of the joeys-avit file aren't
+  # acutally present 🤔 
+  # zgen load $ZDOTDIR/joeys-avit
+
+  # Generate the init script from plugins above
+  zgen save
+fi
+
+# See above TODO
+source $ZDOTDIR/joeys-avit.zsh-theme
+
+############################
+# Enabling shell completions
+############################
+fpath+=$ZDOTDIR/.zfunc
+
+# Enabling shell completions for Homebrew
+if type brew &>/dev/null; then
+  FPATH=$(brew --prefix)/share/zsh/site-functions:$FPATH
+
+  autoload -Uz compinit
+  compinit
+fi
+
+#############
+# Spell check
+#############
+setopt correct
+export SPROMPT="Correct $fg[red]%R$reset_color to $fg[green]%r$reset_color?
+	[Yes, No, Abort, Edit] "
+
+#########
+# Aliases
+#########
+alias zshconfig="${EDITOR:-vim} $ZDOTDIR/.zshrc"
+alias vimconfig="${EDITOR:-vim} $XDG_CONFIG_HOME/org.vim.Vim/vimrc"
+alias ldot='ls -d .*'
+
+# Make some commands more verbose
+alias rm='rm -v'
+alias mv='mv -v'
+alias diff='diff -s'
+
+###########
+# Functions
+###########
+# User zsh-z as cd; first attempt to cd to the given directory, if that fails
+# use zsh-z instead
+function j {
+  if [[ "$argv[1]" == "-"* ]]; then
+    z "$@"
+  else
+    cd "$@" 2> /dev/null || z "$@"
+  fi
+  command ls -GF
+}
+
+###############
+# Miscellaneous
+###############
+export MANPATH="/usr/local/gnupg-2.2/share/man:$MANPATH"
+
+# Broot
+source /Users/josephterrito/Library/Preferences/org.dystroy.broot/launcher/bash/br

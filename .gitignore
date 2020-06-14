@@ -1,12 +1,3 @@
-# We don't need to save shell history or completions
-Library/Preferences/net.sourceforge.zsh.Zsh/.zsh_history
-Library/Preferences/net.sourceforge.zsh.Zsh/.zcompdump*
-
-# Or this thing
 **/.DS_Store
-
-# Or the Python virtualenv
 env
-
-# Or this result from NixOS
 result
