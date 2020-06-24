@@ -84,7 +84,13 @@ export SPROMPT="Correct $fg[red]%R$reset_color to $fg[green]%r$reset_color?
 #########
 alias zshconfig="${EDITOR:-vim} $ZDOTDIR/.zshrc"
 alias vimconfig="${EDITOR:-vim} $XDG_CONFIG_HOME/org.vim.Vim/vimrc"
+alias lsdl='lsd -lF --date relative'
+alias lsda='lsd -aF'
+alias lsdla='lsd -laF --date relative'
 alias ldot='ls -d .*'
+alias lab='ls -AbFG'
+alias tree='br --cmd :pt'
+alias ltree='lsd --tree'
 
 # Make some commands more verbose
 alias rm='rm -v'

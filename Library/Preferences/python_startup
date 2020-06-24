@@ -1,0 +1,14 @@
+import atexit, os, readline
+
+histfile = os.path.join(os.environ['XDG_DATA_HOME'], 'python_history')
+try:
+    # The default history mechanism will only run if readline.read_history_file
+    # has not been called.
+    readline.read_history_file(histfile)
+    # Default history len is -1 (infinite), which may grow unrule
+    readline.set_history_length(1000)
+except FileNotFoundError:
+    pass
+
+atexit.register(readline.write_history_file, histfile)
+

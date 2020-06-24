@@ -11,6 +11,9 @@
 # Reconfiguring programs to store their configuation/data files somewhere besides the home directory
 ####################################################################################################
 
+# Moving the file that saves history from interactive python sessions
+export PYTHONSTARTUP="$XDG_CONFIG_HOME"/python_startup
+
 # Setting PATH for Rust and telling Cargo and rustup where their dotfiles are
 export RUSTUP_HOME="$XDG_DATA_HOME/Rustup"
 export CARGO_HOME="$XDG_DATA_HOME/Cargo"
@@ -38,6 +41,7 @@ export GEM_SPEC_CACHE="$XDG_CACHE_HOME"/Gem
 
 # npm
 export NPM_CONFIG_USERCONFIG=$XDG_CONFIG_HOME/com.npmjs.Npm/npmrc
+export NODE_REPL_HISTORY="$XDG_DATA_HOME"/node_repl_history
 
 # Store less' files somewhere besides the home directory
 export LESSKEY="$XDG_CONFIG_HOME"/Less/lesskey
