@@ -24,6 +24,8 @@ fetchFromGitHub:
 
   # Extra commands that should be added to .zshenv
   envExtra = ''
+    export EDITOR=micro
+  
     # Tell z.lua where to store its data file
     export _ZL_DATA="$HOME/.local/share/z.txt"
     # Tell Vim where its config file is
@@ -46,18 +48,14 @@ fetchFromGitHub:
 
   # Extra commands that should be added to .zshrc
   initExtra = ''
-    # Run ls every time you cd
-    function cd {
-	builtin cd "$@" && ls
-    }
-
     # This function will first try cd, and if cd fails then it will invoke z.lua
     function j {
-	if [[ "$argv[1]" == "-"* ]]; then
-	    x "$@"
-	else
-	    cd "$@" 2> /dev/null || z "$@"
-	fi
+      if [[ "$argv[1]" == "-"* ]]; then
+        x "$@"
+      else
+        cd "$@" 2> /dev/null || z "$@"
+      fi
+      command ls -F --color=tty
     }
 
     source /home/joeyt/.local/share/broot/launcher/bash/1

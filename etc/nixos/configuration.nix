@@ -4,6 +4,13 @@
 
 { config, pkgs, ... }:
 
+let
+  pypi2nix = import (pkgs.fetchgit {
+    url = "https://github.com/nix-community/pypi2nix";
+    rev = "v2.0.4";
+    sha256 = "023b5l2blbzafh9327l5j9b5n05wqxqc75mv8h94927sd5rr9ggr";
+  }) {};
+in
 {
   imports =
     [ # Include the results of the hardware scan.
@@ -63,10 +70,11 @@
     curl wget firefox
 
     # Programmer's toolkit
-    vim zsh gcc git
+    vim micro zsh gcc git
 
     # Nice-to-haves
-    gparted zip unzip htop which xclip file kate bat fd
+    gparted zip unzip htop which xclip file kate bat fd nix-prefetch-git trash-cli
+    pypi2nix
   ];
 
   # Some programs need SUID wrappers, can be configured further or are

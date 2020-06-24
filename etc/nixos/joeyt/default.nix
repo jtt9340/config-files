@@ -17,7 +17,10 @@
   };
 
   home.packages = with pkgs; [
-    broot thunderbird bitwarden lua slack discord
+    # CLI tools
+    broot lua elvish 
+    # GUI apps
+    thunderbird bitwarden slack discord
   ];
 
   # How many times do I have to say that I am okay with non-free software?! I guess when
