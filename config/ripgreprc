@@ -1,0 +1,8 @@
+-n
+--colors=match:fg:yellow
+--glob=!bzr/*
+--glob=!CVS/*
+--glob=!git/*
+--glob=!hg/*
+--glob=!svn/*
+--smart-case

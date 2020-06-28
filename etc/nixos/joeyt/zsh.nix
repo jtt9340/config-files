@@ -28,6 +28,9 @@ fetchFromGitHub:
   
     # Tell z.lua where to store its data file
     export _ZL_DATA="$HOME/.local/share/z.txt"
+    # Tell z.lua which command-line fuzzy finder to use
+    export _ZL_FZF=sk
+    export _ZL_FZF_FLAG='--no-sort'
     # Tell Vim where its config file is
     export VIMINIT="source $HOME/.config/vim/vimrc"
     # Move KDE from ~/.kde to ~/.config/kde
@@ -41,6 +44,8 @@ fetchFromGitHub:
     export XCOMPOSECACHE="$HOME/.cache/X11/xcompose"
     # Tell Cargo where its files are
     export CARGO_HOME="$HOME/.local/share/cargo"
+    # This is where ripgrep's configuration file is
+    export RIPGREP_CONFIG_PATH="$HOME/.config/ripgreprc"
   '';
 
   # Extra local variables defined at the top of .zshrc
@@ -51,13 +56,28 @@ fetchFromGitHub:
     # This function will first try cd, and if cd fails then it will invoke z.lua
     function j {
       if [[ "$argv[1]" == "-"* ]]; then
-        x "$@"
+        z "$@"
       else
         cd "$@" 2> /dev/null || z "$@"
       fi
       command ls -F --color=tty
     }
 
+    # A function that allows ripgrep-all (rga) with skim (sk)
+    function rga-sk {
+      RG_PREFIX='rga --files-with-matches' 
+    	local file
+    	file="$(
+        SKIM_DEFAULT_COMMAND="$RG_PREFIX '$1'" \
+          sk --preview="[[ ! -z {} ]] && rga --pretty --context 5 {q} {}" \
+            -q "$1" \
+            --bind "change:reload:$RG_PREFIX {q}" \
+            --preview-window="70%:wrap"
+      )" &&
+      echo "opening $file" &&
+      xdg-open "$file"
+    }
+    
     source /home/joeyt/.local/share/broot/launcher/bash/1
   '';
 
@@ -106,13 +126,25 @@ fetchFromGitHub:
   ];
 
   shellAliases = {
+    diff = "diff --color --report-identical-files";
+
+    # ls aliases
+    lsd = "lsd --icon never";
+    lsdl = "lsd -lF --date relative";
+    lsda = "lsd -aF";
+    lsdla = "lsd -laF --date relative";
+    tree = "br --cmd :pt";
+    ltree = "lsd --tree";
+    ldot = "ls -ld .*";
+
+    # For quickly editing configuration files
+    nixconfig = "sudo nixos-rebuild edit";
+    brootconfig = "${EDITOR:-vim} $HOME/.config/broot/conf.toml";
+
+    # Make some commands more verbose
     rm = "rm -v";
     mv = "mv -v";
     cp = "cp -v";
-    nixconfig = "sudo nixos-rebuild edit";
-    diff = "diff --color --report-identical-files";
-    tree = "br --cmd :pt";
-    ldot = "ls -ld .*";
   };
 
   # Configure Oh-My-Zsh

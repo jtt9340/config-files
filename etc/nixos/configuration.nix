@@ -66,15 +66,29 @@ in
   # These are packages that are automatically available to all users, and are
   # automatically updated every time you rebuild the system configuration
   environment.systemPackages = with pkgs; [
-    # Networking
-    curl wget firefox
-
-    # Programmer's toolkit
-    vim micro zsh gcc git
-
-    # Nice-to-haves
-    gparted zip unzip htop which xclip file kate bat fd nix-prefetch-git trash-cli
+    bat
+    curl
+    fd
+    file
+    firefox
+    gcc
+    git
+    gparted
+    htop
+    kate
+    micro
+    nix-prefetch-git
+    nix-prefetch-github
     pypi2nix
+    ripgrep-all
+    trash-cli
+    unzip
+    vim
+    wget
+    which
+    xclip
+    zip
+    zsh
   ];
 
   # Some programs need SUID wrappers, can be configured further or are

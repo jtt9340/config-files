@@ -15,9 +15,14 @@ dotfiles:
   f_zshenv:
     src: zshenv
     dst: ~/.zshenv
+  f_library_preferences_re.deadc0de.dotdrop_config.yaml:
+    src: Library/Preferences/re.deadc0de.dotdrop/config.yaml
+    dst: ~/Library/Preferences/re.deadc0de.dotdrop/config.yaml
+    link: link
   f_config_dotdrop_config.yaml:
     src: Library/Preferences/re.deadc0de.dotdrop/config.yaml
     dst: ~/.config/dotdrop/config.yaml
+    link: link
   f_library_preferences_org.dystroy.broot_conf.toml:
     src: Library/Preferences/org.dystroy.broot/conf.toml
     dst: ~/Library/Preferences/org.dystroy.broot/conf.toml
@@ -46,9 +51,9 @@ dotfiles:
   f_library_preferences_net.sourceforge.zsh.zsh_joeys-avit.zsh-theme:
     src: Library/Preferences/net.sourceforge.zsh.Zsh/joeys-avit.zsh-theme
     dst: ~/Library/Preferences/net.sourceforge.zsh.Zsh/joeys-avit.zsh-theme
-  f_library_preferences_re.deadc0de.dotdrop_config.yaml:
-    src: Library/Preferences/re.deadc0de.dotdrop/config.yaml
-    dst: ~/Library/Preferences/re.deadc0de.dotdrop/config.yaml
+  f_config_zsh_themes_joeys-avit.zsh-theme:
+    src: Library/Preferences/net.sourceforge.zsh.Zsh/joeys-avit.zsh-theme
+    dst: ~/.config/zsh/themes/joeys-avit.zsh-theme
   f_library_preferences_net.sourceforge.zsh.zsh_zprofile:
     src: Library/Preferences/net.sourceforge.zsh.Zsh/zprofile
     dst: ~/Library/Preferences/net.sourceforge.zsh.Zsh/.zprofile
@@ -58,6 +63,12 @@ dotfiles:
   f_library_preferences_python_startup:
     src: Library/Preferences/python_startup
     dst: ~/Library/Preferences/python_startup
+  f_config_ripgreprc:
+    src: config/ripgreprc
+    dst: ~/.config/ripgreprc
+  f_config_micro_settings.json:
+    src: config/micro/settings.json
+    dst: ~/.config/micro/settings.json
 profiles:
   macos:
     dotfiles:
@@ -75,8 +86,11 @@ profiles:
     - f_config_vim_vimrc
     - f_config_broot_conf.toml
     - f_config_dotdrop_config.yaml
+    - f_config_zsh_themes_joeys-avit.zsh-theme
     - f_etc_nixos_configuration.nix
     - f_config_nixpkgs_config.nix
     - f_etc_nixos_joeyt_default.nix
     - f_etc_nixos_joeyt_z-lua.nix
     - f_etc_nixos_joeyt_zsh.nix
+    - f_config_ripgreprc
+    - f_config_micro_settings.json
