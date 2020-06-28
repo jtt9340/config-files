@@ -40,6 +40,7 @@ if ! zgen saved; then
   zgen loadall <<EOPLUGINS
     MichaelAquilina/zsh-you-should-use
     agkozak/zsh-z
+    unixorn/autoupdate-zgen
     zsh-users/zsh-autosuggestions
     zsh-users/zsh-history-substring-search
     zdharma/fast-syntax-highlighting
@@ -82,8 +83,12 @@ export SPROMPT="Correct $fg[red]%R$reset_color to $fg[green]%r$reset_color?
 #########
 # Aliases
 #########
-alias zshconfig="${EDITOR:-vim} $ZDOTDIR/.zshrc"
-alias vimconfig="${EDITOR:-vim} $XDG_CONFIG_HOME/org.vim.Vim/vimrc"
+# For quickly editing configuration files
+alias zshconfig="${EDITOR:-vim} ${ZDOTDIR:-$HOME}/.zshrc"
+alias vimconfig="${EDITOR:-vim} ${XDG_CONFIG_HOME:-$HOME/Library/Preferences}/org.vim.Vim/vimrc"
+alias brootconfig="${EDITOR:-vim} ${XDG_CONFIG_HOME:-$HOME/Library/Preferences}/org.dystroy.broot/conf.toml"
+
+# ls aliases
 alias lsdl='lsd -lF --date relative'
 alias lsda='lsd -aF'
 alias lsdla='lsd -laF --date relative'
@@ -91,6 +96,34 @@ alias ldot='ls -d .*'
 alias lab='ls -AbFG'
 alias tree='br --cmd :pt'
 alias ltree='lsd --tree'
+
+# These aliases are graciously taken from the Prezto Homebrew plugin; I have decided not to add the plugin to the above "if
+# ! zgen saved" block becuase that would require sourcing Prezto and adding a lot of code to my shell startup that I
+# wouldn't use
+alias brewc='brew cleanup' # cleans outdated brews and their cached archives
+alias brewi='brew install' # installs a formula
+alias brewL='brew leaves' # lists installed formulae that are not dependencies of another installed formula
+alias brewl='brew list' # lists installed formulae
+alias brewo='brew outdated' # lists brews which have an update available
+alias brews='brew search' # searched for a formula
+alias brewu='brew upgrade' # updates and upgrdes Homebrew packages and formulae
+alias brewx='brew uninstall' # uninstalls a formula
+
+# brew cask
+alias cask='brew cask'
+alias caskc='hb_deprecated brew cask cleanup' # same as brew cleanup
+alias caski='brew cask install' # installs a cask
+alias caskl='brew cask list' # lists installed casks
+alias casko='brew cask outdated' # lists casks which have an update available
+alias casks='hb_deprecated brew cask search' # same as brew search 
+alias caskx='brew cask uninstall' # uninstalls a cask
+
+# Global aliases - proceed with caution
+alias -g C='| wc -l'
+alias -g H='| head'
+alias -g T='| tail'
+alias -g L='| less'
+alias -g 'TRUE?'='&& echo true || echo false'
 
 # Make some commands more verbose
 alias rm='rm -v'
@@ -100,8 +133,7 @@ alias diff='diff -s'
 ###########
 # Functions
 ###########
-# User zsh-z as cd; first attempt to cd to the given directory, if that fails
-# use zsh-z instead
+# User zsh-z as cd; first attempt to cd to the given directory, if that fails use zsh-z instead
 function j {
   if [[ "$argv[1]" == "-"* ]]; then
     z "$@"
@@ -111,10 +143,75 @@ function j {
   command ls -GF
 }
 
+# Used as a shim for deprecated Homebrew commands; taken from Prezto's Homebrew plugin
+function hb_deprecated {
+  local cmd="${@[3]}"
+  local cmd_args="${@:4}"
+
+  printf "'brew cask %s' has been deprecated, " "${cmd}"
+  printf "using 'brew %s' instead\n" "${cmd}"
+
+  command brew "${cmd}" "${=cmd_args}"
+}
+
+# Graciously taken from Prezto's OS X plugin; again I am not sourcing this plusing because it is easier to just copy
+# the function source than include all the Prezto code, much of which I will not use.
+#
+# Displays macOS download history 
+function lsdownloads {
+  local db
+  for db in ~/Library/Preferences/com.apple.LaunchServices.QuarantineEventsV*; do
+    grep -q 'LSQuarantineEvent' < <(sqlite3 "$db" .tables) &&
+    sqlite3 "$db" 'SELECT LSQuarantineDataURLString FROM LSQuarantineEvent'
+  done | sed '/^$/d'
+}
+
+# Also taken from Prezto's OS X plugin, this function removed macOS download history
+function rmdownloads {
+  local db
+  for db in ~/Library/Preferences/com.apple.LaunchServices.QuarantineEventsV*; do
+    grep -q 'LSQuarantineEvent' < <(sqlite3 "$db" .tables) &&
+    sqlite3 "$db" 'DELETE FROM LSQuarantineEvent; VACUUM'
+  done
+}
+
+# Also taken from Prezto's OS X plugin, this function "deletes .DS_Store and __MACOSX cruft"
+function rmmetadata {
+  find "${@:-$PWD}" \( \
+    -type f -name '.DS_Store' -o \
+    -type d -name '__MACOSX' \
+  \) -print0 | xargs -0 rm -rf
+}
+
+# Also taken from Prezto's OS X plugin, this function "prints the current Finder directory"
+function pfd {
+  osascript 2> /dev/null <<EOF
+    tell application "Finder"
+      return POSIX path of (target of first window as text)
+    end tell
+EOF
+}
+
+# Also taken from Prezto's OS X plugin, this function "prinst the current Finder selection"
+function pfs {
+  osascript 2>&1 <<EOF
+    tell application "Finder" to set the_selection to selection
+    if the_selection is not {}
+      repeat with an_item in the_selection
+        log POSIX path of (an_item as text)
+      end repeat
+    end if
+EOF
+}
+
 ###############
 # Miscellaneous
 ###############
-export MANPATH="/usr/local/gnupg-2.2/share/man:$MANPATH"
+MANPATH="/usr/local/gnupg-2.2/share/man${MANPATH:+:$MANPATH}"
+
+# Command-not-found functionality for Homebrew
+HB_CNF_HANDLER="$(brew --prefix)/Homebrew/Library/Taps/homebrew/homebrew-command-not-found/handler.sh"
+[ -f "$HB_CNF_HANDLER" ] && source "$HB_CNF_HANDLER"
 
 # Broot
 source /Users/josephterrito/Library/Preferences/org.dystroy.broot/launcher/bash/br

@@ -7,6 +7,16 @@
 [ -z "$XDG_DATA_DIRS" ] && export XDG_DATA_DIRS='/usr/local/share/:/usr/share/'
 [ -z "$XDG_CACHE_HOME" ] && export XDG_CACHE_HOME="$HOME/Library/Caches"
 
+########################################################################################################################
+# The following code segment was graciously adapted from the Prezto Homebrew plugin; the reason I am not just sourcing
+# that plugin is becuase it would require loading the code necessary for Prezto, much of which I will not, at present,
+# use or take advantage of.
+########################################################################################################################
+# Load standard Homebrew shellenv into the shell session.
+# Load 'HOMEBREW_' prefixed vairables only. Avoid loading 'PATH' related
+# variables as thay are already handled in standard Zsh configuration.
+(( $+commands[brew] )) && eval "${(@M)${(f)"$(brew shellenv 2> /dev/null)"}:#export HOMEBREW*}"
+
 ####################################################################################################
 # Reconfiguring programs to store their configuation/data files somewhere besides the home directory
 ####################################################################################################
@@ -19,9 +29,11 @@ export RUSTUP_HOME="$XDG_DATA_HOME/Rustup"
 export CARGO_HOME="$XDG_DATA_HOME/Cargo"
 export PATH="$PATH:$CARGO_HOME/bin"
 
-# Tell ZSH to make all files in this directory
+# Tell Zsh to make all files in this directory
 export ZDOTDIR="$XDG_CONFIG_HOME/net.sourceforge.zsh.Zsh"
 export ZGEN_DIR="$ZDOTDIR/zgen"
+export ZGEN_SYSTEM_RECEIPT_F="${${ZDOTDIR}#${HOME}}/.zgen_system_lastupdate"
+export ZGEN_PLUGIN_RECEIPT_F="${${ZDOTDIR}#${HOME}}/.zgen_plugin_lastupdate"
 
 # Tell GnuPG where its dotfiles are
 export GNUPGHOME="$XDG_DATA_HOME/GnuPG"

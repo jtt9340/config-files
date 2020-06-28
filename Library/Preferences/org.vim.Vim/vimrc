@@ -36,9 +36,10 @@ set wildmode=longest,list,full
 
 " Syntax highlighting
 syntax on
+autocmd BufRead,BufNewFile *.zsh* set syntax=zsh
 
 " Make a tab appear to be 4 spaces wide (https://stackoverflow.com/questions/1878974/redefine-tab-as-4-spaces)
 set tabstop=4 softtabstop=0 noexpandtab shiftwidth=4
-" Unless we're in a *.nix or *.zsh-theme or *.yaml file, and then I want the tab key to
+" Unless we're in a *.nix or *.zsh* or *.yaml file, and then I want the tab key to
 " literally be 2 spaces
-autocmd BufRead,BufNewFile *.nix,*.zsh-theme,*.yaml set tabstop=2 softtabstop=0 expandtab shiftwidth=2
+autocmd BufRead,BufNewFile *.nix,*.zsh*,*.yaml set tabstop=2 softtabstop=0 expandtab shiftwidth=2
