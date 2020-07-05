@@ -17,6 +17,8 @@ COMPLETION_WAITING_DOTS=true
 DISABLE_UNTRACKED_FILES_DIRTY=true
 # Make hyphens and underscores indistuinguishable completion-wise
 HYPHEN_INSENSITIVE=true
+# Disable biweekly auto-update checks for Oh-My-Zsh; this is handled by the unixorn/autoupdate-zgen plugin below
+DISABLE_AUTO_UPDATE=true
 
 ###################################################################################################################
 # Source the init script created by zgen; this loads all the plugins specified in the "if ! zgen saved" block below 
