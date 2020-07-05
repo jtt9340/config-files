@@ -28,22 +28,24 @@ fetchFromGitHub:
   
     # Tell z.lua where to store its data file
     export _ZL_DATA="$HOME/.local/share/z.txt"
+
     # Tell z.lua which command-line fuzzy finder to use
     export _ZL_FZF=sk
     export _ZL_FZF_FLAG='--no-sort'
+
     # Tell Vim where its config file is
     export VIMINIT="source $HOME/.config/vim/vimrc"
-    # Move KDE from ~/.kde to ~/.config/kde
-    export KDEHOME="$HOME/.config/kde"
-    # I'm confused why there's a ~/.gtkrc-2.0 and a ~/config/gtkrc-2.0
+
+    # I'm confused why there's a ~/.gtkrc-2.0 and a ~/.config/gtkrc-2.0
     export GTK2_RC_FILES="$HOME/.config/gtk-2.0/gtkrc"
+
     # Move less' history file
     export LESSKEY="$HOME/.cache/less/lesskey"
     export LESSHISTFILE="$HOME/.cache/less/history"
-    # Move ~/.compose-cache to ~/.cache/X11/xcompose
-    export XCOMPOSECACHE="$HOME/.cache/X11/xcompose"
+
     # Tell Cargo where its files are
     export CARGO_HOME="$HOME/.local/share/cargo"
+
     # This is where ripgrep's configuration file is
     export RIPGREP_CONFIG_PATH="$HOME/.config/ripgreprc"
   '';
@@ -77,6 +79,20 @@ fetchFromGitHub:
       echo "opening $file" &&
       xdg-open "$file"
     }
+
+    # Spell check
+    #############
+    setopt correct
+    export SPROMPT="Correct $fg[red]%R$reset_color to $fg[green]%r$reset_color?
+    	[Yes, No, Abort, Edit] "
+
+    # As far as I know you cannot set global aliases with home-manager so I
+    # guess I gotta do it myself!
+    alias -g C='| wc -l'
+    alias -g H='| head'
+    alias -g T='| tail'
+    alias -g L='| less'
+    alias -g 'TRUE?'='&& echo true || echo false'
     
     source /home/joeyt/.local/share/broot/launcher/bash/1
   '';
@@ -127,7 +143,9 @@ fetchFromGitHub:
 
   shellAliases = {
     diff = "diff --color --report-identical-files";
-
+    pbcopy = "xclip -sel clip";
+    pbpaste = "xclip -o -sel clip";
+    
     # ls aliases
     lsd = "lsd --icon never";
     lsdl = "lsd -lF --date relative";

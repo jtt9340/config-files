@@ -73,6 +73,7 @@ in
     firefox
     gcc
     git
+    gnumake
     gparted
     htop
     kate

@@ -25,7 +25,6 @@
   home.packages = with pkgs; [
     # CLI tools
     broot
-    elvish
     lua
     
     # GUI apps
