@@ -1,0 +1,9 @@
+# cd into the directory you just made
+function mkcd {
+  (( $# == 0 )) && {
+    echo "Usage: $0 directory" >&2
+    return 64
+  }
+  mkdir -p $1 && cd $1
+}
+

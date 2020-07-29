@@ -1,0 +1,8 @@
+# Also taken from Prezto's OS X plugin, this function "deletes .DS_Store and __MACOSX cruft"
+function rmmetadata {
+  find "${@:-$PWD}" \( \
+    -type f -name '.DS_Store' -o \
+    -type d -name '__MACOSX' \
+  \) -print0 | xargs -0 rm -rvf
+}
+

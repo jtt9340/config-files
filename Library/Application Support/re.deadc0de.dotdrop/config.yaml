@@ -1,0 +1,117 @@
+config:
+  backup: true
+  banner: false
+  create: true
+  dotpath: ~/Projects/config-files
+  workdir: ~/Library/Application Support/re.deadc0de.dotdrop
+  keepdot: false
+  longkey: true
+  cmpignore:
+  - '*/.DS_Store'
+  upignore:
+  - '*/.DS_Store'
+  instignore:
+  - '*/.DS_Store'
+dotfiles:
+  f_config_vim_vimrc:
+    src: Library/Application Support/org.vim.Vim/vimrc
+    dst: ~/.config/vim/vimrc
+  f_zshenv:
+    src: zshenv
+    dst: ~/.zshenv
+    link: link
+  f_config_dotdrop_config.yaml:
+    src: Library/Application Support/re.deadc0de.dotdrop/config.yaml
+    dst: ~/.config/dotdrop/config.yaml
+    link: link
+  f_library_preferences_org.dystroy.broot_conf.toml:
+    src: Library/Preferences/org.dystroy.broot/conf.toml
+    dst: ~/Library/Preferences/org.dystroy.broot/conf.toml
+  f_config_broot_conf.toml:
+    src: Library/Preferences/org.dystroy.broot/conf.toml
+    dst: ~/.config/broot/conf.toml
+  f_etc_nixos_configuration.nix:
+    src: etc/nixos/configuration.nix
+    dst: /etc/nixos/configuration.nix
+    link: nolink
+  f_config_nixpkgs_config.nix:
+    src: config/nixpkgs/config.nix
+    dst: ~/.config/nixpkgs/config.nix
+  f_etc_nixos_joeyt_default.nix:
+    src: etc/nixos/joeyt/default.nix
+    dst: /etc/nixos/joeyt/default.nix
+    link: nolink
+  f_etc_nixos_joeyt_z-lua.nix:
+    src: etc/nixos/joeyt/z-lua.nix
+    dst: /etc/nixos/joeyt/z-lua.nix
+    link: nolink
+  f_etc_nixos_joeyt_zsh.nix:
+    src: etc/nixos/joeyt/zsh.nix
+    dst: /etc/nixos/joeyt/zsh.nix
+    link: nolink
+  f_config_zsh_themes_joeys-avit.zsh-theme:
+    src: Library/Application Support/net.sourceforge.zsh.Zsh/joeys-avit.zsh-theme
+    dst: ~/.config/zsh/themes/joeys-avit.zsh-theme
+  f_config_ripgreprc:
+    src: config/ripgreprc
+    dst: ~/.config/ripgreprc
+  f_config_micro_settings.json:
+    src: config/micro/settings.json
+    dst: ~/.config/micro/settings.json
+  f_library_application-support_org.vim.vim_vimrc:
+    src: Library/Application Support/org.vim.Vim/vimrc
+    dst: ~/Library/Application Support/org.vim.Vim/vimrc
+    link: link
+  f_library_application-support_com.npmjs.npm_npmrc:
+    src: Library/Application Support/com.npmjs.Npm/npmrc
+    dst: ~/Library/Application Support/com.npmjs.Npm/npmrc
+    link: link
+  f_library_application-support_re.deadc0de.dotdrop_config.yaml:
+    src: Library/Application Support/re.deadc0de.dotdrop/config.yaml
+    dst: ~/Library/Application Support/re.deadc0de.dotdrop/config.yaml
+    link: link
+  f_library_application-support_net.sourceforge.zsh.zsh_joeys-avit.zsh-theme:
+    src: Library/Application Support/net.sourceforge.zsh.Zsh/joeys-avit.zsh-theme
+    dst: ~/Library/Application Support/net.sourceforge.zsh.Zsh/joeys-avit.zsh-theme
+    link: link
+  d_library_application-support_net.sourceforge.zsh.zsh:
+    src: Library/Application Support/net.sourceforge.zsh.Zsh
+    dst: ~/Library/Application Support/net.sourceforge.zsh.Zsh
+    link: link_children
+    instignore:
+    - 'joeys-avit.zsh-theme'
+    cmpignore:
+    - 'joeys-avit.zsh-theme'
+    - '.zcompdump*'
+    - '.zsh_history'
+    - 'bookmarks'
+    - 'zgen*'
+    upignore:
+    - 'joeys-avit.zsh-theme'
+    - '.zcompdump*'
+    - '.zsh_history'
+    - 'bookmarks'
+    - 'zgen*'
+profiles:
+  macos:
+    dotfiles:
+    - f_zshenv
+    - f_library_preferences_org.dystroy.broot_conf.toml
+    - f_library_application-support_org.vim.vim_vimrc
+    - f_library_application-support_com.npmjs.npm_npmrc
+    - f_library_application-support_re.deadc0de.dotdrop_config.yaml
+    - d_library_application-support_net.sourceforge.zsh.zsh
+    - f_library_application-support_net.sourceforge.zsh.zsh_joeys-avit.zsh-theme
+  nixos:
+    dotfiles:
+    - f_config_vim_vimrc
+    - f_config_broot_conf.toml
+    - f_config_dotdrop_config.yaml
+    - f_config_zsh_themes_joeys-avit.zsh-theme
+    - f_etc_nixos_configuration.nix
+    - f_config_nixpkgs_config.nix
+    - f_etc_nixos_joeyt_default.nix
+    - f_etc_nixos_joeyt_z-lua.nix
+    - f_etc_nixos_joeyt_zsh.nix
+    - f_config_ripgreprc
+    - f_config_micro_settings.json

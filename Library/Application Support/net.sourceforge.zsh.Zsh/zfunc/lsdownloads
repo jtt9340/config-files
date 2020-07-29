@@ -1,0 +1,12 @@
+# Graciously taken from Prezto's OS X plugin; again I am not sourcing this plugin because it is easier to just copy
+# the function source than include all the Prezto code, much of which I will not use.
+#
+# Displays macOS download history 
+function lsdownloads {
+  local db
+  for db in ~/Library/Preferences/com.apple.LaunchServices.QuarantineEventsV*; do
+    grep -q 'LSQuarantineEvent' < <(sqlite3 "$db" .tables) &&
+    sqlite3 "$db" 'SELECT LSQuarantineDataURLString FROM LSQuarantineEvent'
+  done | sed '/^$/d'
+}
+

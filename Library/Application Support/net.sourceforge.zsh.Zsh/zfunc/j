@@ -1,0 +1,9 @@
+# Use zsh-z as cd; first attempt to cd to the given directory, if that fails use zsh-z instead
+function j {
+  if [[ "$argv[1]" == "-"* ]]; then
+    z "$@"
+  else
+    cd "$@" 2> /dev/null || z "$@" && command ls -GF
+  fi
+}
+

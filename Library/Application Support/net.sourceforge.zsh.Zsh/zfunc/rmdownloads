@@ -1,0 +1,9 @@
+# Also taken from Prezto's OS X plugin, this function clears macOS download history
+function rmdownloads {
+  local db
+  for db in ~/Library/Preferences/com.apple.LaunchServices.QuarantineEventsV*; do
+    grep -q 'LSQuarantineEvent' < <(sqlite3 "$db" .tables) &&
+    sqlite3 "$db" 'DELETE FROM LSQuarantineEvent; VACUUM'
+  done
+}
+

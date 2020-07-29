@@ -1,0 +1,5 @@
+# Opens a man page in a separate terminal window
+function help {
+  open x-man-page://$@
+}
+
