@@ -1,5 +1,5 @@
 **/.DS_Store
 env
 result
-Library/Application Support/net.sourceforge.zsh.Zsh/zfunc/_br*
-Library/Application Support/net.sourceforge.zsh.Zsh/zfunc/_dotdrop-completion.zsh
+Library/Application Support/net.sourceforge.zsh.Zsh/zfunc/_*
+!Library/Application Support/net.sourceforge.zsh.Zsh/zfunc/_python-workon-cwd

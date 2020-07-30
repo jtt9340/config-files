@@ -20,6 +20,8 @@ DISABLE_UNTRACKED_FILES_DIRTY=true
 HYPHEN_INSENSITIVE=true
 # Disable biweekly auto-update checks for Oh-My-Zsh; this is handled by the unixorn/autoupdate-zgen plugin below
 DISABLE_AUTO_UPDATE=true
+# This technically isn't part of Oh-My-Zsh but I don't know where else to put this; it's part of djui/alias-tips
+export ZSH_PLUGINS_ALIAS_TIPS_TEXT='Found existing alias: '
 
 ############################
 # Enabling shell completions
@@ -50,7 +52,7 @@ if ! zgen saved; then
   # sourced last. I'm not sure if that's the same for fast-syntax-highlighing,
   # but might as well adhere to that.
   zgen loadall <<EOPLUGINS
-    MichaelAquilina/zsh-you-should-use
+    djui/alias-tips
     agkozak/zsh-z
     unixorn/autoupdate-zgen
     zsh-users/zsh-autosuggestions
@@ -66,7 +68,6 @@ EOPLUGINS
   # zgen load $ZDOTDIR/joeys-avit
 
   # Generate the init script from plugins above
-  # ZGEN_AUTOLOAD_COMPINIT=0 # Prevent the init script from calling compinit
   zgen save
 fi
 
