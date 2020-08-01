@@ -23,13 +23,13 @@ set encoding=utf-8
 @@#}
 {%@@ if profile == "macos" @@%}
 " Settings to make Vim respect the XDG base directory specification
-set undodir=$XDG_DATA_HOME/Vim/undo
-set directory=$XDG_DATA_HOME/Vim/swap
-set backupdir=$XDG_DATA_HOME/Vim/backup
-set viewdir=$XDG_DATA_HOME/Vim/view
-set viminfo+='1000,n$XDG_DATA_HOME/Vim/viminfo
-set runtimepath=$XDG_CONFIG_HOME/org.vim.Vim,$VIMRUNTIME,$XDG_CONFIG_HOME/org.vim.Vim/after
-set packpath=$XDG_CONFIG_HOME/org.vim.Vim,/usr/local/share/vim/vimfiles,$VIMRUNTIME,/usr/local/share/vim/vimfiles/after,$XDG_CONFIG_HOME/org.vim.Vim/after
+set undodir=$HOME/Library/Application\ Support/org.vim.Vim/undo
+set directory=$HOME/Library/Application\ Support/org.vim.Vim/swap
+set backupdir=$HOME/Library/Application\ Support/org.vim.Vim/backup
+set viewdir=$HOME/Library/Application\ Support/org.vim.Vim/view
+set viminfo+='1000,n$HOME/Library/Application\ Support/org.vim.Vim/viminfo
+set runtimepath=$HOME/Library/Application\ Support/org.vim.Vim,$VIMRUNTIME,$HOME/Library/Application\ Support/org.vim.Vim/after
+set packpath=$HOME/Library/Application\ Support/org.vim.Vim,/usr/local/share/vim/vimfiles,$VIMRUNTIME,/usr/local/share/vim/vimfiles/after,$HOME/Library/Application\ Support/org.vim.Vim/after
 " packpath=~/.vim,/usr/local/share/vim/vimfiles,/usr/local/share/vim/vim82,/usr/local/share/vim/vimfiles/after,~/.vim/after
 {%@@ endif @@%}
 
