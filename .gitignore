@@ -1,5 +1,6 @@
 **/.DS_Store
 env
 result
-Library/Application Support/net.sourceforge.zsh.Zsh/zfunc/_*
-!Library/Application Support/net.sourceforge.zsh.Zsh/zfunc/_python-workon-cwd
+templated
+net.sourceforge.Zsh/zfunc/_*
+!net.sourceforge.Zsh/zfunc/_python-workon-cwd

@@ -62,5 +62,5 @@ export NODE_REPL_HISTORY="$HOME/Library/Application Support/com.npmjs.Npm/node_r
 export LESSKEY="$HOME/Library/Application Support/Less/lesskey"
 export LESSHISTFILE=$HOME/Library/Caches/Less/history
 
-# Tell dotdrop where its config.yaml is
-export DOTDROP_CONFIG="$HOME/Library/Application Support/re.deadc0de.dotdrop/config.yaml"
+# Tell ripgrep where it's configuration file is
+export RIPGREP_CONFIG_PATH="$HOME/Library/Application Support/com.github.burntsushi.Ripgrep/ripgreprc"
