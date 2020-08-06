@@ -22,6 +22,7 @@ HYPHEN_INSENSITIVE=true
 DISABLE_AUTO_UPDATE=true
 # This technically isn't part of Oh-My-Zsh but I don't know where else to put this; it's part of djui/alias-tips
 export ZSH_PLUGINS_ALIAS_TIPS_TEXT='Found existing alias: '
+export ZSH_PLUGINS_ALIAS_TIPS_EXCLUDES=_
 
 ############################
 # Enabling shell completions
@@ -47,6 +48,21 @@ if ! zgen saved; then
   zgen oh-my-zsh plugins/cargo
   zgen oh-my-zsh plugins/rustup
   zgen oh-my-zsh plugins/virtualenv
+
+  # Aliases
+  if [[ -f $ALIASRC ]]; then
+    zgen load $ALIASRC
+  elif [[ -f $ZDOTDIR/aliases.zsh ]]; then
+    zgen load $ZDOTDIR/aliases.zsh
+  elif [[ -f $HOME/.aliases.zsh ]]; then
+    zgen load $HOME/.aliases.zsh
+  fi
+
+  # Directory bookmark mechanism
+  zgen load $ZDOTDIR/bookmark.zsh
+
+  # Broot
+  zgen load /Users/josephterrito/Library/Preferences/org.dystroy.broot/launcher/bash/br
 
   # So when you use `zsh-users/zsh-syntax-highlighting` it needs to be
   # sourced last. I'm not sure if that's the same for fast-syntax-highlighing,
@@ -87,17 +103,6 @@ export SPROMPT="Correct $fg[red]%R$reset_color to $fg[green]%r$reset_color?
 # Case-insensitive globbing
 setopt NO_CASE_GLOB
 
-#########
-# Aliases
-#########
-if [[ -f $ALIASRC ]]; then
-  source $ALIASRC
-elif [[ -f $ZDOTDIR/aliases.zsh ]]; then
-  source $ZDOTDIR/aliases.zsh
-elif [[ -f $HOME/.aliases.zsh ]]; then
-  source $HOME/.aliases.zsh
-fi
-
 ###########
 # Functions
 ###########
@@ -111,9 +116,6 @@ done
 # MANPATH="/usr/local/gnupg-2.2/share/man${MANPATH:+:$MANPATH}"
 manpath=(/usr/local/gnupg-2.2/share/man $manpath)
 
-# Directory bookmark mechanism
-source $ZDOTDIR/bookmark.zsh
-
 # Command-not-found functionality for Homebrew
 if type brew &>/dev/null; then
   HB_CNF_HANDLER="$(brew --prefix)/Homebrew/Library/Taps/homebrew/homebrew-command-not-found/handler.sh"
@@ -124,6 +126,3 @@ fi
 type add-zsh-hook &>/dev/null || autoload -Uz add-zsh-hook
 autoload _python-workon-cwd
 add-zsh-hook chpwd _python-workon-cwd
-
-# Broot
-source /Users/josephterrito/Library/Preferences/org.dystroy.broot/launcher/bash/br
