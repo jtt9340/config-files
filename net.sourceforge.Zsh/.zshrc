@@ -1,7 +1,7 @@
 ##############################################################################################################################
 # This .zshrc requires Zgen, a program that makes it easy to manage Zsh plugins. If it is not installed, it will be installed.
 ##############################################################################################################################
-[[ -d $ZGEN_DIR || -d $ZDOTDIR/zgen || -d $HOME/.zgen ]] || {
+[[ -d $ZGEN_DIR || -d $ZDOTDIR/zgen || -d $ZDOTDIR/.zgen || -d $HOME/.zgen ]] || {
   [[ -z "$ZGEN_DIR" ]] && {
     [[ -n "$ZDOTDIR" ]] && ZGEN_DIR="${ZDOTDIR}/zgen" || ZGEN_DIR="${HOME}/.zgen"
   }
@@ -64,7 +64,11 @@ if ! zgen saved; then
   zgen load $ZDOTDIR/bookmark.zsh
 
   # Broot
+{%@@ if exists_in_path('broot') and os == 'Darwin' @@%}
   zgen load /Users/josephterrito/Library/Preferences/org.dystroy.broot/launcher/bash/br
+{%@@ elif exists_in_path('broot') @@%}
+  zgen load $HOME/.config/broot/launcher/bash/br
+{%@@ endif @@%}
 
   # So when you use `zsh-users/zsh-syntax-highlighting` it needs to be
   # sourced last. I'm not sure if that's the same for fast-syntax-highlighing,

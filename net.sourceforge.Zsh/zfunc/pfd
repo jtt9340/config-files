@@ -1,9 +1,14 @@
 # Also taken from Prezto's OS X plugin, this function "prints the current Finder directory"
 function pfd {
+{%@@ if os == 'Darwin' @@%}
   osascript 2> /dev/null <<EOF
     tell application "Finder"
       return POSIX path of (target of first window as text)
     end tell
 EOF
+{%@@ else @@%}
+  echo 'This function does nothing on operating systems other than macOS/Darwin :(' >&2
+  return 1
+{%@@ endif @@%}
 }
 

@@ -1,1 +1,1 @@
-dotdrop
+dotdrop @ git+https://github.com/jtt9340/dotdrop.git@2c964c9d11f61f8d0eb9ce9d83e37d9db08a9528

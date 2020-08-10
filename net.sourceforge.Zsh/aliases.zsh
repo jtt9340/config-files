@@ -5,10 +5,12 @@
 alias zshconfig="${EDITOR:-vim} ${(q)ZDOTDIR:-$HOME}/.zshrc"
 {%@@ if exists_in_path('vim') and os == 'Darwin' @@%}
 alias vimconfig="${EDITOR:-vim} $HOME/Library/Application\ Support/org.vim.Vim/vimrc"
-{%@@ elif exists_in_path('vim') and env['XDG_CONFIG_HOME'] is string @@%}
-alias vimconfig="${EDITOR:-vim} $XDG_CONFIG_HOME/vim/vimrc}"
 {%@@ elif exists_in_path('vim') @@%}
-alias vimconfig="${EDITOR:-vim} $HOME/.vimrc"
+if [[ -n $XDG_CONFIG_HOME && -f $XDG_CONFIG_HOME/vim/vimrc ]]; then
+  alias vimconfig="${EDITOR:-vim} $XDG_CONFIG_HOME/vim/vimrc}"
+else
+  alias vimconfig="${EDITOR:-vim} $HOME/.vimrc"
+fi
 {%@@ endif @@%} 
 {%@@ if exists_in_path('broot') and os == 'Darwin' @@%}
 alias brootconfig="${EDITOR:-vim} $HOME/Library/Preferences/org.dystroy.broot/conf.toml"
@@ -75,6 +77,6 @@ alias -g 'TRUE?'='&& echo true || echo false'
 # Make some commands more verbose
 alias rm='rm -v'
 alias mv='mv -v'
-alias diff='diff -s'
+alias diff='diff -s --color=always'
 alias cp='cp -v'
 

@@ -1,9 +1,14 @@
 # Also taken from Prezto's OS X plugin, this function clears macOS download history
 function rmdownloads {
+{%@@ if os == 'Darwin' @@%}
   local db
   for db in ~/Library/Preferences/com.apple.LaunchServices.QuarantineEventsV*; do
     grep -q 'LSQuarantineEvent' < <(sqlite3 "$db" .tables) &&
     sqlite3 "$db" 'DELETE FROM LSQuarantineEvent; VACUUM'
   done
+{%@@ else @@%}
+  echo 'This function does nothing on operating systems other than macOS/Darwin :(' >&2
+  return 1
+{%@@ endif @@%}
 }
 
