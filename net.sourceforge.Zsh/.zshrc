@@ -27,9 +27,11 @@ export ZSH_PLUGINS_ALIAS_TIPS_EXCLUDES=_
 ############################
 # Enabling shell completions
 ############################
-type brew &>/dev/null \
-  && fpath+=($(brew --prefix)/share/zsh/site-functions $ZDOTDIR/zfunc) \
-  || fpath+=$ZDOTDIR/zfunc
+{%@@ if exists_in_path('brew') @@%}
+fpath+=($(brew --prefix)/share/zsh/site-functions $ZDOTDIR/zfunc)
+{%@@ else @@%}
+fpath+=$ZDOTDIR/zfunc
+{%@@ endif @@%}
 
 ###################################################################################################################
 # Source the init script created by zgen; this loads all the plugins specified in the "if ! zgen saved" block below 
@@ -113,14 +115,16 @@ done
 ###############
 # Miscellaneous
 ###############
+{%@@ if hostname == 'Joeys-MacBook-Pro-2.local' @@%}
 # MANPATH="/usr/local/gnupg-2.2/share/man${MANPATH:+:$MANPATH}"
 manpath=(/usr/local/gnupg-2.2/share/man $manpath)
+{%@@ endif @@%}
 
+{%@@ if exists_in_path('brew') @@%}
 # Command-not-found functionality for Homebrew
-if type brew &>/dev/null; then
-  HB_CNF_HANDLER="$(brew --prefix)/Homebrew/Library/Taps/homebrew/homebrew-command-not-found/handler.sh"
-  [ -f "$HB_CNF_HANDLER" ] && source "$HB_CNF_HANDLER"
-fi
+HB_CNF_HANDLER="$(brew --prefix)/Homebrew/Library/Taps/homebrew/homebrew-command-not-found/handler.sh"
+[ -f "$HB_CNF_HANDLER" ] && source "$HB_CNF_HANDLER"
+{%@@ endif @@%}
 
 # Automatically activate and deactivate Python virtualenv upon directory entry and exit
 type add-zsh-hook &>/dev/null || autoload -Uz add-zsh-hook

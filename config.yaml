@@ -14,6 +14,7 @@ config:
   - '*/.DS_Store'
 dynvariables:
   os: uname
+  hostname: hostname
 dotfiles:
   f_vimrc:
     src: org.vim.Vim/vimrc
