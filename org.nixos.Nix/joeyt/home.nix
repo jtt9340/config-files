@@ -1,12 +1,32 @@
-{ lib, pkgs, ... }:
+{ lib, pkgs, config, ... }:
 
+let
+  # Path to my repository for storing config/dot files
+  configFiles = "${config.home.homeDirectory}/Projects/config-files";
+in
 {
+  xdg = {
+    # Enable management of XDG Base Directories
+    enable = true;
+
+    # Home manager will manage these dotfiles
+    configFile = {
+      "nixpkgs/config.nix".source = "${configFiles}/org.nixos.Nix/config.nix";
+      "micro/settings.json".source = "${configFiles}/io.github.micro-editor/settings.json";
+      "ripgreprc".source = "${configFiles}/com.github.burntsushi.Ripgrep/ripgreprc";
+      "zsh/zfunc" = {
+        source = "${configFiles}/net.sourceforge.Zsh/zfunc";
+        recursive = true;
+      };
+    };
+  };
+
   programs = {
     # Let Home Manager install and manage things
     home-manager.enable = true;
 
     # Configure Zsh
-    zsh = (import ./zsh.nix) pkgs.fetchFromGitHub; 
+    zsh = (import ./zsh.nix) pkgs.fetchFromGitHub;
 
     # Git config
     git = import ./git.nix;

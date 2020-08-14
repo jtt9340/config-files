@@ -142,8 +142,10 @@ in
   hardware.opengl.driSupport32Bit = true;
 
   # Automatically keep NixOS up-to-date, but don't automatically reboot
-  system.autoUpgrade.enable = true;
-  system.autoUpgrade.allowReboot = false;
+  system.autoUpgrade = {
+    enable = true;
+    allowReboot = false;
+  };
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users = {
@@ -160,7 +162,7 @@ in
   };
 
   # Configure the Joey T user a little bit
-  home-manager.users.joeyt = import ./joeyt/default.nix;
+  home-manager.users.joeyt = import ./joeyt/home.nix;
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions

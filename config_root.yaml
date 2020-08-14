@@ -1,0 +1,19 @@
+config:
+  backup: true
+  banner: false
+  create: false
+  dotpath: org.nixos.Nix
+  link_dotfile_default: nolink
+dotfiles:
+  f_etc_nixos_configuration.nix:
+    src: configuration.nix 
+    dst: /etc/nixos/configuration.nix
+    link: nolink
+  d_joeyt:
+    src: joeyt
+    dst: /etc/nixos/joeyt
+profiles:
+  nixos:
+    dotfiles:
+    - f_etc_nixos_configuration.nix
+    - d_joeyt

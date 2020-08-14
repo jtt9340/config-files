@@ -2,7 +2,7 @@ config:
   backup: true
   banner: false
   create: true
-  dotpath: ~/Projects/config-files
+  dotpath: . 
   workdir: templated 
   keepdot: false
   link_on_import: link
@@ -29,25 +29,9 @@ dotfiles:
     src: org.dystroy.broot/conf.toml
     dst: "{{@@ '~/Library/Preferences/org.dystroy.broot/conf.toml' if os == 'Darwin' else '~/.config/broot/conf.toml' @@}}"
     link: link
-  f_etc_nixos_configuration.nix:
-    src: org.nixos.Nix/configuration.nix 
-    dst: /etc/nixos/configuration.nix
-    link: nolink
   f_nixpkgs_config.nix:
     src: org.nixos.Nix/config.nix
     dst: ~/.config/nixpkgs/config.nix
-  f_etc_nixos_joeyt_default.nix:
-    src: org.nixos.Nix/joeyt/default.nix
-    dst: /etc/nixos/joeyt/default.nix
-    link: nolink
-  f_etc_nixos_joeyt_z-lua.nix:
-    src: org.nixos.Nix/joeyt/z-lua.nix
-    dst: /etc/nixos/joeyt/z-lua.nix
-    link: nolink
-  f_etc_nixos_joeyt_zsh.nix:
-    src: org.nixos.Nix/joeyt/zsh.nix
-    dst: /etc/nixos/joeyt/zsh.nix
-    link: nolink
   f_micro_settings.json:
     src: io.github.micro-editor/settings.json 
     dst: ~/.config/micro/settings.json
@@ -115,10 +99,6 @@ profiles:
     - f_vimrc
     - f_org.dystroy.broot_conf.toml
     - f_joeys-avit.zsh-theme
-    - f_etc_nixos_configuration.nix
     - f_nixpkgs_config.nix
-    - f_etc_nixos_joeyt_default.nix
-    - f_etc_nixos_joeyt_z-lua.nix
-    - f_etc_nixos_joeyt_zsh.nix
     - f_micro_settings.json
     - f_ripgreprc
