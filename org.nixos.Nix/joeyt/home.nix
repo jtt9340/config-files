@@ -3,6 +3,10 @@
 let
   # Path to my repository for storing config/dot files
   configFiles = "${config.home.homeDirectory}/Projects/config-files";
+  # nixos-unstable (for more recent version of some packages)
+  pkgsUnstable = import <nixpkgs-unstable> {
+    config = { allowUnfree = true; };
+  };
 in
 {
   xdg = {
@@ -26,7 +30,10 @@ in
     home-manager.enable = true;
 
     # Configure Zsh
-    zsh = (import ./zsh.nix) pkgs.fetchFromGitHub;
+    zsh = (import ./zsh.nix) {
+      inherit (pkgs) fetchFromGitHub;
+      inherit configFiles;
+    };
 
     # Git config
     git = import ./git.nix;
@@ -42,21 +49,27 @@ in
     lsd.enable = true;
   };
 
-  home.packages = with pkgs; [
-    # CLI tools
-    broot
-    lua
+  home.packages = 
+    let
+      jetbrains = pkgsUnstable.jetbrains;
+    in
+      with pkgs; [
+        # CLI tools
+        pkgsUnstable.broot
+        lua
     
-    # GUI apps
-    bitwarden
-    discord
-    jetbrains.idea-ultimate
-    jetbrains.pycharm-professional
-    slack
-    thunderbird
-  ];
+        # GUI apps
+        bitwarden
+        discord
+        jetbrains.idea-ultimate
+        jetbrains.pycharm-professional
+        slack
+        thunderbird
+      ];
 
   # How many times do I have to say that I am okay with non-free software?! I guess when
   # you specify packages with home.packages you also need to specify it here?
+  # (Me from the future: yes that is the case - the following line applies only to packages
+  # listed above)
   nixpkgs.config.allowUnfree = true;
 }

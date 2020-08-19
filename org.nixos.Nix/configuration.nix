@@ -55,8 +55,9 @@ in
   # Set your time zone.
   time.timeZone = "America/New_York";
 
-  # *gasp* unfree software!
-  nixpkgs.config.allowUnfree = true;
+  # This is only needed if any of the packages listed in `environment.systemPackages`
+  # are non-free.
+  # nixpkgs.config.allowUnfree = true;
 
   # Configure Zsh as an interactive shell
   programs.zsh.enable = true;

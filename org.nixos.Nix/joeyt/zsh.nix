@@ -1,4 +1,6 @@
-fetchFromGitHub:
+{ fetchFromGitHub
+, configFiles
+}:
 
 # Configuration settings for Zsh
 {
@@ -104,6 +106,7 @@ fetchFromGitHub:
     alias -g 'TRUE?'='&& echo true || echo false'
     
     source $XDG_DATA_HOME/broot/launcher/bash/1
+    source ${configFiles}/net.sourceforge.Zsh/bookmark.zsh
   '';
 
   # Plugins not available in Oh-My-Zsh
