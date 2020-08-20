@@ -1,4 +1,6 @@
-fetchFromGitHub:
+{ fetchFromGitHub
+, configFiles
+}:
 
 # Configuration settings for Zsh
 {
@@ -22,48 +24,55 @@ fetchFromGitHub:
   # Where the .zsh_history file is saved
   history.path = ".local/share/zsh/zsh_history";
 
-  # Extra commands that should be added to .zshenv
-  envExtra = ''
-    export EDITOR=micro
-  
-    # Tell z.lua where to store its data file
-    export _ZL_DATA="$HOME/.local/share/z.txt"
+  # Environment variables that will be set for Zsh session
+  sessionVariables = {
+    EDITOR = "micro";    
+
+    SPROMPT = "Correct $fg[red]%R$reset_color to $fg[green]%r$reset_color?\n\t[Yes, No, Abort, Edit] ";
+
+    ZSH_PLUGINS_ALIAS_TIPS_TEXT = "Found existing alias: ";
+    ZSH_PLUGINS_ALIAS_TIPS_EXCLUDES = "_";
+
+    # Tell z.lua where to store its data file    
+    _ZL_DATA = "$XDG_DATA_HOME/z.txt";
 
     # Tell z.lua which command-line fuzzy finder to use
-    export _ZL_FZF=sk
-    export _ZL_FZF_FLAG='--no-sort'
-
-    # Tell Vim where its config file is
-    export VIMINIT="source $HOME/.config/vim/vimrc"
+    _ZL_FZF = "sk";
+    _ZL_FZF_FLAG = "--no-sort";
 
     # I'm confused why there's a ~/.gtkrc-2.0 and a ~/.config/gtkrc-2.0
-    export GTK2_RC_FILES="$HOME/.config/gtk-2.0/gtkrc"
+    GTK2_RC_FILES = "$XDG_CONFIG_HOME/gtk-2.0/gtkrc";
 
     # Move less' history file
-    export LESSKEY="$HOME/.cache/less/lesskey"
-    export LESSHISTFILE="$HOME/.cache/less/history"
+    LESSKEY = "$XDG_CONFIG_HOME/less/lesskey";
+    LESSHISTFILE = "$XDG_CACHE_HOME/less/history";
 
     # Tell Cargo where its files are
-    export CARGO_HOME="$HOME/.local/share/cargo"
+    CARGO_HOME = "$XDG_DATA_HOME/cargo";
 
     # This is where ripgrep's configuration file is
-    export RIPGREP_CONFIG_PATH="$HOME/.config/ripgreprc"
-  '';
+    RIPGREP_CONFIG_PATH = "$XDG_CONFIG_HOME/ripgreprc";
+  };
 
   # Extra local variables defined at the top of .zshrc
-  # localVariables = {};
+  localVariables = {
+    COMPLETION_WAITING_DOTS = true;
+    DISABLE_UNTRACKED_FILES_DIRTY = true;
+    HYPHEN_INSENSITIVE = true;
+    ZSH_THEME_VIRTUALENV_PREFIX = "⟨";
+    ZSH_THEME_VIRTUALENV_SUFFIX = "⟩";
+  };
 
   # Extra commands that should be added to .zshrc
   initExtra = ''
-    # This function will first try cd, and if cd fails then it will invoke z.lua
-    function j {
-      if [[ "$argv[1]" == "-"* ]]; then
-        z "$@"
-      else
-        cd "$@" 2> /dev/null || z "$@"
-      fi
-      command ls -F --color=tty
-    }
+    # Autoload functions
+    fpath+=$ZDOTDIR/zfunc
+
+    autoload _python-workon-cwd
+    autoload j
+    autoload mkcd
+    autoload print_array
+    autoload rmmetadata
 
     # A function that allows ripgrep-all (rga) with skim (sk)
     function rga-sk {
@@ -80,11 +89,11 @@ fetchFromGitHub:
       xdg-open "$file"
     }
 
-    # Spell check
-    #############
-    setopt correct
-    export SPROMPT="Correct $fg[red]%R$reset_color to $fg[green]%r$reset_color?
-    	[Yes, No, Abort, Edit] "
+    autoload -Uz add-zsh-hook
+    add-zsh-hook chpwd _python-workon-cwd
+
+    setopt NO_CASE_GLOB # Case-insensitive globbing
+    setopt correct # Spell check
 
     # As far as I know you cannot set global aliases with home-manager so I
     # guess I gotta do it myself!
@@ -92,9 +101,12 @@ fetchFromGitHub:
     alias -g H='| head'
     alias -g T='| tail'
     alias -g L='| less'
+    alias -g G='| grep -n'
+    alias -g NUL='> /dev/null 2>&1'
     alias -g 'TRUE?'='&& echo true || echo false'
     
-    source /home/joeyt/.local/share/broot/launcher/bash/1
+    source $XDG_DATA_HOME/broot/launcher/bash/1
+    source ${configFiles}/net.sourceforge.Zsh/bookmark.zsh
   '';
 
   # Plugins not available in Oh-My-Zsh
@@ -120,12 +132,12 @@ fetchFromGitHub:
     }
 
     {
-      name = "you-should-use";
+      name = "alias-tips";
       src = fetchFromGitHub {
-        owner = "MichaelAquilina";
-        repo = "zsh-you-should-use";
-        rev = "v1.7.0";
-        sha256 = "1gcxm08ragwrh242ahlq3bpfg5yma2cshwdlj8nrwnd4qwrsflgq";
+        owner = "djui";
+        repo = "alias-tps";
+        rev = "40d8e206c6d6e41e039397eb455bedca578d2ef8";
+        sha256 = "17cifxi4zbzjh1damrwi2fyhj8x0y2m2qcnwgh4i62m1vysgv9xb";
       };
     }
 
@@ -142,7 +154,6 @@ fetchFromGitHub:
   ];
 
   shellAliases = {
-    diff = "diff --color --report-identical-files";
     pbcopy = "xclip -sel clip";
     pbpaste = "xclip -o -sel clip";
     
@@ -151,15 +162,18 @@ fetchFromGitHub:
     lsdl = "lsd -lF --date relative";
     lsda = "lsd -aF";
     lsdla = "lsd -laF --date relative";
+    lbr = "br -sdp";
     tree = "br --cmd :pt";
     ltree = "lsd --tree";
     ldot = "ls -ld .*";
 
     # For quickly editing configuration files
     nixconfig = "sudo nixos-rebuild edit";
-    brootconfig = "${EDITOR:-vim} $HOME/.config/broot/conf.toml";
+    vimconfig = "${EDITOR:-vim} $HOME/.vimrc";
+    brootconfig = "${EDITOR:-vim} $XDG_CONFIG_HOME/broot/conf.toml";
 
     # Make some commands more verbose
+    diff = "diff --color --report-identical-files";
     rm = "rm -v";
     mv = "mv -v";
     cp = "cp -v";
@@ -171,12 +185,13 @@ fetchFromGitHub:
     enable = true;
 
     # Needed for my custom "joeys-avit" theme below
-    custom = "\$HOME/.config/zsh";
+    custom = "\$XDG_CONFIG_HOME/zsh";
 
     # Which Oh-My-Zsh plugins to use
     plugins = [
-      "git" "cargo"
+      "git" "cargo" "virtualenv"
     ];
+    
     theme = "joeys-avit";
   };
 }
