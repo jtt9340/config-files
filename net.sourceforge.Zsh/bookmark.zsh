@@ -22,7 +22,7 @@ function bookmark {
     # When no arguments are provided just display existing bookmarks
     for link in $MARKPATH/*(N@); do
       local markname="$fg[green]${link:t}$reset_color"
-      local markpath="$fg[cyan]${link/${HOME}/~}$reset_color"
+      local markpath="$fg[cyan]${${link:A}/${HOME}/~}$reset_color"
       printf "%-30s -> %s\n" $markname $markpath
     done
   else

@@ -14,6 +14,28 @@
 #  pattern.
 # Example:
 #  execution = "/usr/bin/nvim {file}"
+[[verbs]]
+invocation = "panel_left"
+key = "F3"
+shortcut = "pl"
+execution = ":panel_left"
+
+[[verbs]]
+invocation = "panel_right"
+key = "F4"
+shortcut = "pr"
+execution = ":panel_right"
+
+[[verbs]]
+invocation = "open_preview"
+key = "alt-f"
+execution = ":open_preview"
+
+[[verbs]]
+invocation = "close_preview"
+key = "alt-b"
+execution = ":close_preview"
+
 {%@@ elif profile == "nixos" @@%}
 ###############################################################
 # This configuration file lets you
@@ -95,6 +117,54 @@ execution = "/usr/local/bin/bat {file}"
 execution = "/run/current-system/sw/bin/bat {file}"
 {%@@ endif @@%}
 
+[[verbs]]
+invocation = "touch {item}"
+{%@@ if profile == "macos" @@%}
+execution = "/usr/bin/touch {item}"
+{%@@ elif profile == "nixos" @@%}
+execution = "/run/current-system/sw/bin/touch {item}"
+{%@@ endif @@%}
+leave_broot = false
+
+[[verbs]]
+name = "trash"
+description = "Move to trash"
+invocation = "trash"
+{%@@ if profile == "macos" @@%}
+execution = "/usr/local/bin/trash {file}"
+{%@@ elif profile == "nixos" @@%}
+execution = "/run/current-system/sw/bin/trash {file}"
+{%@@ endif @@%}
+leave_broot = false
+
+{%@@ if profile == "macos" @@%}
+[[verbs]]
+invocation = "zshconfig"
+description = "Edit .zshrc"
+execution = "zshconfig"
+from_shell = true
+{%@@ endif @@%}
+
+[[verbs]]
+invocation = "vimconfig"
+description = "Edit .vimrc"
+execution = "vimconfig"
+from_shell = true
+
+[[verbs]]
+invocation = "brootconfig"
+description = "Edit Broot configuration file"
+execution = "brootconfig"
+from_shell = true
+
+{%@@ if profile == "macos" @@%}
+[[verbs]]
+name = "Quick Look"
+description = "Quick Look"
+invocation = "ql"
+execution = "ql {file}"
+from_shell = true
+{%@@ endif @@%}
 {%@@ if profile == "nixos" @@%}
 # If you uncomment the two next shortcuts, the left
 # and right arrow keys will be used to go to the parent

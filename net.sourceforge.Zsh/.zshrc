@@ -119,7 +119,7 @@ done
 ###############
 # Miscellaneous
 ###############
-{%@@ if hostname == 'Joeys-MacBook-Pro-2.local' @@%}
+{%@@ if os == 'Darwin' @@%}
 # MANPATH="/usr/local/gnupg-2.2/share/man${MANPATH:+:$MANPATH}"
 manpath=(/usr/local/gnupg-2.2/share/man $manpath)
 {%@@ endif @@%}
