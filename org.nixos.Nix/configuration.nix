@@ -72,12 +72,14 @@ in
     fd
     file
     firefox
+    flameshot
     gcc
     git
     gnumake
     gparted
     htop
     kate
+    okular
     micro
     nix-prefetch-git
     nix-prefetch-github

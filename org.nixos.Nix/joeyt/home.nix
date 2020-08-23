@@ -57,12 +57,14 @@ in
         # CLI tools
         pkgsUnstable.broot
         lua
+        sshfs
     
         # GUI apps
         bitwarden
         discord
         jetbrains.idea-ultimate
         jetbrains.pycharm-professional
+        libreoffice
         slack
         thunderbird
       ];
