@@ -36,9 +36,12 @@ in
   # The global useDHCP flag is deprecated, therefore explicitly set to false here.
   # Per-interface useDHCP will be mandatory in the future, so this generated config
   # replicates the default behaviour.
-  networking.useDHCP = false;
-  networking.interfaces.enp0s25.useDHCP = true;
-  networking.interfaces.wlp0s26f7u3.useDHCP = true;
+  # Joey: I think this can all be managed by networkmanager
+  # networking.useDHCP = false;
+  # networking.interfaces.enp0s25.useDHCP = true;
+  # networking.interfaces.wlp0s26f7u3.useDHCP = true;
+  # Used to facilitate network configuration (I probably need this?)
+  networking.networkmanager.enable = true;
 
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
@@ -108,9 +111,6 @@ in
 
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
-
-  # Used to facilitate network configuration (I probably need this?)
-  networking.networkmanager.enable = true;
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
