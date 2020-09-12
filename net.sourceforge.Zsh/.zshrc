@@ -122,6 +122,7 @@ done
 {%@@ if os == 'Darwin' @@%}
 # MANPATH="/usr/local/gnupg-2.2/share/man${MANPATH:+:$MANPATH}"
 manpath=(/usr/local/gnupg-2.2/share/man $manpath)
+export MANPATH
 {%@@ endif @@%}
 
 {%@@ if exists_in_path('brew') @@%}

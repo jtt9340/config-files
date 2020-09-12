@@ -5,7 +5,7 @@
 #
 # Configuration documentation is available at https://dystroy.org/broot
 #
-
+default_flags = "g"
 #####################
 # user defined verbs:
 

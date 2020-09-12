@@ -59,7 +59,7 @@ alias brewx='brew uninstall' # uninstalls a formula
 alias cask='brew cask'
 alias caskc='brew cleanup' # same as brew cleanup
 alias caski='brew cask install' # installs a cask
-alias caskl='brew cask list' # lists installed casks
+alias caskl='brew list --cask' # lists installed casks
 alias casko='brew cask outdated' # lists casks which have an update available
 alias casks='brew search --casks' # same as brew search 
 alias caskx='brew cask uninstall' # uninstalls a cask
@@ -77,6 +77,10 @@ alias -g 'TRUE?'='&& echo true || echo false'
 # Make some commands more verbose
 alias rm='rm -v'
 alias mv='mv -v'
+{%@@ if profile == "macos" @@%}
+alias diff='diff -s'
+{%@@ else @@%}
 alias diff='diff -s --color=always'
+{%@@ endif @@%}
 alias cp='cp -v'
 
