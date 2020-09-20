@@ -51,6 +51,8 @@ if ! zgen saved; then
   zgen oh-my-zsh plugins/rustup
   zgen oh-my-zsh plugins/virtualenv
 
+  zgen load zsh-users/zsh-completions src
+
   # Aliases
   if [[ -f $ALIASRC ]]; then
     zgen load $ALIASRC
