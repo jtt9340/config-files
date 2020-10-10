@@ -52,8 +52,6 @@ export RUSTUP_HOME="$HOME/Library/Application Support/Rustup"
 
 # Tell Zsh to make all files in this directory
 export ZGEN_DIR=$ZDOTDIR/zgen
-export ZGEN_SYSTEM_RECEIPT_F=${${ZDOTDIR}#${HOME}}/zgen_system_lastupdate
-export ZGEN_PLUGIN_RECEIPT_F=${${ZDOTDIR}#${HOME}}/zgen_plugin_lastupdate
 export _Z_DATA=$ZDOTDIR/z.txt
 
 {#@@ GPG @@#}
