@@ -34,6 +34,11 @@ path=(/usr/local/opt/python@3.8/bin /usr/local/opt/llvm/bin $path)
 eval "${(@M)${(f)"$(brew shellenv 2> /dev/null)"}:#export HOMEBREW*}"
 {%@@ endif @@%}
 
+{#@@ Bat (its configuration file location changed for some reason) @@#}
+{%@@ if os == 'Darwin' @@%}
+export BAT_CONFIG_PATH="$HOME/Library/Application Support/bat/config"
+{%@@ endif @@%}
+
 # Reconfiguring programs to store their configuation/data files somewhere besides the home directory
 {#@@ Rustup @@#}
 {%@@ if exists_in_path('rustup') @@%}
@@ -47,8 +52,6 @@ export RUSTUP_HOME="$HOME/Library/Application Support/Rustup"
 
 # Tell Zsh to make all files in this directory
 export ZGEN_DIR=$ZDOTDIR/zgen
-export ZGEN_SYSTEM_RECEIPT_F=${${ZDOTDIR}#${HOME}}/zgen_system_lastupdate
-export ZGEN_PLUGIN_RECEIPT_F=${${ZDOTDIR}#${HOME}}/zgen_plugin_lastupdate
 export _Z_DATA=$ZDOTDIR/z.txt
 
 {#@@ GPG @@#}

@@ -51,6 +51,8 @@ if ! zgen saved; then
   zgen oh-my-zsh plugins/rustup
   zgen oh-my-zsh plugins/virtualenv
 
+  zgen load zsh-users/zsh-completions src
+
   # Aliases
   if [[ -f $ALIASRC ]]; then
     zgen load $ALIASRC
@@ -121,7 +123,8 @@ done
 ###############
 {%@@ if os == 'Darwin' @@%}
 # MANPATH="/usr/local/gnupg-2.2/share/man${MANPATH:+:$MANPATH}"
-manpath=(/usr/local/gnupg-2.2/share/man $manpath)
+manpath=(/usr/local/gnupg-2.2/share/man /usr/share/man /usr/local/share/man $manpath)
+export MANPATH
 {%@@ endif @@%}
 
 {%@@ if exists_in_path('brew') @@%}
