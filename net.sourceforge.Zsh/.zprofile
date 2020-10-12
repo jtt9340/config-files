@@ -95,6 +95,18 @@ export NPM_CONFIG_USERCONFIG="$HOME/Library/Application Support/com.npmjs.Npm/np
 export NODE_REPL_HISTORY="$HOME/Library/Application Support/com.npmjs.Npm/node_repl_history"
 {%@@ endif @@%}
 
+{#@@ Go @@#}
+# Go(lang)
+{%@@ if exists_in_path('go') and os == 'Darwin' @@%}
+export GOPATH=$HOME/Library/Application\ Support/org.golang.Go
+{%@@ elif exists_in_path('go') @@%}
+if [[ -n $XDG_DATA_HOME ]]; then
+  export GOPATH="$XDG_DATA_HOME"/go
+elif [[ -d $HOME/.local/share/go ]]; then
+  export GOPATH=$HOME/.local/share/go
+fi
+{%@@ endif @@%}
+
 {#@@ less @@#}
 {%@@ if exists_in_path('less') @@%}
 # Store less' files somewhere besides the home directory
