@@ -158,7 +158,6 @@
     pbpaste = "xclip -o -sel clip";
     
     # ls aliases
-    lsd = "lsd --icon never";
     lsdl = "lsd -lF --date relative";
     lsda = "lsd -aF";
     lsdla = "lsd -laF --date relative";
@@ -169,8 +168,8 @@
 
     # For quickly editing configuration files
     nixconfig = "sudo nixos-rebuild edit";
-    vimconfig = "${EDITOR:-vim} $HOME/.vimrc";
-    brootconfig = "${EDITOR:-vim} $XDG_CONFIG_HOME/broot/conf.toml";
+    vimconfig = "\${EDITOR:-vim} $HOME/.vimrc";
+    brootconfig = "\${EDITOR:-vim} $XDG_CONFIG_HOME/broot/conf.toml";
 
     # Make some commands more verbose
     diff = "diff --color --report-identical-files";
