@@ -96,15 +96,17 @@ export NODE_REPL_HISTORY="$HOME/Library/Application Support/com.npmjs.Npm/node_r
 {%@@ endif @@%}
 
 {#@@ Go @@#}
+{%@@ if exists_in_path('go') @@%}
 # Go(lang)
-{%@@ if exists_in_path('go') and os == 'Darwin' @@%}
+{%@@ if os == 'Darwin' @@%}
 export GOPATH=$HOME/Library/Application\ Support/org.golang.Go
-{%@@ elif exists_in_path('go') @@%}
+{%@@ else @@%}
 if [[ -n $XDG_DATA_HOME ]]; then
   export GOPATH="$XDG_DATA_HOME"/go
 elif [[ -d $HOME/.local/share/go ]]; then
   export GOPATH=$HOME/.local/share/go
 fi
+{%@@ endif @@%}
 {%@@ endif @@%}
 
 {#@@ less @@#}
