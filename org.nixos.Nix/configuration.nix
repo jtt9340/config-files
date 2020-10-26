@@ -80,6 +80,7 @@ in
     git
     gnumake
     gparted
+    hunspellDicts.en-us
     htop
     kate
     okular
@@ -142,7 +143,9 @@ in
   };
 
   # "On 64-bit systems, if you want OpenGL for 32-bit programs such as in Wine, you should also set the following"
-  hardware.opengl.driSupport32Bit = true;
+  # Could this be why programs fail with an error saying my version of OpenGL is too old?
+  # hardware.opengl.driSupport32Bit = true;
+  hardware.opengl.enable = true;
 
   # Automatically keep NixOS up-to-date, but don't automatically reboot
   system.autoUpgrade = {
