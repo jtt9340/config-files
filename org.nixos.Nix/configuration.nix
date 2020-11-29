@@ -5,10 +5,11 @@
 { config, pkgs, ... }:
 
 let
-  pypi2nix = import (pkgs.fetchgit {
-    url = "https://github.com/nix-community/pypi2nix";
-    rev = "v2.0.4";
-    sha256 = "023b5l2blbzafh9327l5j9b5n05wqxqc75mv8h94927sd5rr9ggr";
+  pypi2nix = import (pkgs.fetchFromGitHub {
+    owner = "nix-community";
+    repo = "pypi2nix";
+    rev = "0dbd119465ff2ccbe43cb83431eba792b536a640";
+    sha256 = "1zxgy3znw0i6h1lxhmnx001c1pdcyszwqj8f0d0092nmnngdzsrl";
   }) {};
 in
 {

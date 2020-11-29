@@ -3,10 +3,10 @@
 let
   # Path to my repository for storing config/dot files
   configFiles = "${config.home.homeDirectory}/Projects/config-files";
-  # nixos-unstable (for more recent version of some packages)
-  pkgsUnstable = import <nixpkgs-unstable> {
-    config = { allowUnfree = true; };
-  };
+  # nixos-unstable (for more recent version of some packages, need to subscribe to nixpkgs-unstable first)
+  # pkgsUnstable = import <nixpkgs-unstable> {
+  #   config = { allowUnfree = true; };
+  # };
 in
 {
   xdg = {
@@ -49,25 +49,28 @@ in
     lsd.enable = true;
   };
 
-  home.packages = 
-    let
-      jetbrains = pkgsUnstable.jetbrains;
-    in
-      with pkgs; [
-        # CLI tools
-        pkgsUnstable.broot
-        lua
-        sshfs
-    
-        # GUI apps
-        bitwarden
-        discord
-        jetbrains.idea-ultimate
-        jetbrains.pycharm-professional
-        libreoffice
-        slack
-        thunderbird
-      ];
+  home.packages = with pkgs; [
+    # CLI tools
+    bat-extras.batdiff
+    bat-extras.batgrep
+    bat-extras.batman
+    bat-extras.prettybat
+    broot
+    elvish
+    go-sct # Program for fading screen to orange at nighttime
+    nodePackages.insect
+    lua
+    sshfs
+
+    # GUI apps
+    bitwarden
+    discord
+    jetbrains.idea-ultimate
+    jetbrains.pycharm-professional
+    libreoffice
+    slack
+    thunderbird
+  ];
 
   # How many times do I have to say that I am okay with non-free software?! I guess when
   # you specify packages with home.packages you also need to specify it here?
