@@ -14,6 +14,8 @@ config:
   - '*/.DS_Store'
 dynvariables:
   os: uname
+actions:
+  zshenv: ln -s {{ dst }}/.zshenv $HOME/.zshenv
 dotfiles:
   f_vimrc:
     src: org.vim.Vim/vimrc
@@ -37,10 +39,6 @@ dotfiles:
   f_npmrc:
     src: com.npmjs.Npm/npmrc 
     dst: ~/Library/Application Support/com.npmjs.Npm/npmrc
-    link: link
-  f_zshenv:
-    src: net.sourceforge.Zsh/.zshenv
-    dst: ~/.zshenv
     link: link
   f_joeys-avit.zsh-theme:
     src: net.sourceforge.Zsh/joeys-avit.zsh-theme
@@ -81,6 +79,8 @@ dotfiles:
     - bookmarks
     - zgen*
     - z.txt
+    actions:
+      - zshenv
   f_ripgreprc:
     src: com.github.burntsushi.Ripgrep/ripgreprc
     dst: "{{@@ env['RIPGREP_CONFIG_PATH'] @@}}"
@@ -88,7 +88,6 @@ dotfiles:
 profiles:
   macos:
     dotfiles:
-    - f_zshenv
     - f_org.dystroy.broot_conf.toml
     - f_vimrc
     - f_npmrc
