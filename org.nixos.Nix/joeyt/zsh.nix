@@ -116,8 +116,8 @@
       src = fetchFromGitHub {
         owner = "zsh-users";
         repo = "zsh-syntax-highlighting";
-        rev = "v0.7.1";
-        sha256 = "0zmq66dzasmr5pwribyh4kbkk23jxbpdw4rjxx0i7dx8jjp2lzl4";
+        rev = "1715f39a4680a27abd57fc30c98a95fdf191be45";
+        sha256 = "1kpxima0fnypl7fak4snxnf6nj36nvp1gqwpx1ailyrgxa8641j0";
       };
     }
 

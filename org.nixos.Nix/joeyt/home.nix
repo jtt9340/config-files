@@ -36,7 +36,7 @@ in
     };
 
     # Git config
-    git = import ./git.nix;
+    git = (import ./git.nix) pkgs.bat-extras.batman;
 
     # Use z-lua, a program that remembers your most frequently cd-ed to directories to make
     # it easier to cd to them
@@ -57,7 +57,6 @@ in
     bat-extras.prettybat
     broot
     elvish
-    go-sct # Program for fading screen to orange at nighttime
     nodePackages.insect
     lua
     sshfs

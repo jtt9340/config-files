@@ -80,7 +80,6 @@ in
     gcc
     git
     gnumake
-    gparted
     hunspellDicts.en-us
     htop
     kate
@@ -88,6 +87,8 @@ in
     micro
     nix-prefetch-git
     nix-prefetch-github
+    partition-manager
+    peek
     pypi2nix
     ripgrep-all
     trash-cli
