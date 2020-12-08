@@ -5,12 +5,7 @@
 { config, pkgs, ... }:
 
 let
-  pypi2nix = import (pkgs.fetchFromGitHub {
-    owner = "nix-community";
-    repo = "pypi2nix";
-    rev = "0dbd119465ff2ccbe43cb83431eba792b536a640";
-    sha256 = "1zxgy3znw0i6h1lxhmnx001c1pdcyszwqj8f0d0092nmnngdzsrl";
-  }) {};
+  pypi2nix = import (import ./program/pypi2nix/default.nix pkgs.fetchFromGitHub) {};
 in
 {
   imports =
@@ -28,6 +23,10 @@ in
   # boot.loader.efi.efiSysMountPoint = "/boot/efi";
   # Define on which hard drive you want to install Grub.
   boot.loader.grub.device = "/dev/sda"; # or "nodev" for efi only
+
+  nix.extraOptions = ''
+    plugin-files = ${pkgs.callPackage ./program/nix-doc/default.nix {}}/lib/libnix_doc_plugin.so
+  '';
 
   networking.hostName = "craigscomputer"; # Define your hostname.
   # The following does not need to be enabled, so long as a user is in the "networkmanager" group
@@ -85,6 +84,7 @@ in
     kate
     okular
     micro
+    (callPackage ./program/nix-doc/default.nix {})
     nix-prefetch-git
     nix-prefetch-github
     partition-manager

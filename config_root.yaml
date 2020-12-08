@@ -6,14 +6,18 @@ config:
   link_dotfile_default: nolink
 dotfiles:
   f_etc_nixos_configuration.nix:
-    src: configuration.nix 
+    src: configuration.nix
     dst: /etc/nixos/configuration.nix
     link: nolink
   d_joeyt:
     src: joeyt
     dst: /etc/nixos/joeyt
+  d_program:
+    src: program
+    dst: /etc/nixos/program
 profiles:
   nixos:
     dotfiles:
     - f_etc_nixos_configuration.nix
     - d_joeyt
+    - d_program
