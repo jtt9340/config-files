@@ -18,12 +18,6 @@ alias brootconfig="${EDITOR:-vim} $HOME/Library/Preferences/org.dystroy.broot/co
 alias brootconfig="${EDITOR:-vim} $XDG_CONFIG_HOME/broot/conf.toml"
 {%@@ endif @@%}
 
-{%@@ if exists_in_path('mvn') and os == 'Darwin' @@%}
-alias mvn='mvn -gs ~/Library/Application\ Support/org.apache.Maven/settings.xml'
-{%@@ elif exists_in_path('mvn') and env['XDG_CONFIG_HOME'] is string @@%}
-alias mvn='mvn -gs "$XDG_CONFIG_HOME"/maven/settings.xml'
-{%@@ endif @@%}
-
 # ls aliases
 alias ldot='ls -d .*'
 alias lab='ls -AbFG'
