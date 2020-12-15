@@ -6,6 +6,7 @@
 # Configuration documentation is available at https://dystroy.org/broot
 #
 default_flags = "g"
+icon_theme = "vscode"
 #####################
 # user defined verbs:
 

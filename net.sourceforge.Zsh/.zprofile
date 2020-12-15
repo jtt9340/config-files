@@ -17,7 +17,7 @@
 # The original version is saved in .bash_profile.pysave
 # And also use a version of LLVM that supports LeakSanitizer
 # export PATH="/usr/local/opt/python@3.8/bin:${PATH}"
-path=(/usr/local/opt/python@3.8/bin /usr/local/opt/llvm/bin $path)
+path=(/usr/local/opt/python@3.9/bin /usr/local/opt/llvm/bin $path)
 # export PATH="/usr/local/opt/llvm/bin:$PATH"
 {%@@ endif @@%}
 

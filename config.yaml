@@ -15,7 +15,8 @@ config:
 dynvariables:
   os: uname
 actions:
-  zshenv: ln -s {{ dst }}/.zshenv $HOME/.zshenv
+  zshenv: >-
+    ln -i -s "{{@@ _dotfile_abs_dst @@}}/.zshenv" {{@@ env['HOME'] @@}}/.zshenv
 dotfiles:
   f_vimrc:
     src: org.vim.Vim/vimrc
@@ -60,10 +61,8 @@ dotfiles:
     link: link_children
     instignore:
     - joeys-avit.zsh-theme
-    - '*/.zshenv'
     cmpignore:
     - joeys-avit.zsh-theme
-    - '*/.zshenv'
     - .zcompdump*
     - .zsh_history
     - .zshdb_hist
@@ -72,7 +71,6 @@ dotfiles:
     - z.txt
     upignore:
     - joeys-avit.zsh-theme
-    - '*/.zshenv'
     - .zcompdump*
     - .zsh_history
     - .zshdb_hist
