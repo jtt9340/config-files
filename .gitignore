@@ -1,6 +1,25 @@
+# macOS cruft
 **/.DS_Store
+
+# Call your Python virtualenv 'env'
 env
+
+# The result symlink created on NixOS
 result
+
+# When dotdrop has to deploy files that use Jinja
+# templates, they are stored in this directory, so
+# we don't need to check that into Git.
 templated
+
+# This directory stores scripts that provide shell tab
+# completion for Zsh and can be generated from external programs,
+# so since those can be re-generated from said programs we
+# don't need to check this into Git, either.
 net.sourceforge.Zsh/zfunc/_*
+
+# Except this function, I want this one. It has been graciously
+# taken from Prezto and allows your Python virtualenvs to automatically
+# be activated and deactivated upon entering and leaving directories that
+# contain them.
 !net.sourceforge.Zsh/zfunc/_python-workon-cwd
