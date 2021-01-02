@@ -12,21 +12,56 @@ config:
   - '*/.DS_Store'
   instignore:
   - '*/.DS_Store'
+variables:
+  vimdir: >-
+    {{@@
+      env['XDG_CONFIG_HOME'] + '/vim' if env['XDG_CONFIG_HOME'] is string
+      else env['HOME'] + '/Library/Application Support/org.vim.Vim' if profile == 'macos'
+      else env['HOME'] + '/.config/vim' if exists('~/.config/vim')
+      else env['HOME'] + '/.vim'
+    @@}}
 dynvariables:
   os: uname
 actions:
   zshenv: >-
     ln -i -s "{{@@ _dotfile_abs_dst @@}}/.zshenv" {{@@ env['HOME'] @@}}/.zshenv
+  install_vim_plugins: |-
+    if [ ! -d "{{@@ vimdir @@}}/pack/vendor/start/nerdtree" ]; then
+      # The NERDTree plugin is not installed, so install it
+      echo Installing NERDTree Vim plugin
+      mkdir -pv {{@@ vimdir @@}}/pack/vendor/start
+      git clone https://github.com/preservim/nerdtree.git "{{@@ vimdir @@}}/pack/vendor/start/nerdtree"
+      vim -u NONE -c "helptags {{@@ vimdir @@}}/pack/vendor/start/nerdtree/doc" -c q
+      echo Installed NERDTree Vim plugin
+    else
+      echo NERDTree Vim plugin already installed!
+    fi
+    if [ ! -d "{{@@ vimdir @@}}/pack/vendor/start/nerdtree-git-plugin" ]; then
+      # The NERDTree-Git plugin is not installed, so install it
+      echo Installing NERDTree Git Plugin Vim plugin
+      mkdir -pv {{@@ vimdir @@}}/pack/vendor/start
+      git clone https://github.com/Xuyuanp/nerdtree-git-plugin.git "{{@@ vimdir @@}}/pack/vendor/start/nerdtree-git-plugin"
+      echo Installed NERDTree Git Plugin Vim plugin
+    else
+      echo NERDTree Git Plugin Vim plugin already installed!
+    fi
+    if [ ! -d "{{@@ vimdir @@}}/pack/airblade/start/vim-gitgutter" ]; then
+      # The Vim-Gitgutter plugin is not installed, so install it
+      echo Installing Vim-Gitgutter Vim plugin
+      mkdir -pv {{@@ vimdir @@}}/pack/airblade/start
+      git clone https://github.com/airblade/vim-gitgutter.git "{{@@ vimdir @@}}/pack/airblade/start/vim-gitgutter"
+      vim -u NONE -c "helptags {{@@ vimdir @@}}/pack/vendor/start/vim-gitgutter/doc" -c q
+      echo Installed Vim-Gitgutter Vim plugin
+    else
+      echo Vim-Gitgutter Vim plugin already installed!
+    fi
 dotfiles:
   f_vimrc:
     src: org.vim.Vim/vimrc
-    dst: >-
-      {{@@
-        '~/.config/vim/vimrc' if env['XDG_CONFIG_HOME'] is string
-        else '~/Library/Application Support/org.vim.Vim/vimrc' if os == 'Darwin'
-        else '~/.vimrc'
-      @@}}
+    dst: "{{@@ '~/.vimrc' if vimdir == '~/.vim' else vimdir + '/vimrc' @@}}"
     link: link
+    actions:
+    - install_vim_plugins
   f_org.dystroy.broot_conf.toml:
     src: org.dystroy.broot/conf.toml
     dst: "{{@@ '~/Library/Preferences/org.dystroy.broot/conf.toml' if os == 'Darwin' else '~/.config/broot/conf.toml' @@}}"
@@ -41,28 +76,16 @@ dotfiles:
     src: com.npmjs.Npm/npmrc 
     dst: ~/Library/Application Support/com.npmjs.Npm/npmrc
     link: link
-  f_joeys-avit.zsh-theme:
-    src: net.sourceforge.Zsh/joeys-avit.zsh-theme
-    dst: >-
-      {{@@
-        '~/.config/zsh/themes/joeys-avit.zsh-theme' if env['XDG_CONFIG_HOME'] is string
-        else '~/Library/Application Support/net.sourceforge.Zsh/joeys-avit.zsh-theme' if os == 'Darwin'
-        else '~/.zsh/joeys-avit.zsh-theme' 
-      @@}}
-    link: link
   d_zdotdir:
     src: net.sourceforge.Zsh
     dst: >-
       {{@@
-        '~/.config/zsh' if env['XDG_CONFIG_HOME'] is string
+        env['XDG_CONFIG_HOME'] + '/zsh' if env['XDG_CONFIG_HOME'] is string
         else '~/Library/Application Support/net.sourceforge.Zsh' if os == 'Darwin'
         else '~/.zsh'
       @@}}
     link: link_children
-    instignore:
-    - joeys-avit.zsh-theme
     cmpignore:
-    - joeys-avit.zsh-theme
     - .zcompdump*
     - .zsh_history
     - .zshdb_hist
@@ -70,7 +93,6 @@ dotfiles:
     - zgen*
     - z.txt
     upignore:
-    - joeys-avit.zsh-theme
     - .zcompdump*
     - .zsh_history
     - .zshdb_hist
@@ -90,13 +112,11 @@ profiles:
     - f_vimrc
     - f_npmrc
     - d_zdotdir
-    - f_joeys-avit.zsh-theme
     - f_ripgreprc
   nixos:
     dotfiles:
     - f_vimrc
     - f_org.dystroy.broot_conf.toml
-    - f_joeys-avit.zsh-theme
     - f_nixpkgs_config.nix
     - f_micro_settings.json
     - f_ripgreprc

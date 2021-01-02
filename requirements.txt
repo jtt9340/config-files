@@ -1,1 +1,1 @@
--e git+https://github.com/jtt9340/dotdrop.git@0b58578aa0e5c2e9219e0aae6039cbbee1b742a8#egg=dotdrop
+git+ssh://git@github.com/deadc0de6/dotdrop.git@master#egg=dotdrop

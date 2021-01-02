@@ -8,7 +8,7 @@ augroup numbertoggle
 augroup END
 
 " Make backspace work like in most programs (apparently Vim has a feature that tries
-" to prevent you from unintentionally removing indentation exept it makes using backspace
+" to prevent you from unintentionally removing indentation except it makes using backspace
 " really annoying)
 set backspace=indent,eol,start
 
@@ -38,6 +38,7 @@ set wildmode=longest,list,full
 
 " Syntax highlighting
 syntax on
+colorscheme koehler
 autocmd BufRead,BufNewFile *.zsh* set syntax=zsh
 
 " Make a tab appear to be 4 spaces wide (https://stackoverflow.com/questions/1878974/redefine-tab-as-4-spaces)
@@ -47,3 +48,24 @@ set tabstop=4 softtabstop=0 noexpandtab shiftwidth=4
 autocmd BufRead,BufNewFile *.nix,*.zsh*,*.yaml set tabstop=2 softtabstop=0 expandtab shiftwidth=2
 
 autocmd BufRead,BufNewFile *.py set expandtab
+
+" Settings for NERDTree, a file finder that appears at the left
+" Show NERDTree if no files were specified when invoking Vim
+autocmd StdinReadPre * let s:std_in = 1
+autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+
+" :q quits even when NERDTree is open
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+
+" Show hidden files all the time (it will be cool if I could just change this on the fly and have this
+" automatically update without having to close and re-open NERDTree, similar to how I can just do
+" :toggle_hidden in Broot)
+let NERDTreeShowHidden = 1
+
+" Settings for NERDTree-git-plugin which integrates NERDTree with Git
+let g:NERDTreeGitStatusUseNerdFonts = 1 " Use Nerd fonts
+let g:NERDTreeGitStatusConcealBrackets = 1 " Hide the [ ] around the icons
+
+" Settings for vim-gitgutter
+highlight! link SignColumn LineNr
+let g:gitgutter_set_sign_backgrounds = 1
