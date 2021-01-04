@@ -55,6 +55,15 @@ actions:
     else
       echo Vim-Gitgutter Vim plugin already installed!
     fi
+    if [ ! -d "{{@@ vimdir @@}}/pack/plugins/start/vim-toml" ]; then
+      # The Vim-TOML (syntax highlighting for TOML) is not installed, so install it
+      echo Installing Vim-TOML Vim plugin
+      mkdir -pv {{@@ vimdir @@}}/pack/plugins/start
+      git clone https://github.com/cespare/vim-toml.git "{{@@ vimdir @@}}/pack/plugins/start/vim-toml"
+      echo Installed Vim-TOML Vim plugin
+    else
+       echo Vim-TOML plugin already installed!
+    fi
 dotfiles:
   f_vimrc:
     src: org.vim.Vim/vimrc

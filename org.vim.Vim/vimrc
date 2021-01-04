@@ -22,7 +22,7 @@ set encoding=utf-8
 	is only on macOS. I wonder if Neovim has the same problem?
 @@#}
 {%@@ if profile == "macos" @@%}
-" Settings to make Vim respect the XDG base directory specification
+" Settings to make Vim not clutter the home directory
 set undodir=$HOME/Library/Application\ Support/org.vim.Vim/undo
 set directory=$HOME/Library/Application\ Support/org.vim.Vim/swap
 set backupdir=$HOME/Library/Application\ Support/org.vim.Vim/backup
@@ -41,12 +41,14 @@ syntax on
 colorscheme koehler
 autocmd BufRead,BufNewFile *.zsh* set syntax=zsh
 
+" Detect the file type and automatically indent, following the indentation rules of the detected programming language
+filetype indent on
+
 " Make a tab appear to be 4 spaces wide (https://stackoverflow.com/questions/1878974/redefine-tab-as-4-spaces)
 set tabstop=4 softtabstop=0 noexpandtab shiftwidth=4
-" Unless we're in a *.nix or *.zsh* or *.yaml file, and then I want the tab key to
-" literally be 2 spaces
+" Unless we're in a *.nix or *.zsh* or *.yaml file, and then I want the tab key to literally be 2 spaces
 autocmd BufRead,BufNewFile *.nix,*.zsh*,*.yaml set tabstop=2 softtabstop=0 expandtab shiftwidth=2
-
+" Use spaces instead of tabs in Python files
 autocmd BufRead,BufNewFile *.py set expandtab
 
 " Settings for NERDTree, a file finder that appears at the left
@@ -54,10 +56,13 @@ autocmd BufRead,BufNewFile *.py set expandtab
 autocmd StdinReadPre * let s:std_in = 1
 autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 
+" Bind Ctrl-N to toggle opening and closing NERDTree
+nmap <C-n> :NERDTreeToggle<CR>
+
 " :q quits even when NERDTree is open
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
-" Show hidden files all the time (it will be cool if I could just change this on the fly and have this
+" Show hidden files all the time (it would be cool if I could just change this on the fly and have this
 " automatically update without having to close and re-open NERDTree, similar to how I can just do
 " :toggle_hidden in Broot)
 let NERDTreeShowHidden = 1
