@@ -49,6 +49,7 @@ if ! zgen saved; then
   zgen oh-my-zsh plugins/git
   zgen oh-my-zsh plugins/cargo
   zgen oh-my-zsh plugins/rustup
+  zgen oh-my-zsh plugins/pip
   zgen oh-my-zsh plugins/virtualenv
 
   zgen load zsh-users/zsh-completions src
@@ -94,6 +95,17 @@ EOPLUGINS
   # Generate the init script from plugins above
   zgen save
 fi
+
+{#@@
+  The Oh-My-Zsh pip plugin automatically handles putting the zsh-cache file in a place
+  so as to not clutter the home directory on GNU/Linux, so we only need this line on macOS.
+@@#}
+{%@@ if profile == 'macos' @@%}
+# The Oh-My-Zsh pip plugin (see below) stores auto-completion data in this file
+# (This line needs to be placed after the "source $ZGEN_DIR/zgen.zsh"/"if ! zgen saved" block above
+# since the following variable needs to be set *after* the pip plugin is sourced.
+ZSH_PIP_CACHE_FILE=$HOME/Library/Caches/pip/zsh-cache
+{%@@ endif @@%}
 
 # See above TODO
 ZSH_THEME_VIRTUALENV_PREFIX=⟨

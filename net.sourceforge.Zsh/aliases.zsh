@@ -57,12 +57,11 @@ alias brewx='brew uninstall' # uninstalls a formula
 
 # brew cask
 alias cask='brew cask'
-alias caskc='brew cleanup' # same as brew cleanup
-alias caski='brew cask install' # installs a cask
+alias caski='brew install --cask' # installs a cask
 alias caskl='brew list --cask' # lists installed casks
-alias casko='brew cask outdated' # lists casks which have an update available
+alias casko='brew outdated --cask' # lists casks which have an update available
 alias casks='brew search --casks' # same as brew search 
-alias caskx='brew cask uninstall' # uninstalls a cask
+alias caskx='brew uninstall --cask' # uninstalls a cask
 {%@@ endif @@%}
 
 # Global aliases - proceed with caution
