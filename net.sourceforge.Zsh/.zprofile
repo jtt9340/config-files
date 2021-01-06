@@ -35,7 +35,7 @@ eval "${(@M)${(f)"$(brew shellenv 2> /dev/null)"}:#export HOMEBREW*}"
 {%@@ endif @@%}
 
 {#@@ Bat (its configuration file location changed for some reason) @@#}
-{%@@ if os == 'Darwin' @@%}
+{%@@ if os == 'Darwin' and exists_in_path('bat') @@%}
 export BAT_CONFIG_PATH="$HOME/Library/Application Support/bat/config"
 {%@@ endif @@%}
 
@@ -46,7 +46,11 @@ export BAT_CONFIG_PATH="$HOME/Library/Application Support/bat/config"
 {%@@ if os == 'Darwin' @@%}
 export RUSTUP_HOME="$HOME/Library/Application Support/Rustup"
 {%@@ else @@%}
-[[ -n $XDG_DATA_HOME ]] && export RUSTUP_HOME=$XDG_DATA_HOME/rustup 
+if [[ -n $XDG_DATA_HOME ]]; then
+  export RUSTUP_HOME=$XDG_DATA_HOME/rustup
+elif [[ -d $HOME/.local/share ]]; then
+  export RUSTUP_HOME=$HOME/.local/share/rustup
+fi	
 {%@@ endif @@%}
 {%@@ endif @@%}
 
@@ -60,7 +64,11 @@ export _Z_DATA=$ZDOTDIR/z.txt
 {%@@ if os == 'Darwin' @@%}
 export GNUPGHOME="$HOME/Library/Application Support/GnuPG"
 {%@@ else @@%}
-[[ -n $XDG_DATA_HOME ]] && export GNUPGHOME=$XDG_DATA_HOME/gnupg
+if [[ -n $XDG_DATA_HOME ]]; then
+  export GNUPGHOME=$XDG_DATA_HOME/gnupg
+elif [[ -d $HOME/.local/share ]]; then
+  export GNUPGHOME=$HOME/.local/share/gnupg
+fi
 {%@@ endif @@%}
 {%@@ endif @@%}
 

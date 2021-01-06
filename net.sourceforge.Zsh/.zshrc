@@ -51,6 +51,7 @@ if ! zgen saved; then
   zgen oh-my-zsh plugins/rustup
   zgen oh-my-zsh plugins/pip
   zgen oh-my-zsh plugins/virtualenv
+  zgen oh-my-zsh plugins/docker
 
   zgen load zsh-users/zsh-completions src
 

@@ -7,7 +7,11 @@ typeset -U PATH path FPATH fpath
 export CARGO_HOME="$HOME/Library/Application Support/Cargo"
 path+=($CARGO_HOME/bin $HOME/Library/Application\ Support/com.npmjs.Npm/bin)
 {%@@ else @@%}
-[[ -n $XDG_DATA_HOME ]] && export CARGO_HOME="$XDG_DATA_HOME"/cargo
+if [[ -n $XDG_DATA_HOME ]]; then
+  export CARGO_HOME="$XDG_DATA_HOME"/cargo
+elif [[ -d $HOME/.local/share ]]; then
+  export CARGO_HOME=$HOME/.local/share/cargo
+fi
 {%@@ endif @@%}
 {%@@ endif @@%}
 
