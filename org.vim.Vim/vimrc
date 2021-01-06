@@ -1,4 +1,4 @@
-" Hybrid line numbers outside of INSERT mode and absolute line numbers inside INSERT numbers
+" Hybrid line numbers outside of INSERT mode and absolute line numbers inside INSERT mode
 set number relativenumber
 
 augroup numbertoggle
@@ -14,6 +14,7 @@ set backspace=indent,eol,start
 
 " UTF-8 encoding
 set encoding=utf-8
+
 {#@@
 	For some reason, on NixOS, changing the following settings
 	to try to consolidate where Vim spits out all of its files
@@ -41,8 +42,20 @@ syntax on
 colorscheme koehler
 autocmd BufRead,BufNewFile *.zsh* set syntax=zsh
 
+" Highlight all matches when searching with '/' or '?'
+set hlsearch
+" Show matches as you find them
+set incsearch
+" Remove all highlighted matches upon pressing Escape
+nnoremap <silent> <Space> :nohlsearch<Bar>:echo<CR>
+
+" Graciously taken from https://gist.github.com/benawad/b768f5a5bbd92c8baabd363b7e79786f
+" Make j/k move along lines that wrap
+noremap <silent> <expr> j (v:count == 0 ? 'gj' : 'j')
+noremap <silent> <expr> k (v:count == 0 ? 'gk' : 'k')
+
 " Detect the file type and automatically indent, following the indentation rules of the detected programming language
-filetype indent on
+filetype plugin indent on
 
 " Make a tab appear to be 4 spaces wide (https://stackoverflow.com/questions/1878974/redefine-tab-as-4-spaces)
 set tabstop=4 softtabstop=0 noexpandtab shiftwidth=4
@@ -72,5 +85,6 @@ let g:NERDTreeGitStatusUseNerdFonts = 1 " Use Nerd fonts
 let g:NERDTreeGitStatusConcealBrackets = 1 " Hide the [ ] around the icons
 
 " Settings for vim-gitgutter
+set updatetime=300
 highlight! link SignColumn LineNr
 let g:gitgutter_set_sign_backgrounds = 1
