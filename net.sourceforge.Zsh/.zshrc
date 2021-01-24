@@ -46,12 +46,12 @@ if ! zgen saved; then
   zgen oh-my-zsh
 
   # Specify plugins part of oh-my-zsh
-  zgen oh-my-zsh plugins/git
-  zgen oh-my-zsh plugins/cargo
-  zgen oh-my-zsh plugins/rustup
-  zgen oh-my-zsh plugins/pip
-  zgen oh-my-zsh plugins/virtualenv
-  zgen oh-my-zsh plugins/docker
+  whence git &>/dev/null && zgen oh-my-zsh plugins/git
+  whence cargo &>/dev/null && zgen oh-my-zsh plugins/cargo
+  whence rustup &>/dev/null && zgen oh-my-zsh plugins/rustup
+  whence pip &>/dev/null && zgen oh-my-zsh plugins/pip
+  whence virtualenv &>/dev/null && zgen oh-my-zsh plugins/virtualenv
+  whence docker &>/dev/null && zgen oh-my-zsh plugins/docker
 
   zgen load zsh-users/zsh-completions src
 
@@ -102,10 +102,13 @@ fi
   so as to not clutter the home directory on GNU/Linux, so we only need this line on macOS.
 @@#}
 {%@@ if profile == 'macos' @@%}
-# The Oh-My-Zsh pip plugin (see below) stores auto-completion data in this file
+# The Oh-My-Zsh pip plugin stores auto-completion data in this file
 # (This line needs to be placed after the "source $ZGEN_DIR/zgen.zsh"/"if ! zgen saved" block above
-# since the following variable needs to be set *after* the pip plugin is sourced.
-ZSH_PIP_CACHE_FILE=$HOME/Library/Caches/pip/zsh-cache
+# since the following variable needs to be set *after* the pip plugin is sourced.)
+# And this variable is only set if the pip plugin is loaded at all.
+if (($zsh_loaded_plugins[(Ie)ohmyzsh/ohmyzsh/plugins/pip])) || (($ZGEN_LOADED[(I)*pip*])); then
+  ZSH_PIP_CACHE_FILE=$HOME/Library/Caches/pip/zsh-cache
+fi
 {%@@ endif @@%}
 
 # See above TODO
