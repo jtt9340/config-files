@@ -12,6 +12,8 @@ config:
   - '*/.DS_Store'
   instignore:
   - '*/.DS_Store'
+  func_file:
+  - 're.deadc0de.dotdrop/funcs.py'
 variables:
   vimdir: >-
     {{@@

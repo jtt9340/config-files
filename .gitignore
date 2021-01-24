@@ -1,6 +1,8 @@
 # macOS cruft
 **/.DS_Store
 
+# Unecessary Python artifacts
+**/__pycache__
 # Call your Python virtualenv 'env'
 env
 
@@ -15,7 +17,7 @@ templated
 # This directory stores scripts that provide shell tab
 # completion for Zsh and can be generated from external programs,
 # so since those can be re-generated from said programs we
-# don't need to check this into Git, either.
+# don't need to check this into Git either.
 net.sourceforge.Zsh/zfunc/_*
 
 # Except this function, I want this one. It has been graciously

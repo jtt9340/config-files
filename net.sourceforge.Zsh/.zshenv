@@ -15,6 +15,12 @@ fi
 {%@@ endif @@%}
 {%@@ endif @@%}
 
+{%@@ if exists_in_path('pipx') @@%}
+export PIPX_HOME="{{@@ user_base() @@}}"
+export PIPX_BIN_DIR="$PIPX_HOME/bin"
+path+="$PIPX_BIN_DIR"
+{%@@ endif @@%}
+
 # Tell Zsh to make all files in this directory
 {%@@ if os == 'Darwin' @@%}
 export ZDOTDIR="$HOME/Library/Application Support/net.sourceforge.Zsh"
