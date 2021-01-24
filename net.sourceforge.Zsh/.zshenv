@@ -7,7 +7,7 @@ if [ -d "$HOME/bin" ]; then
 fi
 
 if [ -d "$HOME/.local/bin" ]; then
-  PATH="$HOME/.local/bin"
+  PATH="$HOME/.local/bin:$PATH"
 fi
 
 {%@@ if exists_in_path('cargo') @@%}
