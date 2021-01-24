@@ -1,6 +1,6 @@
 # Also taken from Prezto's OS X plugin, this function "prints the current Finder selection"
 function pfs {
-{%@@ if os == 'Darwin' @@%}
+{%@@ if profile == 'macos' @@%}
   osascript 2>&1 <<EOF
     tell application "Finder" to set the_selection to selection
     if the_selection is not {}

@@ -22,7 +22,7 @@ HYPHEN_INSENSITIVE=true
 DISABLE_AUTO_UPDATE=true
 # This technically isn't part of Oh-My-Zsh but I don't know where else to put this; it's part of djui/alias-tips
 export ZSH_PLUGINS_ALIAS_TIPS_TEXT='Found existing alias: '
-export ZSH_PLUGINS_ALIAS_TIPS_EXCLUDES=_
+export ZSH_PLUGINS_ALIAS_TIPS_EXCLUDES='_ fsh-alias'
 
 ############################
 # Enabling shell completions
@@ -50,7 +50,7 @@ if ! zgen saved; then
   whence cargo &>/dev/null && zgen oh-my-zsh plugins/cargo
   whence rustup &>/dev/null && zgen oh-my-zsh plugins/rustup
   whence pip &>/dev/null && zgen oh-my-zsh plugins/pip
-  whence virtualenv &>/dev/null && zgen oh-my-zsh plugins/virtualenv
+  zgen oh-my-zsh plugins/virtualenv
   whence docker &>/dev/null && zgen oh-my-zsh plugins/docker
 
   zgen load zsh-users/zsh-completions src
@@ -67,11 +67,13 @@ if ! zgen saved; then
   # Directory bookmark mechanism
   zgen load $ZDOTDIR/bookmark.zsh
 
+{%@@ if exists_in_path('broot') @@%}
   # Broot
-{%@@ if exists_in_path('broot') and os == 'Darwin' @@%}
+{%@@ if profile == 'macos' @@%}
   zgen load /Users/josephterrito/Library/Preferences/org.dystroy.broot/launcher/bash/br
-{%@@ elif exists_in_path('broot') @@%}
+{%@@ else @@%}
   zgen load $HOME/.config/broot/launcher/bash/br
+{%@@ endif @@%}
 {%@@ endif @@%}
 
   # So when you use `zsh-users/zsh-syntax-highlighting` it needs to be
@@ -137,7 +139,7 @@ done
 ###############
 # Miscellaneous
 ###############
-{%@@ if os == 'Darwin' @@%}
+{%@@ if profile == 'macos' @@%}
 # MANPATH="/usr/local/gnupg-2.2/share/man${MANPATH:+:$MANPATH}"
 manpath=(/usr/local/gnupg-2.2/share/man /usr/share/man /usr/local/share/man $manpath)
 export MANPATH

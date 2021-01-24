@@ -1,4 +1,4 @@
-{%@@ if os == 'Darwin' @@%}
+{%@@ if profile == 'macos' @@%}
 ##############
 # Setting PATH
 ##############
@@ -35,7 +35,7 @@ eval "${(@M)${(f)"$(brew shellenv 2> /dev/null)"}:#export HOMEBREW*}"
 {%@@ endif @@%}
 
 {#@@ Bat (its configuration file location changed for some reason) @@#}
-{%@@ if os == 'Darwin' and exists_in_path('bat') @@%}
+{%@@ if profile == 'macos' and exists_in_path('bat') @@%}
 export BAT_CONFIG_PATH="$HOME/Library/Application Support/bat/config"
 {%@@ endif @@%}
 
@@ -43,7 +43,7 @@ export BAT_CONFIG_PATH="$HOME/Library/Application Support/bat/config"
 {#@@ Rustup @@#}
 {%@@ if exists_in_path('rustup') @@%}
 # Move $HOME/.rustup somewhere else
-{%@@ if os == 'Darwin' @@%}
+{%@@ if profile == 'macos' @@%}
 export RUSTUP_HOME="$HOME/Library/Application Support/Rustup"
 {%@@ else @@%}
 if [[ -n $XDG_DATA_HOME ]]; then
@@ -61,27 +61,28 @@ export _Z_DATA=$ZDOTDIR/z.txt
 {#@@ GPG @@#}
 {%@@ if exists_in_path('gpg') @@%}
 # Tell GnuPG where its dotfiles are
-{%@@ if os == 'Darwin' @@%}
+{%@@ if profile == 'macos' @@%}
 export GNUPGHOME="$HOME/Library/Application Support/GnuPG"
 {%@@ else @@%}
-if [[ -n $XDG_DATA_HOME ]]; then
+if [[ -n $XDG_DATA_HOME && -d $XDG_DATA_HOME/gnupg ]]; then
   export GNUPGHOME=$XDG_DATA_HOME/gnupg
-elif [[ -d $HOME/.local/share ]]; then
+elif [[ -d $HOME/.local/share/gnupg ]]; then
   export GNUPGHOME=$HOME/.local/share/gnupg
 fi
 {%@@ endif @@%}
 {%@@ endif @@%}
 
 {#@@ Android SDK @@#}
-{%@@ if os == 'Darwin' @@%}
-# Tell the Android SDK where its dotfiles are (why do I even have the Android SDK?)
+{%@@ if profile == 'macos'  @@%}
+# Tell the Android SDK where its dotfiles are
+# (why do I even have the Android SDK? I think it's because of JetBrains IDEs)
 export ANDROID_SDK_HOME="$HOME/Library/Application Support/Android"
 {%@@ endif @@%}
 
 {#@@ Vim @@#}
 {%@@ if exists_in_path('vim') @@%}
 # Tell Vim where its config file is
-{%@@ if os == 'Darwin' @@%}
+{%@@ if profile == 'macos' @@%}
 export VIMINIT='source \$HOME/Library/Application\ Support/org.vim.Vim/vimrc'
 {%@@ else @@%}
 if [[ -n $XDG_CONFIG_HOME && -f $XDG_CONFIG_HOME/vim/vimrc ]]; then
@@ -93,7 +94,7 @@ fi
 {%@@ endif @@%}
 
 {#@@ gem and npm @@#}
-{%@@ if os == 'Darwin' @@%}
+{%@@ if profile == 'macos' @@%}
 # gem, the Ruby package manager
 export GEM_HOME="$HOME/Library/Application Support/Gem"
 export GEM_SPEC_CACHE=$HOME/Library/Caches/Gem
@@ -106,10 +107,10 @@ export NODE_REPL_HISTORY="$HOME/Library/Application Support/com.npmjs.Npm/node_r
 {#@@ Go @@#}
 {%@@ if exists_in_path('go') @@%}
 # Go(lang)
-{%@@ if os == 'Darwin' @@%}
+{%@@ if profile == 'macos' @@%}
 export GOPATH=$HOME/Library/Application\ Support/org.golang.Go
 {%@@ else @@%}
-if [[ -n $XDG_DATA_HOME ]]; then
+if [[ -n $XDG_DATA_HOME && -d $XDG_DATA_HOME/go ]]; then
   export GOPATH="$XDG_DATA_HOME"/go
 elif [[ -d $HOME/.local/share/go ]]; then
   export GOPATH=$HOME/.local/share/go
@@ -120,7 +121,7 @@ fi
 {#@@ less @@#}
 {%@@ if exists_in_path('less') @@%}
 # Store less' files somewhere besides the home directory
-{%@@ if os == 'Darwin' @@%}
+{%@@ if profile == 'macos' @@%}
 export LESSKEY="$HOME/Library/Application Support/Less/lesskey"
 export LESSHISTFILE=$HOME/Library/Caches/Less/history
 {%@@ else @@%}
@@ -141,8 +142,5 @@ fi
 {#@@ ripgrep @@#}
 {%@@ if exists_in_path('rg') @@%}
 # Tell ripgrep where it's configuration file is
-export RIPGREP_CONFIG_PATH={{@@ env['HOME'] + '/Library/Application\ Support/com.github.burntsushi.Ripgrep/ripgreprc' if os == 'Darwin'
-                                else env['XDG_CONFIG_HOME'] + '/ripgreprc' if env['XDG_CONFIG_HOME'] is string
-                                else env['HOME'] + '/.config/ripgreprc'
-                           @@}}
+export RIPGREP_CONFIG_PATH={{@@ ripgrep_config_path | shellescape @@}}
 {%@@ endif @@%}

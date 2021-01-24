@@ -14,16 +14,23 @@ config:
   - '*/.DS_Store'
   func_file:
   - 're.deadc0de.dotdrop/funcs.py'
+  filter_file:
+  - 're.deadc0de.dotdrop/filters.py'
 variables:
   vimdir: >-
     {{@@
-      env['XDG_CONFIG_HOME'] + '/vim' if env['XDG_CONFIG_HOME'] is string
-      else env['HOME'] + '/Library/Application Support/org.vim.Vim' if profile == 'macos'
-      else env['HOME'] + '/.config/vim' if exists('~/.config/vim')
-      else env['HOME'] + '/.vim'
+      '~/Library/Application Support/org.vim.Vim' if profile == 'macos'
+      else env['XDG_CONFIG_HOME'] + '/vim' if env['XDG_CONFIG_HOME'] is string
+      else '~/.config/vim' if exists('~/.config/vim')
+      else '~/.vim'
     @@}}
-dynvariables:
-  os: uname
+  ripgrep_config_path: >-
+    {{@@
+      env['RIPGREP_CONFIG_PATH'] if env['RIPGREP_CONFIG_PATH'] is string
+      else '~/Library/Application Support/com.github.burntsushi.Ripgrep/ripgreprc' if profile == 'macos'
+      else env['XDG_CONFIG_HOME'] + '/ripgreprc' if env['XDG_CONFIG_HOME'] is string
+      else '~/.config/ripgreprc'
+    @@}}
 actions:
   zshenv: >-
     ln -i -s "{{@@ _dotfile_abs_dst @@}}/.zshenv" {{@@ env['HOME'] @@}}/.zshenv
@@ -75,7 +82,7 @@ dotfiles:
     - install_vim_plugins
   f_org.dystroy.broot_conf.toml:
     src: org.dystroy.broot/conf.toml
-    dst: "{{@@ '~/Library/Preferences/org.dystroy.broot/conf.toml' if os == 'Darwin' else '~/.config/broot/conf.toml' @@}}"
+    dst: "{{@@ '~/Library/Preferences/org.dystroy.broot/conf.toml' if profile == 'macos' else '~/.config/broot/conf.toml' @@}}"
     link: link
   f_nixpkgs_config.nix:
     src: org.nixos.Nix/config.nix
@@ -91,8 +98,8 @@ dotfiles:
     src: net.sourceforge.Zsh
     dst: >-
       {{@@
-        env['XDG_CONFIG_HOME'] + '/zsh' if env['XDG_CONFIG_HOME'] is string
-        else '~/Library/Application Support/net.sourceforge.Zsh' if os == 'Darwin'
+        '~/Library/Application Support/net.sourceforge.Zsh' if profile == 'macos'
+        else env['XDG_CONFIG_HOME'] + '/zsh' if env['XDG_CONFIG_HOME'] is string
         else '~/.zsh'
       @@}}
     link: link_children
@@ -114,7 +121,7 @@ dotfiles:
       - zshenv
   f_ripgreprc:
     src: com.github.burntsushi.Ripgrep/ripgreprc
-    dst: "{{@@ env['RIPGREP_CONFIG_PATH'] @@}}"
+    dst: "{{@@ ripgrep_config_path @@}}"
     link: link
 profiles:
   macos:
@@ -124,6 +131,12 @@ profiles:
     - f_npmrc
     - d_zdotdir
     - f_ripgreprc
+  linux:
+    dotfiles:
+    - f_vimrc
+    - f_ripgreprc
+    - f_org.dystroy.broot_conf.toml
+    - d_zdotdir
   nixos:
     dotfiles:
     - f_vimrc

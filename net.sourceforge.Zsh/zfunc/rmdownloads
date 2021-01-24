@@ -1,6 +1,6 @@
 # Also taken from Prezto's OS X plugin, this function clears macOS download history
 function rmdownloads {
-{%@@ if os == 'Darwin' @@%}
+{%@@ if profile == 'macos' @@%}
   local db
   for db in ~/Library/Preferences/com.apple.LaunchServices.QuarantineEventsV*; do
     grep -q 'LSQuarantineEvent' < <(sqlite3 "$db" .tables) &&

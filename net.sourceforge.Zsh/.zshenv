@@ -1,9 +1,18 @@
 # Discard duplicates from PATH and FPATH
 typeset -U PATH path FPATH fpath
 
+# set PATH so it includes user's private bin if it exists
+if [ -d "$HOME/bin" ]; then
+  PATH="$HOME/bin:$PATH"
+fi
+
+if [ -d "$HOME/.local/bin" ]; then
+  PATH="$HOME/.local/bin"
+fi
+
 {%@@ if exists_in_path('cargo') @@%}
 # Move the $HOME/.cargo directory somewhere else
-{%@@ if os == 'Darwin' @@%}
+{%@@ if profile == 'macos' @@%}
 export CARGO_HOME="$HOME/Library/Application Support/Cargo"
 path+=($CARGO_HOME/bin $HOME/Library/Application\ Support/com.npmjs.Npm/bin)
 {%@@ else @@%}
@@ -16,13 +25,13 @@ fi
 {%@@ endif @@%}
 
 {%@@ if exists_in_path('pipx') @@%}
-export PIPX_HOME="{{@@ user_base() @@}}"
+export PIPX_HOME={{@@ user_base() | shellescape @@}}
 export PIPX_BIN_DIR="$PIPX_HOME/bin"
 path+="$PIPX_BIN_DIR"
 {%@@ endif @@%}
 
 # Tell Zsh to make all files in this directory
-{%@@ if os == 'Darwin' @@%}
+{%@@ if profile == 'macos' @@%}
 export ZDOTDIR="$HOME/Library/Application Support/net.sourceforge.Zsh"
 {%@@ else @@%}
 [[ -n $XDG_CONFIG_HOME ]] \

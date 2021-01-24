@@ -3,7 +3,7 @@
 #########
 # For quickly editing configuration files
 alias zshconfig="${EDITOR:-vim} ${(q)ZDOTDIR:-$HOME}/.zshrc"
-{%@@ if exists_in_path('vim') and os == 'Darwin' @@%}
+{%@@ if exists_in_path('vim') and profile == 'macos' @@%}
 alias vimconfig="${EDITOR:-vim} $HOME/Library/Application\ Support/org.vim.Vim/vimrc"
 {%@@ elif exists_in_path('vim') @@%}
 if [[ -n $XDG_CONFIG_HOME && -f $XDG_CONFIG_HOME/vim/vimrc ]]; then
@@ -12,7 +12,7 @@ else
   alias vimconfig="${EDITOR:-vim} $HOME/.vimrc"
 fi
 {%@@ endif @@%} 
-{%@@ if exists_in_path('broot') and os == 'Darwin' @@%}
+{%@@ if exists_in_path('broot') and profile == 'macos' @@%}
 alias brootconfig="${EDITOR:-vim} $HOME/Library/Preferences/org.dystroy.broot/conf.toml"
 {%@@ elif exists_in_path('broot') @@%}
 alias brootconfig="${EDITOR:-vim} $XDG_CONFIG_HOME/broot/conf.toml"

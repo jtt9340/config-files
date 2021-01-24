@@ -3,7 +3,7 @@
 #
 # Displays macOS download history 
 function lsdownloads {
-{%@@ if os == 'Darwin' @@%}
+{%@@ if profile == 'macos' @@%}
   local db
   for db in ~/Library/Preferences/com.apple.LaunchServices.QuarantineEventsV*; do
     grep -q 'LSQuarantineEvent' < <(sqlite3 "$db" .tables) &&
