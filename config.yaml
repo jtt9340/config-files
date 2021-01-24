@@ -14,65 +14,35 @@ config:
   - '*/.DS_Store'
   func_file:
   - 're.deadc0de.dotdrop/funcs.py'
-variables:
-  vimdir: >-
-    {{@@
-      env['XDG_CONFIG_HOME'] + '/vim' if env['XDG_CONFIG_HOME'] is string
-      else env['HOME'] + '/Library/Application Support/org.vim.Vim' if profile == 'macos'
-      else env['HOME'] + '/.config/vim' if exists('~/.config/vim')
-      else env['HOME'] + '/.vim'
-    @@}}
 dynvariables:
   os: uname
 actions:
   zshenv: >-
     ln -i -s "{{@@ _dotfile_abs_dst @@}}/.zshenv" {{@@ env['HOME'] @@}}/.zshenv
-  install_vim_plugins: |-
-    if [ ! -d "{{@@ vimdir @@}}/pack/vendor/start/nerdtree" ]; then
-      # The NERDTree plugin is not installed, so install it
-      echo Installing NERDTree Vim plugin
-      mkdir -pv {{@@ vimdir @@}}/pack/vendor/start
-      git clone https://github.com/preservim/nerdtree.git "{{@@ vimdir @@}}/pack/vendor/start/nerdtree"
-      vim -u NONE -c "helptags {{@@ vimdir @@}}/pack/vendor/start/nerdtree/doc" -c q
-      echo Installed NERDTree Vim plugin
-    else
-      echo NERDTree Vim plugin already installed!
-    fi
-    if [ ! -d "{{@@ vimdir @@}}/pack/vendor/start/nerdtree-git-plugin" ]; then
-      # The NERDTree-Git plugin is not installed, so install it
-      echo Installing NERDTree Git Plugin Vim plugin
-      mkdir -pv {{@@ vimdir @@}}/pack/vendor/start
-      git clone https://github.com/Xuyuanp/nerdtree-git-plugin.git "{{@@ vimdir @@}}/pack/vendor/start/nerdtree-git-plugin"
-      echo Installed NERDTree Git Plugin Vim plugin
-    else
-      echo NERDTree Git Plugin Vim plugin already installed!
-    fi
-    if [ ! -d "{{@@ vimdir @@}}/pack/airblade/start/vim-gitgutter" ]; then
-      # The Vim-Gitgutter plugin is not installed, so install it
-      echo Installing Vim-Gitgutter Vim plugin
-      mkdir -pv {{@@ vimdir @@}}/pack/airblade/start
-      git clone https://github.com/airblade/vim-gitgutter.git "{{@@ vimdir @@}}/pack/airblade/start/vim-gitgutter"
-      vim -u NONE -c "helptags {{@@ vimdir @@}}/pack/vendor/start/vim-gitgutter/doc" -c q
-      echo Installed Vim-Gitgutter Vim plugin
-    else
-      echo Vim-Gitgutter Vim plugin already installed!
-    fi
-    if [ ! -d "{{@@ vimdir @@}}/pack/plugins/start/vim-toml" ]; then
-      # The Vim-TOML (syntax highlighting for TOML) is not installed, so install it
-      echo Installing Vim-TOML Vim plugin
-      mkdir -pv {{@@ vimdir @@}}/pack/plugins/start
-      git clone https://github.com/cespare/vim-toml.git "{{@@ vimdir @@}}/pack/plugins/start/vim-toml"
-      echo Installed Vim-TOML Vim plugin
-    else
-       echo Vim-TOML plugin already installed!
-    fi
 dotfiles:
-  f_vimrc:
-    src: org.vim.Vim/vimrc
-    dst: "{{@@ '~/.vimrc' if vimdir == '~/.vim' else vimdir + '/vimrc' @@}}"
-    link: link
-    actions:
-    - install_vim_plugins
+  d_vim:
+    src: org.vim.Vim
+    dst: >-
+      {{@@
+        env['XDG_CONFIG_HOME'] + '/vim' if env['XDG_CONFIG_HOME'] is string
+        else env['HOME'] + '/Library/Application Support/org.vim.Vim' if profile == 'macos'
+        else env['HOME'] + '/.config/vim' if exists('~/.config/vim')
+        else env['HOME'] + '/.vim'
+      @@}}
+    link: link_children
+    upignore:
+    - .netrwhist*
+    - backup
+    - swap
+    - undo
+    - viminfo
+    cmpignore:
+    - .netrwhist*
+    - backup
+    - swap
+    - undo
+    - viminfo
+    - pack
   f_org.dystroy.broot_conf.toml:
     src: org.dystroy.broot/conf.toml
     dst: "{{@@ '~/Library/Preferences/org.dystroy.broot/conf.toml' if os == 'Darwin' else '~/.config/broot/conf.toml' @@}}"
@@ -120,14 +90,11 @@ profiles:
   macos:
     dotfiles:
     - f_org.dystroy.broot_conf.toml
-    - f_vimrc
+    - d_vim
     - f_npmrc
     - d_zdotdir
     - f_ripgreprc
   nixos:
     dotfiles:
-    - f_vimrc
+    - d_vim
     - f_org.dystroy.broot_conf.toml
-    - f_nixpkgs_config.nix
-    - f_micro_settings.json
-    - f_ripgreprc

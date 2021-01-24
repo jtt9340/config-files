@@ -37,6 +37,9 @@ set packpath=$HOME/Library/Application\ Support/org.vim.Vim,/usr/local/share/vim
 " Enable autocompletion
 set wildmode=longest,list,full
 
+" Only enable the vim-toml plugin if we are in a *.toml file
+autocmd FileType toml packadd! vim-toml
+
 " Syntax highlighting
 syntax on
 colorscheme koehler
