@@ -32,57 +32,34 @@ variables:
       else env['XDG_CONFIG_HOME'] + '/ripgreprc' if env['XDG_CONFIG_HOME'] is string
       else '~/.config/ripgreprc'
     @@}}
+  zdotdir: >-
+    {{@@
+      '~/Library/Application Support/net.sourceforge.Zsh' if profile == 'macos'
+      else env['XDG_CONFIG_HOME'] + '/zsh' if env['XDG_CONFIG_HOME'] is string
+      else '~/.zsh'
+    @@}}
 dynvariables:
   bat_config_path: command -v bat &>/dev/null && bat --config-file || echo $HOME/.bat-not-installed
 actions:
-  zshenv: >-
-    ln -i -s "{{@@ _dotfile_abs_dst @@}}/.zshenv" {{@@ env['HOME'] @@}}/.zshenv
-  install_vim_plugins: |-
-    if [ ! -d "{{@@ vimdir @@}}/pack/vendor/start/nerdtree" ]; then
-      # The NERDTree plugin is not installed, so install it
-      echo Installing NERDTree Vim plugin
-      mkdir -pv {{@@ vimdir @@}}/pack/vendor/start
-      git clone https://github.com/preservim/nerdtree.git "{{@@ vimdir @@}}/pack/vendor/start/nerdtree"
-      vim -u NONE -c "helptags {{@@ vimdir @@}}/pack/vendor/start/nerdtree/doc" -c q
-      echo Installed NERDTree Vim plugin
-    else
-      echo NERDTree Vim plugin already installed!
-    fi
-    if [ ! -d "{{@@ vimdir @@}}/pack/vendor/start/nerdtree-git-plugin" ]; then
-      # The NERDTree-Git plugin is not installed, so install it
-      echo Installing NERDTree Git Plugin Vim plugin
-      mkdir -pv {{@@ vimdir @@}}/pack/vendor/start
-      git clone https://github.com/Xuyuanp/nerdtree-git-plugin.git "{{@@ vimdir @@}}/pack/vendor/start/nerdtree-git-plugin"
-      echo Installed NERDTree Git Plugin Vim plugin
-    else
-      echo NERDTree Git Plugin Vim plugin already installed!
-    fi
-    if [ ! -d "{{@@ vimdir @@}}/pack/airblade/start/vim-gitgutter" ]; then
-      # The Vim-Gitgutter plugin is not installed, so install it
-      echo Installing Vim-Gitgutter Vim plugin
-      mkdir -pv {{@@ vimdir @@}}/pack/airblade/start
-      git clone https://github.com/airblade/vim-gitgutter.git "{{@@ vimdir @@}}/pack/airblade/start/vim-gitgutter"
-      vim -u NONE -c "helptags {{@@ vimdir @@}}/pack/vendor/start/vim-gitgutter/doc" -c q
-      echo Installed Vim-Gitgutter Vim plugin
-    else
-      echo Vim-Gitgutter Vim plugin already installed!
-    fi
-    if [ ! -d "{{@@ vimdir @@}}/pack/plugins/start/vim-toml" ]; then
-      # The Vim-TOML (syntax highlighting for TOML) is not installed, so install it
-      echo Installing Vim-TOML Vim plugin
-      mkdir -pv {{@@ vimdir @@}}/pack/plugins/start
-      git clone https://github.com/cespare/vim-toml.git "{{@@ vimdir @@}}/pack/plugins/start/vim-toml"
-      echo Installed Vim-TOML Vim plugin
-    else
-       echo Vim-TOML plugin already installed!
-    fi
+  zshenv: ln -i -s {{@@ _dotfile_abs_dst @@}}/.zshenv ~/.zshenv
 dotfiles:
-  f_vimrc:
-    src: org.vim.Vim/vimrc
-    dst: "{{@@ '~/.vimrc' if vimdir == '~/.vim' else vimdir + '/vimrc' @@}}"
-    link: link
-    actions:
-    - install_vim_plugins
+  d_vim:
+    src: org.vim.Vim
+    dst: '{{@@ vimdir @@}}' 
+    link: link_children
+    upignore:
+    - .netrwhist*
+    - backup
+    - swap
+    - undo
+    - viminfo
+    cmpignore:
+    - .netrwhist*
+    - backup
+    - swap
+    - undo
+    - viminfo
+    - pack
   f_org.dystroy.broot_conf.toml:
     src: org.dystroy.broot/conf.toml
     dst: "{{@@ '~/Library/Preferences/org.dystroy.broot/conf.toml' if profile == 'macos'\
@@ -100,12 +77,7 @@ dotfiles:
     link: link
   d_zdotdir:
     src: net.sourceforge.Zsh
-    dst: >-
-      {{@@
-        '~/Library/Application Support/net.sourceforge.Zsh' if profile == 'macos'
-        else env['XDG_CONFIG_HOME'] + '/zsh' if env['XDG_CONFIG_HOME'] is string
-        else '~/.zsh'
-      @@}}
+    dst: '{{@@ zdotdir @@}}'
     link: link_children
     cmpignore:
     - .zcompdump*
@@ -129,28 +101,25 @@ dotfiles:
     link: link
   f_bat_config:
     src: com.github.sharkdp.Bat/config
-    dst: '{{@@ "~/Library/Application Support/bat/config" if profile == "macos" else bat_config_path @@}}'
+    dst: "{{@@ '~/Library/Application Support/bat/config' if profile == 'macos' else bat_config_path @@}}"
     link: link
 profiles:
   macos:
     dotfiles:
     - f_org.dystroy.broot_conf.toml
-    - f_vimrc
+    - d_vim
     - f_npmrc
     - d_zdotdir
     - f_ripgreprc
     - f_bat_config
   linux:
     dotfiles:
-    - f_vimrc
+    - d_vim
     - f_ripgreprc
     - f_org.dystroy.broot_conf.toml
     - d_zdotdir
     - f_bat_config
   nixos:
     dotfiles:
-    - f_vimrc
+    - d_vim
     - f_org.dystroy.broot_conf.toml
-    - f_nixpkgs_config.nix
-    - f_micro_settings.json
-    - f_ripgreprc
