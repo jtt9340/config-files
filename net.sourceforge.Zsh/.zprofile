@@ -37,6 +37,7 @@ eval "${(@M)${(f)"$(brew shellenv 2> /dev/null)"}:#export HOMEBREW*}"
 {#@@ Bat (its configuration file location changed for some reason) @@#}
 {%@@ if profile == 'macos' and exists_in_path('bat') @@%}
 export BAT_CONFIG_PATH="$HOME/Library/Application Support/bat/config"
+export BAT_CACHE_PATH=$HOME/Library/Caches/bat
 {%@@ endif @@%}
 
 # Reconfiguring programs to store their configuation/data files somewhere besides the home directory

@@ -1,0 +1,8 @@
+# Set the theme to OneHalfDark
+--theme=OneHalfDark
+
+# Help Bat figure out the syntax highlighting for these files
+-m '*.plugin.zsh:Bourne Again Shell (bash)'
+-m '*.zsh:Bourne Again Shell (bash)'
+-m '*.sh:Bourne Again Shell (bash)'
+-m '*.zsh-theme:Bourne Again Shell (bash)'

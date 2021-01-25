@@ -2,8 +2,8 @@ config:
   backup: true
   banner: false
   create: true
-  dotpath: . 
-  workdir: templated 
+  dotpath: .
+  workdir: templated
   keepdot: false
   link_on_import: link
   cmpignore:
@@ -13,9 +13,9 @@ config:
   instignore:
   - '*/.DS_Store'
   func_file:
-  - 're.deadc0de.dotdrop/funcs.py'
+  - re.deadc0de.dotdrop/funcs.py
   filter_file:
-  - 're.deadc0de.dotdrop/filters.py'
+  - re.deadc0de.dotdrop/filters.py
 variables:
   vimdir: >-
     {{@@
@@ -27,10 +27,13 @@ variables:
   ripgrep_config_path: >-
     {{@@
       env['RIPGREP_CONFIG_PATH'] if env['RIPGREP_CONFIG_PATH'] is string
-      else '~/Library/Application Support/com.github.burntsushi.Ripgrep/ripgreprc' if profile == 'macos'
+      else '~/Library/Application Support/com.github.burntsushi.Ripgrep/ripgreprc'
+    if profile == 'macos'
       else env['XDG_CONFIG_HOME'] + '/ripgreprc' if env['XDG_CONFIG_HOME'] is string
       else '~/.config/ripgreprc'
     @@}}
+dynvariables:
+  bat_config_path: command -v bat &>/dev/null && bat --config-file || echo $HOME/.bat-not-installed
 actions:
   zshenv: >-
     ln -i -s "{{@@ _dotfile_abs_dst @@}}/.zshenv" {{@@ env['HOME'] @@}}/.zshenv
@@ -82,16 +85,17 @@ dotfiles:
     - install_vim_plugins
   f_org.dystroy.broot_conf.toml:
     src: org.dystroy.broot/conf.toml
-    dst: "{{@@ '~/Library/Preferences/org.dystroy.broot/conf.toml' if profile == 'macos' else '~/.config/broot/conf.toml' @@}}"
+    dst: "{{@@ '~/Library/Preferences/org.dystroy.broot/conf.toml' if profile == 'macos'\
+      \ else '~/.config/broot/conf.toml' @@}}"
     link: link
   f_nixpkgs_config.nix:
     src: org.nixos.Nix/config.nix
     dst: ~/.config/nixpkgs/config.nix
   f_micro_settings.json:
-    src: io.github.micro-editor/settings.json 
+    src: io.github.micro-editor/settings.json
     dst: ~/.config/micro/settings.json
   f_npmrc:
-    src: com.npmjs.Npm/npmrc 
+    src: com.npmjs.Npm/npmrc
     dst: ~/Library/Application Support/com.npmjs.Npm/npmrc
     link: link
   d_zdotdir:
@@ -118,10 +122,14 @@ dotfiles:
     - zgen*
     - z.txt
     actions:
-      - zshenv
+    - zshenv
   f_ripgreprc:
     src: com.github.burntsushi.Ripgrep/ripgreprc
-    dst: "{{@@ ripgrep_config_path @@}}"
+    dst: '{{@@ ripgrep_config_path @@}}'
+    link: link
+  f_bat_config:
+    src: com.github.sharkdp.Bat/config
+    dst: '{{@@ "~/Library/Application Support/bat/config" if profile == "macos" else bat_config_path @@}}'
     link: link
 profiles:
   macos:
@@ -131,12 +139,14 @@ profiles:
     - f_npmrc
     - d_zdotdir
     - f_ripgreprc
+    - f_bat_config
   linux:
     dotfiles:
     - f_vimrc
     - f_ripgreprc
     - f_org.dystroy.broot_conf.toml
     - d_zdotdir
+    - f_bat_config
   nixos:
     dotfiles:
     - f_vimrc
