@@ -5,29 +5,29 @@ with pkgs;
 let
   pythonEnv =
     let
-      dotdrop = python38.pkgs.buildPythonPackage rec {
+      dotdrop = python39.pkgs.buildPythonPackage rec {
         pname = "dotdrop";
-        version = "1.1.0";
+        version = "1.4.3";
 
         src = fetchFromGitHub {
           owner = "jtt9340";
           repo = pname;
-          rev = "2c964c9d11f61f8d0eb9ce9d83e37d9db08a9528";
-          sha256 = "0pwvg0f45p2nm5fpfpklmlrc22wn744xp0v31ba6rx4hqbqasm8v";
+          rev = "v${version}";
+          sha256 = "16pc4gh1cc795ckwswpbmzc7k0k6ki6mzmgy7lsvpwyal80rl773";
         };
 
         doCheck = false;
 
-        propagatedBuildInputs = with python38.pkgs; [
+        propagatedBuildInputs = with python39.pkgs; [
           jinja2
           docopt
           ruamel_yaml
+          python_magic
         ];
       };
     in
-      python38.withPackages (ps: with ps; [
+      python39.withPackages (ps: with ps; [
         dotdrop
-        virtualenv
       ]);
 in mkShell {
   name = "config-files";
