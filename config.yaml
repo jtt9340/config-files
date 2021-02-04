@@ -39,7 +39,7 @@ variables:
       else '~/.zsh'
     @@}}
 dynvariables:
-  bat_config_path: command -v bat &>/dev/null && bat --config-file || echo $HOME/.bat-not-installed
+  bat_config_path: command -v bat >/dev/null && bat --config-file || echo $HOME/.bat-not-installed
 actions:
   zshenv: ln -i -s {{@@ _dotfile_abs_dst @@}}/.zshenv ~/.zshenv
 dotfiles:
