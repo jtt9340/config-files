@@ -22,6 +22,7 @@ in
         source = "${configFiles}/net.sourceforge.Zsh/zfunc";
         recursive = true;
       };
+      "bat/config".source = "${configFiles}/com.github.sharkdp.Bat/config";
     };
   };
 
@@ -51,23 +52,43 @@ in
 
   home.packages = with pkgs; [
     # CLI tools
+
+    # A shell script to use bat (a cat/less alternative feat. syntax highlighting) to view diffs
     bat-extras.batdiff
+    # A shell script to use bat (see above) in tandem with ripgrep (grep alternative) for pretty output
     bat-extras.batgrep
+    # A shell script to use bat (see above) to view man pages, effectively colorizing them 
     bat-extras.batman
+    # A shell script to pretty print/format files before viewing them
     bat-extras.prettybat
+    # Tree-based file manager and fuzzy finder
     broot
+    # A shell that aims to innovate on UNIX shells by using strongly-typed data structures as pipelines
     elvish
+    # A command line calculator with support for dimensional analysis
     nodePackages.insect
+    # A simple scripting language
     lua
+    # Allows you to mount remote drives via ssh
     sshfs
 
     # GUI apps
+
+    # Password manager
     bitwarden
+    # Chat app
     discord
+    # Java IDE
     jetbrains.idea-ultimate
+    # Python IDE
     jetbrains.pycharm-professional
+    # Free and open-source office suite
     libreoffice
+    # Makes it easier to run games/Windows-only applications on GNU/Linux
+    lutris
+    # Another chat app
     slack
+    # Email client
     thunderbird
   ];
 

@@ -70,34 +70,63 @@ in
   # These are packages that are automatically available to all users, and are
   # automatically updated every time you rebuild the system configuration
   environment.systemPackages = with pkgs; [
+    # A cat/less alternative with syntax highlighting
     bat
+    # "A command-line tool for transferring files with URL syntax"
     curl
+    # More user-friendly alternative to find
     fd
+    # Identify files by their type
     file
+    # Web browser
     firefox
+    # Screenshots
     flameshot
+    # C/C++ compiler
     gcc
+    # Distributed VCS
     git
+    # "A tool to control the generation of non-source files from sources"
     gnumake
+    # English dictionaries, useful for spell check in programs
     hunspellDicts.en-us
+    # Terminal-based system monitor
     htop
+    # Text editor part of the KDE ecosystem
     kate
+    # PDE viewer part of the KDE ecosystem
     okular
+    # A user-friendly terminal-based text editor
     micro
+    # View documentation for Nix functions
     (callPackage ./program/nix-doc/default.nix {})
+    # Generate SHA-256 sums from Git repositories
     nix-prefetch-git
+    # Generate SHA-256 sums from GitHub repositories
     nix-prefetch-github
+    # Does what it says on the tin
     partition-manager
+    # Screen recorder
     peek
+    # Convert Python requirements.txt files to Nix expressions
     pypi2nix
+    # Integrate ripgrep (grep alternative) with additional document formats like PDFs and Word documents
     ripgrep-all
+    # Put files in the trash from the command line
     trash-cli
+    # Extract ZIP archives
     unzip
+    # Advanced terminal-based text editor
     vim
+    # "Tool for retrieving files using HTTP, HTTPS, and FTP"
     wget
+    # Determine where binaries are installed on your system
     which
+    # Access the clpiboard from the command line
     xclip
+    # Create ZIP archives
     zip
+    # A UNIX shell alternative to Bash
     zsh
   ];
 
