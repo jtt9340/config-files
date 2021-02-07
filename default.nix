@@ -10,7 +10,7 @@ let
         version = "1.4.3";
 
         src = fetchFromGitHub {
-          owner = "jtt9340";
+          owner = "deadc0de6";
           repo = pname;
           rev = "v${version}";
           sha256 = "16pc4gh1cc795ckwswpbmzc7k0k6ki6mzmgy7lsvpwyal80rl773";
