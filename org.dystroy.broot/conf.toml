@@ -56,7 +56,7 @@ execution = ":close_preview"
 # to see hidden and gitignored files and the permissions (then
 # if you don't want the hidden files you can launch `br -H`
 #
-default_flags = ""
+default_flags = "g"
 
 ###############################################################
 # Verbs and shortcuts
