@@ -48,6 +48,12 @@ in
 
     # Use lsd, an ls clone written in Rust
     lsd.enable = true;
+
+    # Use Vim with custom configuration and plugins
+    vim = (import ./vim.nix) {
+      inherit (pkgs) vimPlugins fetchFromGitHub;
+      inherit (pkgs.vimUtils) buildVimPluginFrom2Nix;
+    };
   };
 
   home.packages = with pkgs; [

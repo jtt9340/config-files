@@ -121,5 +121,4 @@ profiles:
     - f_bat_config
   nixos:
     dotfiles:
-    - d_vim
     - f_org.dystroy.broot_conf.toml
