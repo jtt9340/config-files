@@ -8,6 +8,8 @@ alias vimconfig="${EDITOR:-vim} $HOME/Library/Application\ Support/org.vim.Vim/v
 {%@@ elif exists_in_path('vim') @@%}
 if [[ -n $XDG_CONFIG_HOME && -f $XDG_CONFIG_HOME/vim/vimrc ]]; then
   alias vimconfig="${EDITOR:-vim} $XDG_CONFIG_HOME/vim/vimrc}"
+elif [[ -f $HOME/.vim/vimrc ]]; then
+  alias vimconfig="${EDITOR:-vim} $HOME/.vim/vimrc"
 else
   alias vimconfig="${EDITOR:-vim} $HOME/.vimrc"
 fi

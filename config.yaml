@@ -47,6 +47,8 @@ dotfiles:
     src: org.vim.Vim
     dst: '{{@@ vimdir @@}}' 
     link: link_children
+    instignore:
+    - pack
     upignore:
     - .netrwhist*
     - backup
@@ -82,6 +84,7 @@ dotfiles:
     cmpignore:
     - .zcompdump*
     - .zsh_history
+    - .zsh_sessions
     - .zshdb_hist
     - bookmarks
     - zgen*
@@ -89,6 +92,7 @@ dotfiles:
     upignore:
     - .zcompdump*
     - .zsh_history
+    - .zsh_sessions
     - .zshdb_hist
     - bookmarks
     - zgen*

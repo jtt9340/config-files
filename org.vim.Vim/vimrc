@@ -67,6 +67,10 @@ autocmd BufRead,BufNewFile *.nix,*.zsh*,*.yaml set tabstop=2 softtabstop=0 expan
 " Use spaces instead of tabs in Python files
 autocmd BufRead,BufNewFile *.py set expandtab
 
+" Use Ctrl+a to toggle showing hidden characters or not
+set listchars=eol:$,tab:>-,trail:~,extends:>,precedes:<
+nnoremap <silent> <C-a> :set list!<CR>
+
 " Settings for NERDTree, a file finder that appears at the left
 " Show NERDTree if no files were specified when invoking Vim
 autocmd StdinReadPre * let s:std_in = 1
