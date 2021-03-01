@@ -47,8 +47,6 @@ dotfiles:
     src: org.vim.Vim
     dst: '{{@@ vimdir @@}}'
     link: link_children
-    instignore:
-    - pack
     upignore:
     - .netrwhist*
     - backup
@@ -61,7 +59,6 @@ dotfiles:
     - swap
     - undo
     - viminfo
-    - pack
   f_org.dystroy.broot_conf.toml:
     src: org.dystroy.broot/conf.toml
     dst: "{{@@ '~/Library/Preferences/org.dystroy.broot/conf.toml' if profile == 'macos'\
