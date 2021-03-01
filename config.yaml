@@ -45,7 +45,7 @@ actions:
 dotfiles:
   d_vim:
     src: org.vim.Vim
-    dst: '{{@@ vimdir @@}}' 
+    dst: '{{@@ vimdir @@}}'
     link: link_children
     instignore:
     - pack
@@ -105,7 +105,17 @@ dotfiles:
     link: link
   f_bat_config:
     src: com.github.sharkdp.Bat/config
-    dst: "{{@@ '~/Library/Application Support/bat/config' if profile == 'macos' else bat_config_path @@}}"
+    dst: "{{@@ '~/Library/Application Support/bat/config' if profile == 'macos' else\
+      \ bat_config_path @@}}"
+    link: link
+  f_git_config:
+    src: com.git-scm.Git/config
+    dst: >-
+      {{@@
+        '~/.gitconfig' if profile == 'macos'
+        else env['XDG_CONFIG_HOME'] + '/git/config' if env['XDG_CONFIG_HOME'] is string
+        else '~/.config/git/config'
+      @@}}
     link: link
 profiles:
   macos:
@@ -116,6 +126,7 @@ profiles:
     - d_zdotdir
     - f_ripgreprc
     - f_bat_config
+    - f_git_config
   linux:
     dotfiles:
     - d_vim
@@ -123,6 +134,7 @@ profiles:
     - f_org.dystroy.broot_conf.toml
     - d_zdotdir
     - f_bat_config
+    - f_git_config
   nixos:
     dotfiles:
     - f_org.dystroy.broot_conf.toml
