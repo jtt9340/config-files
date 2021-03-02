@@ -19,25 +19,25 @@ icon_theme = "vscode"
 invocation = "panel_left"
 key = "F3"
 shortcut = "pl"
-execution = ":panel_left"
+internal = ":panel_left"
 
 [[verbs]]
 invocation = "panel_right"
 key = "F4"
 shortcut = "pr"
-execution = ":panel_right"
+internal = ":panel_right"
 
 [[verbs]]
 invocation = "open_preview"
 key = "alt-f"
-execution = ":open_preview"
+internal = ":open_preview"
 
 [[verbs]]
 invocation = "close_preview"
 key = "alt-b"
-execution = ":close_preview"
+internal = ":close_preview"
 
-{%@@ elif profile == "nixos" @@%}
+{%@@ else @@%}
 ###############################################################
 # This configuration file lets you
 # - define new commands
@@ -74,10 +74,10 @@ default_flags = "g"
 invocation = "edit"
 key = "F2"
 shortcut = "e"
-{%@@ if profile == "macos" @@%}
-execution = "/usr/bin/vim {file}"
-{%@@ elif profile == "nixos" @@%}
+{%@@ if profile == "nixos" @@%}
 execution = "$EDITOR {file}"
+{%@@ else @@%}
+execution = "{{@@ editor_exe @@}} {file}"
 {%@@ endif @@%}
 
 [[verbs]]
@@ -86,18 +86,20 @@ execution = ":quit"
 
 [[verbs]]
 invocation = "create {subpath}"
-{%@@ if profile == "macos" @@%}
+{%@@ if profile == "nixos" @@%}
+execution = "$EDITOR {directory}/{subpath}"
+{%@@ else @@%}
 # $EDITOR isn't set :(
 # execution = "$EDITOR {directory}/{subpath}"
-execution = "/usr/bin/vim {directory}/{subpath}"
-{%@@ elif profile == "nixos" @@%}
-execution = "$EDITOR {directory}/{subpath}"
+execution = "{{@@ editor_exe @@}} {directory}/{subpath}"
 {%@@ endif @@%}
 
+{%@@ if exists_in_path('git') @@%}
 [[verbs]]
 invocation = "git_diff"
 shortcut = "gd"
 execution = "git diff {file}"
+{%@@ endif @@%}
 
 # If $PAGER isn't set on your computer, you should either set it
 #  or just replace it with your viewer of choice in the 'execution'
@@ -109,34 +111,26 @@ name = "view"
 invocation = "view"
 execution = "$PAGER {file}"
 
+{%@@ if exists_in_path('bat') @@%}
 [[verbs]]
 name = "bat"
 invocation = "bat"
-{%@@ if profile == "macos" @@%}
-execution = "/usr/local/bin/bat {file}"
-{%@@ elif profile == "nixos" @@%}
-execution = "/run/current-system/sw/bin/bat {file}"
+execution = "{{@@ bat_exe @@}} {file}"
 {%@@ endif @@%}
 
 [[verbs]]
 invocation = "touch {item}"
-{%@@ if profile == "macos" @@%}
-execution = "/usr/bin/touch {item}"
-{%@@ elif profile == "nixos" @@%}
-execution = "/run/current-system/sw/bin/touch {item}"
-{%@@ endif @@%}
+execution = "{{@@ touch_exe @@}} {item}"
 leave_broot = false
 
+{%@@ if exists_in_path('trash') @@%}
 [[verbs]]
 name = "trash"
 description = "Move to trash"
 invocation = "trash"
-{%@@ if profile == "macos" @@%}
-execution = "/usr/local/bin/trash {file}"
-{%@@ elif profile == "nixos" @@%}
-execution = "/run/current-system/sw/bin/trash {file}"
-{%@@ endif @@%}
+execution = "{{@@ trash_exe @@}} {file}"
 leave_broot = false
+{%@@ endif @@%}
 
 {%@@ if profile == "macos" @@%}
 [[verbs]]
@@ -165,8 +159,7 @@ description = "Quick Look"
 invocation = "ql"
 execution = "ql {file}"
 from_shell = true
-{%@@ endif @@%}
-{%@@ if profile == "nixos" @@%}
+{%@@ else @@%}
 # If you uncomment the two next shortcuts, the left
 # and right arrow keys will be used to go to the parent
 # directory or to open a selected one:
@@ -222,13 +215,13 @@ from_shell = true
 # exe = "rgb(17, 164, 181) none"
 # link = "Magenta none"
 # pruning = "rgb(89, 73, 101) none Italic"
-{%@@ if profile == "nixos" @@%}
+{%@@ if profile == "macos" @@%}
+# permissions = "gray(12) none "
+{%@@ else @@%}
 # perm__ = "gray(5) None"
 # perm_r = "ansi(94) None"
 # perm_w = "ansi(132) None"
 # perm_x = "ansi(65) None"
-{%@@ elif profile == "macos" @@%}
-# permissions = "gray(12) none "
 {%@@ endif @@%}
 # owner = "gray(12) none "
 # group = "gray(12) none "
