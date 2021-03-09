@@ -1,0 +1,6 @@
+# Command to run whenever changing directories
+{%@@ if profile == 'macos' @@%}
+command ls -GF
+{%@@ else @@%}
+command ls --color --classify
+{%@@ endif @@%}

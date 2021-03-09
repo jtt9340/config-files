@@ -3,7 +3,7 @@ function j {
   if [[ "$argv[1]" == "-"* ]]; then
     z "$@"
   else
-    cd "$@" 2> /dev/null || z "$@" && command ls -GF
+    cd "$@" 2> /dev/null || z "$@"
   fi
 }
 

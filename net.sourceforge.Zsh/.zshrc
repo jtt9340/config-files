@@ -149,3 +149,6 @@ HB_CNF_HANDLER="$(brew --prefix)/Homebrew/Library/Taps/homebrew/homebrew-command
 type add-zsh-hook &>/dev/null || autoload -Uz add-zsh-hook
 autoload _python-workon-cwd
 add-zsh-hook chpwd _python-workon-cwd
+
+# Run ls when changing directories
+add-zsh-hook chpwd lsGF
