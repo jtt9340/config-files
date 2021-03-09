@@ -14,7 +14,7 @@ fi
 # Move the $HOME/.cargo directory somewhere else
 {%@@ if profile == 'macos' @@%}
 export CARGO_HOME="$HOME/Library/Application Support/Cargo"
-path+=($CARGO_HOME/bin $HOME/Library/Application\ Support/com.npmjs.Npm/bin)
+path+=($CARGO_HOME/bin $HOME/Library/Application\ Support/com.npmjs.Npm/bin /usr/local/sbin)
 {%@@ else @@%}
 if [[ -n $XDG_DATA_HOME ]]; then
   export CARGO_HOME="$XDG_DATA_HOME"/cargo
