@@ -139,12 +139,6 @@ done
 ###############
 # Miscellaneous
 ###############
-{%@@ if profile == 'macos' @@%}
-# MANPATH="/usr/local/gnupg-2.2/share/man${MANPATH:+:$MANPATH}"
-manpath=(/usr/local/gnupg-2.2/share/man /usr/share/man /usr/local/share/man $manpath)
-export MANPATH
-{%@@ endif @@%}
-
 {%@@ if exists_in_path('brew') @@%}
 # Command-not-found functionality for Homebrew
 HB_CNF_HANDLER="$(brew --prefix)/Homebrew/Library/Taps/homebrew/homebrew-command-not-found/handler.sh"
