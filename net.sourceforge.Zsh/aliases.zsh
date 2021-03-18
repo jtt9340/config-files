@@ -29,7 +29,7 @@ alias ldot='ls -d .*'
 alias lab='ls -AbFG'
 {%@@ if exists(env['HOME'] + '/Library/Application Support/org.dystroy.broot/launcher/bash/1') or
         exists(env.get('XDG_DATA_HOME', default='') + '/broot/launcher/bash/1') or 
-        exists(env['HOME'] + '/.local/share/broot/launcer/bash/1') @@%}
+        exists(env['HOME'] + '/.local/share/broot/launcher/bash/1') @@%}
 alias lbr='br -sdp'
 {%@@ endif @@%}
 
