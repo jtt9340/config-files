@@ -27,6 +27,7 @@ fi
 # ls aliases
 alias ldot='ls -d .*'
 alias lab='ls -AbFG'
+alias d='dirs -v'
 {%@@ if exists(env['HOME'] + '/Library/Application Support/org.dystroy.broot/launcher/bash/1') or
         exists(env.get('XDG_DATA_HOME', default='') + '/broot/launcher/bash/1') or 
         exists(env['HOME'] + '/.local/share/broot/launcher/bash/1') @@%}
@@ -47,6 +48,19 @@ alias tree='br --cmd :pt'
 {%@@ if exists_in_path('lsd') @@%}
 alias ltree='lsd --tree'
 {%@@ endif @@%}
+
+alias g=git
+# Convert Git aliases into shell aliases
+IFS='
+'
+for galias in `git config --global --list`; do
+  if [[ $galias =~ ^alias\. ]]; then
+    galias=$(echo $galias | cut -c 7-)
+    galias_key=$(echo $galias | cut -d = -f 1)
+    galias_value=$(echo $galias | cut -d = -f 2)
+    alias "g$galias_key"="git $galias_value"
+  fi
+done
 
 {%@@ if exists_in_path('brew') @@%}
 # These aliases are graciously taken from the Prezto Homebrew plugin; I have decided not to add the plugin

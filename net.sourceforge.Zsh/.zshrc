@@ -1,122 +1,59 @@
-##############################################################################################################################
-# This .zshrc requires Zgen, a program that makes it easy to manage Zsh plugins. If it is not installed, it will be installed.
-##############################################################################################################################
-[[ -d $ZGEN_DIR || -d $ZDOTDIR/zgen || -d $ZDOTDIR/.zgen || -d $HOME/.zgen ]] || {
-  [[ -z "$ZGEN_DIR" ]] && {
-    [[ -n "$ZDOTDIR" ]] && ZGEN_DIR="${ZDOTDIR}/zgen" || ZGEN_DIR="${HOME}/.zgen"
-  }
-  # Use my custom fork of Zgen
-  git clone git@github.com:jtt9340/zgen.git $ZGEN_DIR 
-}
+# Lines configured by zsh-newuser-install
+HISTFILE={{@@ zdotdir @@}}/.zsh_history
+HISTSIZE=1000
+SAVEHIST=1000
+setopt autocd
+unsetopt beep
+bindkey -e
+# End of lines configured by zsh-newuser-install
+# The following lines were added by compinstall
+zstyle :compinstall filename '{{@@ zdotdir @@}}/.zshrc'
 
-#############################
-# These are part of Oh-My-Zsh
-#############################
-# Display little red dots while waiting for Zsh to fill in a completion
-COMPLETION_WAITING_DOTS=true
-# This probably does something useful
-DISABLE_UNTRACKED_FILES_DIRTY=true
-# Make hyphens and underscores indistuinguishable completion-wise
-HYPHEN_INSENSITIVE=true
-# Disable biweekly auto-update checks for Oh-My-Zsh; this is handled by the unixorn/autoupdate-zgen plugin below
-DISABLE_AUTO_UPDATE=true
-# This technically isn't part of Oh-My-Zsh but I don't know where else to put this; it's part of djui/alias-tips
-export ZSH_PLUGINS_ALIAS_TIPS_TEXT='Found existing alias: '
-export ZSH_PLUGINS_ALIAS_TIPS_EXCLUDES='_ fsh-alias'
-
-############################
 # Enabling shell completions
-############################
-{%@@ if exists_in_path('brew') @@%}
-fpath+=($(brew --prefix)/share/zsh/site-functions $ZDOTDIR/zfunc)
-{%@@ else @@%}
 fpath+=$ZDOTDIR/zfunc
-{%@@ endif @@%}
 
-###################################################################################################################
-# Source the init script created by zgen; this loads all the plugins specified in the "if ! zgen saved" block below 
-###################################################################################################################
-source "$ZGEN_DIR/zgen.zsh"
+autoload -Uz compinit
+compinit
+# End of lines added by compinstall
+## Automatically decide when to page a list of completions
+LISTMAX=100
 
-######################################################################################################################
-# If the init script exists, skip the following. Otherwise, we will download and use the following themes/plugins/etc.
-######################################################################################################################
-if ! zgen saved; then
-  # Per the zgen documentation: "It's a good idea to load the base components before specifying any plugins"
-  zgen oh-my-zsh
+# From `man zshparam`: "A list of non-alphanumeric characters considered part of a word by the line editor."
+WORDCHARS='*?_[]~=&;!#$%^(){}<>:.-'  # Borrowed from github.com/zpm-zsh/core-config
 
-  # Specify plugins part of oh-my-zsh
-  whence git &>/dev/null && zgen oh-my-zsh plugins/git
-  whence cargo &>/dev/null && zgen oh-my-zsh plugins/cargo
-  whence rustup &>/dev/null && zgen oh-my-zsh plugins/rustup
-  whence pip &>/dev/null && zgen oh-my-zsh plugins/pip
-  zgen oh-my-zsh plugins/virtualenv
-  whence docker &>/dev/null && zgen oh-my-zsh plugins/docker
+##########################
+# More completion settings
+##########################
+# The following were all borrowed from zpm-zsh/core-config
+zstyle ':completion:*:processes' command 'NOCOLORS=1 ps -U $USER|sed "/ps/d"'
+zstyle ':completion:*:processes' insert-ids menu yes select
+zstyle ':completion:*:processes-names' command 'NOCOLORS=1 ps xho command|sed "s/://g"'
+zstyle ':completion:*:processes' sort false
+zstyle ':completion:*' completer _expand _complete _correct _approximate
+zstyle ':completion:*:approximate:*' max-errors 'reply=($((($#PREFIX+$#SUFFIX)/3))numeric)'
+zstyle '*' single-ignored show
+zstyle ':completion:*:*:*:*:*' menu select  # Use an interactive menu when there are multiple completions
+bindkey '^[[Z' reverse-menu-complete        # Shift+Tab goes backward in the completion menu
+zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'\
+zstyle ':completion:*:messages' format '%d'
+zstyle ':completion:*:functions' ignored-patterns '_*'
+zstyle ':completion:*:*:zcompile:*' ignored-patterns '(*~|*.zwc)'
+zstyle ':completion:*:warnings' format "%{${c[red]}${c[bold]}%}No matches for:%{${c[yellow]}${c[bold]}%} %d"
+zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=36=31'
+zstyle ':completion:*' accept-exact '*(N)'
+zstyle ':completion::complete:*' use-cache 1  # Enable a cache for shell completions
+zstyle ':completion::complete:*' cache-path "${TMPDIR:-/tmp}/zsh-${UID}"
 
-  zgen load zsh-users/zsh-completions src
+# From zpm-zsh/core-config: Load completion listing extensions
+zmodload zsh/complist
 
-  # Aliases
-  if [[ -f $ALIASRC ]]; then
-    zgen load $ALIASRC
-  elif [[ -f $ZDOTDIR/aliases.zsh ]]; then
-    zgen load $ZDOTDIR/aliases.zsh
-  elif [[ -f $HOME/.aliases.zsh ]]; then
-    zgen load $HOME/.aliases.zsh
-  fi
+# Enable colors
+autoload -U colors
+colors
 
-  # Directory bookmark mechanism
-  zgen load $ZDOTDIR/bookmark.zsh
-
-{%@@ if exists_in_path('broot') @@%}
-  # Broot
-{%@@ if profile == 'macos' @@%}
-  zgen load /Users/josephterrito/Library/Preferences/org.dystroy.broot/launcher/bash/br
-{%@@ else @@%}
-  zgen load $HOME/.config/broot/launcher/bash/br
-{%@@ endif @@%}
-{%@@ endif @@%}
-
-  # So when you use `zsh-users/zsh-syntax-highlighting` it needs to be
-  # sourced last. I'm not sure if that's the same for fast-syntax-highlighing,
-  # but might as well adhere to that.
-  zgen loadall <<EOPLUGINS
-    djui/alias-tips
-    agkozak/zsh-z
-    unixorn/autoupdate-zgen
-    zsh-users/zsh-autosuggestions
-    zsh-users/zsh-history-substring-search
-    zdharma/fast-syntax-highlighting
-EOPLUGINS
-
-  # Set the theme
-  # TODO: figure out why this theme only sort-of works when using 'zgen load', for now I am resorting back to
-  # normal source
-  # By 'sort-of works' I mean the variables declared with 'typeset +H' at the top of the joeys-avit file aren't
-  # actually present 🤔 
-  # zgen load $ZDOTDIR/joeys-avit
-
-  # Generate the init script from plugins above
-  zgen save
-fi
-
-{#@@
-  The Oh-My-Zsh pip plugin automatically handles putting the zsh-cache file in a place
-  so as to not clutter the home directory on GNU/Linux, so we only need this line on macOS.
-@@#}
-{%@@ if profile == 'macos' @@%}
-# The Oh-My-Zsh pip plugin stores auto-completion data in this file
-# (This line needs to be placed after the "source $ZGEN_DIR/zgen.zsh"/"if ! zgen saved" block above
-# since the following variable needs to be set *after* the pip plugin is sourced.)
-# And this variable is only set if the pip plugin is loaded at all.
-if (($zsh_loaded_plugins[(Ie)ohmyzsh/ohmyzsh/plugins/pip])) || (($ZGEN_LOADED[(I)*pip*])); then
-  ZSH_PIP_CACHE_FILE=$HOME/Library/Caches/pip/zsh-cache
-fi
-{%@@ endif @@%}
-
-# See above TODO
-ZSH_THEME_VIRTUALENV_PREFIX=⟨
-ZSH_THEME_VIRTUALENV_SUFFIX=⟩
-source $ZDOTDIR/joeys-avit.zsh-theme
+# Make ctrl-left and ctrl-right go left and right by words
+bindkey ';5D' backward-word
+bindkey ';5C' forward-word
 
 ###############
 # Shell Options
@@ -129,6 +66,30 @@ export SPROMPT="Correct $fg[red]%R$reset_color to $fg[green]%r$reset_color?
 # Case-insensitive globbing
 setopt NO_CASE_GLOB
 
+# Allow tab completion in the middle of a word
+setopt COMPLETE_IN_WORD
+
+# History-related options
+setopt APPEND_HISTORY           # Add to the history file instead of overwriting it every time
+setopt INC_APPEND_HISTORY       # Incrementally write to the history file instead of waiting until you exit Zsh
+setopt HIST_IGNORE_DUPS         # Don't store duplicate history commands
+setopt HIST_FIND_NO_DUPS        # When searching through the command history don't show duplicates
+setopt HIST_IGNORE_SPACE        # Remove commands from the history that begin with a space
+setopt HIST_REDUCE_BLANKS       # Trim commands of whitespace before saving them in HISTFILE
+setopt HIST_FCNTL_LOCK          # I don't really understand what this does but it seems useful
+setopt HIST_VERIFY              # When invoking history with a !, check first before running the command
+setopt SHARE_HISTORY            # For sharing history between zsh processes
+
+# cd-ing related options
+setopt autopushd       # Automatically push directories onto the directory stack
+setopt pushdignoredups # Don't add directories to the directory stack that are already on it
+
+# Allow comments even in interactive shells
+setopt interactive_comments
+
+# Do not allow '>' to clear (truncate) files
+unsetopt clobber
+
 ###########
 # Functions
 ###########
@@ -139,16 +100,47 @@ done
 ###############
 # Miscellaneous
 ###############
-{%@@ if exists_in_path('brew') @@%}
-# Command-not-found functionality for Homebrew
-HB_CNF_HANDLER="$(brew --prefix)/Homebrew/Library/Taps/homebrew/homebrew-command-not-found/handler.sh"
-[ -f "$HB_CNF_HANDLER" ] && source "$HB_CNF_HANDLER"
-{%@@ endif @@%}
-
 # Automatically activate and deactivate Python virtualenv upon directory entry and exit
 type add-zsh-hook &>/dev/null || autoload -Uz add-zsh-hook
 autoload _python-workon-cwd
 add-zsh-hook chpwd _python-workon-cwd
 
-# Run ls when changing directories
-add-zsh-hook chpwd lsGF
+# Ignore these users (taken from github.com/zpm-zsh/ignored-users)
+if [[ -e /etc/passwd ]]; then
+  CACHE_FILE=$ZDOTDIR/ignored-users.zsh
+  if [[ -f "$CACHE_FILE" ]]; then
+    source "$CACHE_FILE"
+  else
+    ignored=( $(cat /etc/passwd | awk -F':' '($3<1000 && $3>0)||$3>10000{print $1}' | xargs) )
+    zstyle ':completion:*:*:*:users' ignored-patterns $ignored
+    echo "zstyle ':completion:*:*:*:users' ignored-patterns $ignored" >! "$CACHE_FILE" 2>/dev/null
+    zcompile "$CACHE_FILE"
+  fi
+fi
+
+####################
+# Additional scripts
+####################
+source $ZDOTDIR/aliases.zsh
+source $ZDOTDIR/bookmark.zsh
+
+# If a plugins script exist, then load these plugins
+ZSH_PLUGINS=$ZDOTDIR/zsh_plugins.zsh
+[[ -f $ZSH_PLUGINS ]] && source $ZSH_PLUGINS
+
+# Only load these plugins if not logged in via ssh
+# (check for ssh session borrowed from https://serverfault.com/a/506267)
+if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
+  SESSION_TYPE=remote/ssh
+else
+  case $(ps -o comm= -p $PPID) in
+    sshd|*/sshd) SESSION_TYPE=remote/ssh
+  esac
+fi
+
+ZSH_PLUGINS_SSH=$ZDOTDIR/zsh_plugins_ssh.zsh
+[[ $SESSION_TYPE != remote/ssh && -f $ZSH_PLUGINS_SSH ]] && source $ZSH_PLUGINS_SSH
+
+# Needed for zsh-users/zsh-history-substring-search
+bindkey '^[[A' history-substring-search-up
+bindkey '^[[B' history-substring-search-down
