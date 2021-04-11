@@ -62,7 +62,6 @@ alias brewu='brew upgrade' # updates and upgrdes Homebrew packages and formulae
 alias brewx='brew uninstall' # uninstalls a formula
 
 # brew cask
-alias cask='brew cask'
 alias caski='brew install --cask' # installs a cask
 alias caskl='brew list --cask' # lists installed casks
 alias casko='brew outdated --cask' # lists casks which have an update available
