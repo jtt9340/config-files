@@ -47,8 +47,6 @@ if ! zgen saved; then
 
   # Specify plugins part of oh-my-zsh
   whence git &>/dev/null && zgen oh-my-zsh plugins/git
-  whence cargo &>/dev/null && zgen oh-my-zsh plugins/cargo
-  whence rustup &>/dev/null && zgen oh-my-zsh plugins/rustup
   whence pip &>/dev/null && zgen oh-my-zsh plugins/pip
   zgen oh-my-zsh plugins/virtualenv
   whence docker &>/dev/null && zgen oh-my-zsh plugins/docker
