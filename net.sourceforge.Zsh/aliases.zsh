@@ -27,7 +27,6 @@ fi
 # ls aliases
 alias ldot='ls -d .*'
 alias lab='ls -AbFG'
-alias d='dirs -v'
 {%@@ if exists(env['HOME'] + '/Library/Application Support/org.dystroy.broot/launcher/bash/1') or
         exists(env.get('XDG_DATA_HOME', default='') + '/broot/launcher/bash/1') or 
         exists(env['HOME'] + '/.local/share/broot/launcher/bash/1') @@%}
@@ -49,6 +48,11 @@ alias tree='br --cmd :pt'
 alias ltree='lsd --tree'
 {%@@ endif @@%}
 
+# Create cd aliases
+alias 1='cd -'
+for (( i = 2; i <= 9; i++ ))
+  alias "$i"="cd -$i" 
+
 alias g=git
 # Convert Git aliases into shell aliases
 IFS='
@@ -57,7 +61,7 @@ for galias in `git config --global --list`; do
   if [[ $galias =~ ^alias\. ]]; then
     galias=$(echo $galias | cut -c 7-)
     galias_key=$(echo $galias | cut -d = -f 1)
-    galias_value=$(echo $galias | cut -d = -f 2)
+    galias_value=$(echo $galias | cut -d = -f 2-)
     alias "g$galias_key"="git $galias_value"
   fi
 done

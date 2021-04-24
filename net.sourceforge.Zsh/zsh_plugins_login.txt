@@ -1,5 +1,5 @@
 # The following plugins should only be sourced if
-# NOT logged in via ssh
+# NOT logged in via ssh/login shell
 
 # Reminder to use the aliases you have set
 djui/alias-tips
@@ -9,7 +9,8 @@ djui/alias-tips
 agkozak/zsh-z
 
 # Standardizes macOS' 'pbcopy' and 'pbpaste' commands to
-# work as expected regardless of whether you are on Linux or macOS (Linux dependencies: xdg-open, xclip)
+# work as expected regardless of whether you are on Linux or macOS
+# (Linux dependencies: xdg-open, xclip)
 zpm-zsh/clipboard
 
 # Bookmark your most commonly cd-ed to directories

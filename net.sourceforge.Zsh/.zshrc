@@ -59,7 +59,7 @@ bindkey ';5C' forward-word
 # Shell Options
 ###############
 # Spell check
-setopt correct
+setopt CORRECT
 export SPROMPT="Correct $fg[red]%R$reset_color to $fg[green]%r$reset_color?
 	[Yes, No, Abort, Edit] "
 
@@ -81,14 +81,18 @@ setopt HIST_VERIFY              # When invoking history with a !, check first be
 setopt SHARE_HISTORY            # For sharing history between zsh processes
 
 # cd-ing related options
-setopt autopushd       # Automatically push directories onto the directory stack
-setopt pushdignoredups # Don't add directories to the directory stack that are already on it
+setopt AUTO_PUSHD        # Automatically push directories onto the directory stack
+setopt PUSHD_IGNORE_DUPS # Don't add directories to the directory stack that are already on it
+setopt PUSHD_MINUS       # From `man zshoptions`: "Exchanges the meanings of `+' and `-' when
+                         # used with a number to specify a directory in the stack."
+setopt PUSHD_SILENT      # From `man zshoptions`: "Do not print the directory stack after pushd or popd."
+setopt PUSHD_TO_HOME     # Make `pushd` behave as `pushd $HOME` similar to how `cd` behaves as `cd $HOME`
 
 # Allow comments even in interactive shells
-setopt interactive_comments
+setopt INTERACTIVE_COMMENTS
 
 # Do not allow '>' to clear (truncate) files
-unsetopt clobber
+unsetopt CLOBBER
 
 ###########
 # Functions
@@ -104,6 +108,9 @@ done
 type add-zsh-hook &>/dev/null || autoload -Uz add-zsh-hook
 autoload _python-workon-cwd
 add-zsh-hook chpwd _python-workon-cwd
+
+# Run ls when changing directories
+add-zsh-hook chpwd lsGF
 
 # Ignore these users (taken from github.com/zpm-zsh/ignored-users)
 if [[ -e /etc/passwd ]]; then
@@ -121,26 +128,27 @@ fi
 ####################
 # Additional scripts
 ####################
-source $ZDOTDIR/aliases.zsh
-source $ZDOTDIR/bookmark.zsh
+source $ZDOTDIR/aliases.zsh   # Shell aliases
+source $ZDOTDIR/bookmark.zsh  # Bookmark mechanism
 
-# If a plugins script exist, then load these plugins
+# If a plugins script exists, then load these plugins
 ZSH_PLUGINS=$ZDOTDIR/zsh_plugins.zsh
 [[ -f $ZSH_PLUGINS ]] && source $ZSH_PLUGINS
 
-# Only load these plugins if not logged in via ssh
-# (check for ssh session borrowed from https://serverfault.com/a/506267)
-if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
-  SESSION_TYPE=remote/ssh
-else
-  case $(ps -o comm= -p $PPID) in
-    sshd|*/sshd) SESSION_TYPE=remote/ssh
-  esac
+# Only load these plugins if not logged a login shell
+ZSH_PLUGINS_LOGIN=$ZDOTDIR/zsh_plugins_login.zsh
+if [[ $0 != -zsh && -f $ZSH_PLUGINS_LOGIN ]]; then
+  source $ZSH_PLUGINS_LOGIN
+  # Needed for zsh-users/zsh-history-substring-search
+  bindkey '^[[A' history-substring-search-up
+  bindkey '^[[B' history-substring-search-down
 fi
 
-ZSH_PLUGINS_SSH=$ZDOTDIR/zsh_plugins_ssh.zsh
-[[ $SESSION_TYPE != remote/ssh && -f $ZSH_PLUGINS_SSH ]] && source $ZSH_PLUGINS_SSH
-
-# Needed for zsh-users/zsh-history-substring-search
-bindkey '^[[A' history-substring-search-up
-bindkey '^[[B' history-substring-search-down
+{%@@ if exists_in_path('broot') @@%}
+# Broot
+{%@@ if profile == 'macos' @@%}
+source $HOME/Library/Preferences/org.dystroy.broot/launcher/bash/br
+{%@@ else @@%}
+source  $HOME/.config/broot/launcher/bash/br
+{%@@ endif @@%}
+{%@@ endif @@%}
