@@ -8,10 +8,13 @@ config:
   link_on_import: link
   cmpignore:
   - '*/.DS_Store'
+  - '*.swp'
   upignore:
   - '*/.DS_Store'
+  - '*.swp'
   instignore:
   - '*/.DS_Store'
+  - '*.swp'
   func_file:
   - re.deadc0de.dotdrop/funcs.py
   filter_file:
