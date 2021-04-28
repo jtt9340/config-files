@@ -41,7 +41,7 @@ alias lsdla='lsd -laF --date relative'
 
 {%@@ if exists(env['HOME'] + '/Library/Application Support/org.dystroy.broot/launcher/bash/1') or
         exists(env.get('XDG_DATA_HOME', default='') + '/broot/launcher/bash/1') or 
-        exists(env['HOME'] + '/.local/share/broot/launcer/bash/1') @@%}
+        exists(env['HOME'] + '/.local/share/broot/launcher/bash/1') @@%}
 alias tree='br --cmd :pt'
 {%@@ endif @@%}
 {%@@ if exists_in_path('lsd') @@%}
