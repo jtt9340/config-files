@@ -7,13 +7,13 @@ let
     let
       dotdrop = python39.pkgs.buildPythonPackage rec {
         pname = "dotdrop";
-        version = "1.4.3";
+        version = "1.5.3";
 
         src = fetchFromGitHub {
           owner = "deadc0de6";
           repo = pname;
           rev = "v${version}";
-          sha256 = "16pc4gh1cc795ckwswpbmzc7k0k6ki6mzmgy7lsvpwyal80rl773";
+          sha256 = "1qqlh9pznssbgg45qvxw73j4ii1hl1y118lyaldblmjqhdc65768";
         };
 
         doCheck = false;
