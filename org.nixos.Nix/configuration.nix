@@ -100,6 +100,8 @@ in
     micro
     # View documentation for Nix functions
     (callPackage ./program/nix-doc/default.nix {})
+    # A files database for nixpkgs
+    nix-index
     # Generate SHA-256 sums from Git repositories
     nix-prefetch-git
     # Generate SHA-256 sums from GitHub repositories

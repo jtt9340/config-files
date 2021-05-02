@@ -88,6 +88,8 @@ in
     jetbrains.idea-ultimate
     # Python IDE
     jetbrains.pycharm-professional
+    # ISO image writer for KDE
+    k3b
     # Free and open-source office suite
     libreoffice
     # Makes it easier to run games/Windows-only applications on GNU/Linux
