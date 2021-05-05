@@ -106,4 +106,4 @@ alias diff='diff -s'
 alias diff='diff -s --color=always'
 {%@@ endif @@%}
 alias cp='cp -v'
-
+alias grep='grep -n --color=always'
