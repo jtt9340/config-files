@@ -44,13 +44,13 @@ variables:
 dynvariables:
   bat_config_path: command -v bat >/dev/null && bat --config-file || echo $HOME/.bat-not-installed
   # The path to the Vim binary, or else nano if Vim is not installed
-  editor_exe: command -v vim >/dev/null && which vim || which nano
+  editor_exe: which vim || which nano
   # The path to the Bat binary
   bat_exe: which bat
   # The path to the touch binary
   touch_exe: which touch
   # The path to the trash binary
-  trash_exe: which trash
+  trash_exe: which trash || echo 'trash-cli not installed'
 actions:
   zshenv: ln -i -s {{@@ _dotfile_abs_dst @@}}/.zshenv ~/.zshenv
 dotfiles:
