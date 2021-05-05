@@ -1,3 +1,4 @@
+# This is Git's per-user configuration file.
 [user]
 	name = Joey Territo
 {%@@ if env['git-email'] is string @@%}
