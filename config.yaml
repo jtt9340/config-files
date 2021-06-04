@@ -72,7 +72,7 @@ dotfiles:
     - viminfo
   f_org.dystroy.broot_conf.toml:
     src: org.dystroy.broot/conf.toml
-    dst: "{{@@ '~/Library/Preferences/org.dystroy.broot/conf.toml' if profile == 'macos'\
+    dst: "{{@@ '~/Library/Application Support/org.dystroy.broot/conf.toml' if profile == 'macos'\
       \ else '~/.config/broot/conf.toml' @@}}"
     link: link
   f_nixpkgs_config.nix:

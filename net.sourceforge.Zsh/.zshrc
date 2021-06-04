@@ -69,7 +69,7 @@ if ! zgen saved; then
 {%@@ if exists_in_path('broot') @@%}
   # Broot
 {%@@ if profile == 'macos' @@%}
-  zgen load /Users/josephterrito/Library/Preferences/org.dystroy.broot/launcher/bash/br
+  zgen load "$HOME/Library/Application Support/org.dystroy.broot/launcher/bash/br"
 {%@@ else @@%}
   zgen load $HOME/.config/broot/launcher/bash/br
 {%@@ endif @@%}
