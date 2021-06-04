@@ -50,6 +50,7 @@ if ! zgen saved; then
   whence pip &>/dev/null && zgen oh-my-zsh plugins/pip
   zgen oh-my-zsh plugins/virtualenv
   whence docker &>/dev/null && zgen oh-my-zsh plugins/docker
+  whence rsync &>/dev/null && zgen oh-my-zsh plugins/cp
 
   zgen load zsh-users/zsh-completions src
 
