@@ -1,69 +1,69 @@
-tap "eth-p/software", "git@github.com:eth-p/homebrew-software.git"
+# Contains a formula for Apple's San Francisco monospace font
+# patched to work with Nerd fonts
+tap "epk/epk"
+# Contans the "bat-extas" suite of shell scripts
+tap "eth-p/software"
+# Contains the "brew bundle" command to generate this file
 tap "homebrew/bundle"
+# Several graphical applications for macOS
 tap "homebrew/cask"
+# Several fonts for macOS
 tap "homebrew/cask-fonts"
+# When you type the name of a command not installed on your machine,
+# this will suggest the package you should install to get that command
 tap "homebrew/command-not-found"
+# The core Homebrew repository that contains all official formulae
 tap "homebrew/core"
+# "Manage background services with macOS' launchctl daemon manager"
 tap "homebrew/services"
 # Clone of cat(1) with syntax highlighting and Git integration
 brew "bat"
+# New way to see and navigate directory trees
+brew "broot"
 # Interpreted, interactive, object-oriented programming language
 brew "python@3.9"
-# Core application library for C
-brew "glib"
 # Simple, fast and user-friendly alternative to find
 brew "fd"
 # Syntax-highlighting pager for git and diff output
 brew "git-delta"
-# Open source programming language to build simple/reliable/efficient software
-brew "go"
-# Platform built on V8 to build network applications
-brew "node"
+# GNU Pretty Good Privacy (PGP) package
+brew "gnupg"
 # High precision scientific calculator with support for physical units
 brew "insect"
-# Implementation of the file(1) command
-brew "libmagic"
-# Next-gen compiler infrastructure
-brew "llvm"
 # Clone of ls with colorful output, file type icons, and more
 brew "lsd"
-# Mac App Store command-line interface
-brew "mas"
-# Java-based project management
-brew "maven"
-# Swiss-army knife of markup format conversion
-brew "pandoc"
 # PDF rendering library (based on the xpdf-3.0 code base)
 brew "poppler"
 # Code formatter for JavaScript, CSS, JSON, GraphQL, Markdown, YAML
 brew "prettier"
 # Wrapper around ripgrep that adds multiple rich file types
 brew "ripgrep-all"
+# Rust toolchain installer
+brew "rustup-init"
 # OCR (Optical Character Recognition) engine
 brew "tesseract"
-# Vi 'workalike' with many additional features
-brew "vim"
-# Debugger for zsh
-brew "zshdb"
-# Bash scripts that integrate bat with various command-line tools
-brew "eth-p/software/bat-extras"
+# Application launcher and productivity software
+cask "alfred"
+# Application uninstaller
 cask "appcleaner"
+# Desktop password and login vault
+cask "bitwarden"
+# App to build and share containerized applications and microservices
+cask "docker"
+# Tool to hide status bar icons
 cask "dozer"
+# Web browser
 cask "firefox"
+# Several nerd fonts for use with lsd
 cask "font-droidsansmono-nerd-font"
 cask "font-iosevka-nerd-font"
 cask "font-meslolg-nerd-font"
-cask "google-drive-file-stream"
-cask "microsoft-teams"
+cask "font-sf-mono-nerd-font"
+# Client for the Google Drive storage service
+cask "google-drive"
+# JetBrains tools manager
+cask "jetbrains-toolbox"
+# Cloud storage client
 cask "onedrive"
-mas "AdBlock Pro", id: 1018301773
-mas "Amphetamine", id: 937984704
-mas "Bitwarden", id: 1352778147
-mas "Keynote", id: 409183694
-mas "Microsoft Excel", id: 462058435
-mas "Microsoft PowerPoint", id: 462062816
-mas "Microsoft Word", id: 462054704
-mas "Numbers", id: 409203825
-mas "Pages", id: 409201541
-mas "Slack", id: 803453959
-mas "Trello", id: 1278508951
+# Move and resize windows using keyboard shortcuts or snap areas
+cask "rectangle"
