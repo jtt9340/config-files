@@ -81,6 +81,10 @@ execution = "{{@@ editor_exe @@}} {file}"
 {%@@ endif @@%}
 
 [[verbs]]
+internal = ":toggle_stage"
+key = "ctrl-a"
+
+[[verbs]]
 key = "ctrl-c"
 execution = ":quit"
 
@@ -132,19 +136,19 @@ execution = "{{@@ trash_exe @@}} {file}"
 leave_broot = false
 {%@@ endif @@%}
 
-{%@@ if profile == "macos" @@%}
+{%@@ if profile != "nixos" @@%}
 [[verbs]]
 invocation = "zshconfig"
 description = "Edit .zshrc"
 execution = "zshconfig"
 from_shell = true
-{%@@ endif @@%}
 
 [[verbs]]
 invocation = "vimconfig"
 description = "Edit .vimrc"
 execution = "vimconfig"
 from_shell = true
+{%@@ endif @@%}
 
 [[verbs]]
 invocation = "brootconfig"
