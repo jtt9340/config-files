@@ -23,6 +23,9 @@ else
   alias brootconfig="${EDITOR:-vim} $HOME/.config/broot/conf.toml"
 fi
 {%@@ endif @@%}
+{%@@ if exists_in_path('git') @@%}
+alias gitconfig="${EDITOR:-vim} {{@@ gitconfig_config_path @@}}"
+{%@@ endif @@%}
 
 # ls aliases
 alias ldot='ls -d .*'

@@ -27,6 +27,12 @@ variables:
       else '~/.config/vim' if exists('~/.config/vim')
       else '~/.vim'
     @@}}
+  zdotdir: >-
+    {{@@
+      '~/Library/Application Support/net.sourceforge.Zsh' if profile == 'macos'
+      else env['XDG_CONFIG_HOME'] + '/zsh' if env['XDG_CONFIG_HOME'] is string
+      else '~/.zsh'
+    @@}}
   ripgrep_config_path: >-
     {{@@
       env['RIPGREP_CONFIG_PATH'] if env['RIPGREP_CONFIG_PATH'] is string
@@ -35,11 +41,11 @@ variables:
       else env['XDG_CONFIG_HOME'] + '/ripgreprc' if env['XDG_CONFIG_HOME'] is string
       else '~/.config/ripgreprc'
     @@}}
-  zdotdir: >-
+  gitconfig_config_path: >-
     {{@@
-      '~/Library/Application Support/net.sourceforge.Zsh' if profile == 'macos'
-      else env['XDG_CONFIG_HOME'] + '/zsh' if env['XDG_CONFIG_HOME'] is string
-      else '~/.zsh'
+      '~/.gitconfig' if profile == 'macos'
+      else env['XDG_CONFIG_HOME'] + '/git/config' if env['XDG_CONFIG_HOME'] is string
+      else '~/.config/git/config'
     @@}}
 dynvariables:
   bat_config_path: command -v bat >/dev/null && bat --config-file || echo $HOME/.bat-not-installed
@@ -121,12 +127,7 @@ dotfiles:
     link: link
   f_git_config:
     src: com.git-scm.Git/config
-    dst: >-
-      {{@@
-        '~/.gitconfig' if profile == 'macos'
-        else env['XDG_CONFIG_HOME'] + '/git/config' if env['XDG_CONFIG_HOME'] is string
-        else '~/.config/git/config'
-      @@}}
+    dst: '{{@@ gitconfig_config_path @@}}'
     link: link
 profiles:
   macos:
