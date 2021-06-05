@@ -60,6 +60,7 @@
 	d = diff
 	dca = diff --cached
 	dcw = diff --cached --word-diff
+	dct = !git describe --tags $(git rev-list --tags --max-count=1)
 	ds = diff --staged
 	dt = diff-tree --no-commit-id --name-only -r
 	dw = diff --word-diff
@@ -138,3 +139,5 @@
 	ams = am --skip
 	ama = am --abort
 	amscp = am --show-current-patch
+[pull]
+	ff = only
