@@ -100,6 +100,44 @@ in
     thunderbird
   ];
 
+  # Define systemd per-user service units
+  systemd.user.services.check-online = {
+    Unit.Description = "Check for a DNS name resolution to succeed";
+
+    Service = {
+      Type = "simple";
+      ExecStart = "/run/wrappers/bin/ping -n -c 1 -w 5 8.8.8.8";
+      Restart = "always";
+      RestartSec = 30;
+      StartLimitIntervalSec = 200;
+      StartLimitBurst = 3;
+    };
+  };
+  
+  systemd.user.services.rclone-automount-google-drive = {
+    Unit = {
+      Description = "Automatically mount my Google Drive in my home directory at startup using rclone";
+      After = "check-online.service";
+      Requires = "check-online.service";
+    };
+
+    Service = {
+      Type = "simple";
+      ExecStart = with pkgs.lib.strings; concatStringsSep " " [
+        "${pkgs.rclone}/bin/rclone mount --vfs-cache-mode writes"
+        "--config ${config.xdg.configHome}/rclone/rclone.conf"
+        "--drive-import-formats docx,xlsx,pptx,svg rit-google-drive:"
+        "${config.home.homeDirectory}/\"RIT Google Drive\""
+      ];
+      ExecStop = "/run/wrappers/bin/fusermount -u ${config.home.homeDirectory}/\"RIT Google Drive\"";
+      Restart = "on-abort";
+    };
+
+    Install = {
+      WantedBy = [ "default.target" ];
+    };
+  };
+
   # How many times do I have to say that I am okay with non-free software?! I guess when
   # you specify packages with home.packages you also need to specify it here?
   # (Me from the future: yes that is the case - the following line applies only to packages
