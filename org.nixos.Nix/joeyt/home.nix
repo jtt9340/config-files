@@ -34,6 +34,8 @@ in
     zsh = (import ./zsh.nix) {
       inherit (pkgs) fetchFromGitHub;
       inherit configFiles;
+      xdgConfigHome = config.xdg.configHome;
+      xdgDataHome = config.xdg.dataHome;
     };
 
     # Git config

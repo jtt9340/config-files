@@ -4,9 +4,6 @@
 
 { config, pkgs, ... }:
 
-let
-  pypi2nix = import (import ./program/pypi2nix/default.nix pkgs.fetchFromGitHub) {};
-in
 {
   imports =
     [ # Include the results of the hardware scan.
@@ -70,6 +67,8 @@ in
   # These are packages that are automatically available to all users, and are
   # automatically updated every time you rebuild the system configuration
   environment.systemPackages = with pkgs; [
+    # Print a list of paths as a tree of paths
+    as-tree
     # A cat/less alternative with syntax highlighting
     bat
     # "A command-line tool for transferring files with URL syntax"
@@ -110,8 +109,6 @@ in
     partition-manager
     # Screen recorder
     peek
-    # Convert Python requirements.txt files to Nix expressions
-    pypi2nix
     # Integrate ripgrep (grep alternative) with additional document formats like PDFs and Word documents
     ripgrep-all
     # Put files in the trash from the command line
