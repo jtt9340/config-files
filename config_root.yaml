@@ -12,12 +12,8 @@ dotfiles:
   d_joeyt:
     src: joeyt
     dst: /etc/nixos/joeyt
-  d_program:
-    src: program
-    dst: /etc/nixos/program
 profiles:
   nixos:
     dotfiles:
     - f_etc_nixos_configuration.nix
     - d_joeyt
-    - d_program

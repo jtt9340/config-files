@@ -22,7 +22,7 @@
   boot.loader.grub.device = "/dev/sda"; # or "nodev" for efi only
 
   nix.extraOptions = ''
-    plugin-files = ${pkgs.callPackage ./program/nix-doc/default.nix {}}/lib/libnix_doc_plugin.so
+    plugin-files = ${pkgs.nix-doc}/lib/libnix_doc_plugin.so
   '';
 
   networking.hostName = "craigscomputer"; # Define your hostname.
@@ -98,7 +98,7 @@
     # A user-friendly terminal-based text editor
     micro
     # View documentation for Nix functions
-    (callPackage ./program/nix-doc/default.nix {})
+    nix-doc
     # A files database for nixpkgs
     nix-index
     # Generate SHA-256 sums from Git repositories
