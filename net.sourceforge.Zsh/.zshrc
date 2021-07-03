@@ -133,7 +133,12 @@ source $ZDOTDIR/bookmark.zsh  # Bookmark mechanism
 
 # If a plugins script exists, then load these plugins
 ZSH_PLUGINS=$ZDOTDIR/zsh_plugins.zsh
-[[ -f $ZSH_PLUGINS ]] && source $ZSH_PLUGINS
+if [[ -f $ZSH_PLUGINS ]]; then
+  # Needed for djui/alias-tips
+  export ZSH_PLUGINS_ALIAS_TIPS_TEXT='Found existing alias: '
+  export ZSH_PLUGINS_ALIAS_TIPS_EXCLUDES='_ fsh-alias'
+  source $ZSH_PLUGINS
+fi
 
 # Only load these plugins if not logged a login shell
 ZSH_PLUGINS_LOGIN=$ZDOTDIR/zsh_plugins_login.zsh
@@ -149,6 +154,6 @@ fi
 {%@@ if profile == 'macos' @@%}
 source $HOME/Library/Preferences/org.dystroy.broot/launcher/bash/br
 {%@@ else @@%}
-source  $HOME/.config/broot/launcher/bash/br
+source $HOME/.config/broot/launcher/bash/br
 {%@@ endif @@%}
 {%@@ endif @@%}
