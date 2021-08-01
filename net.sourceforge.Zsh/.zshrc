@@ -52,7 +52,7 @@ if ! zgen saved; then
   whence docker &>/dev/null && zgen oh-my-zsh plugins/docker
   whence rsync &>/dev/null && zgen oh-my-zsh plugins/cp
 
-  zgen load zsh-users/zsh-completions src
+  zgen load zsh-users/zsh-completions 
 
   # Aliases
   if [[ -f $ALIASRC ]]; then
