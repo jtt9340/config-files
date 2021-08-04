@@ -15,19 +15,12 @@ set backspace=indent,eol,start
 " UTF-8 encoding
 set encoding=utf-8
 
-{#@@
-	For some reason, on NixOS, changing the following settings
-	to try to consolidate where Vim spits out all of its files
-	fails with error E303. I've tried several things to get it
-	to work and just cannot fix it; that's why the following
-	is only on macOS. I wonder if Neovim has the same problem?
-@@#}
 {%@@ if profile == "macos" @@%}
 " Settings to make Vim not clutter the home directory
-set undodir=$HOME/Library/Application\ Support/org.vim.Vim/undo
-set directory=$HOME/Library/Application\ Support/org.vim.Vim/swap
-set backupdir=$HOME/Library/Application\ Support/org.vim.Vim/backup
-set viewdir=$HOME/Library/Application\ Support/org.vim.Vim/view
+set undodir=$HOME/Library/Application\ Support/org.vim.Vim/undo | call mkdir(&undodir, 'p')
+set directory=$HOME/Library/Application\ Support/org.vim.Vim/swap | call mkdir(&directory, 'p')
+set backupdir=$HOME/Library/Application\ Support/org.vim.Vim/backup | call mkdir(&backupdir, 'p')
+set viewdir=$HOME/Library/Application\ Support/org.vim.Vim/view | call mkdir(&viewdir, 'p')
 set viminfo+='1000,n$HOME/Library/Application\ Support/org.vim.Vim/viminfo
 set runtimepath=$HOME/Library/Application\ Support/org.vim.Vim,$VIMRUNTIME,$HOME/Library/Application\ Support/org.vim.Vim/after
 set packpath=$HOME/Library/Application\ Support/org.vim.Vim,/usr/local/share/vim/vimfiles,$VIMRUNTIME,/usr/local/share/vim/vimfiles/after,$HOME/Library/Application\ Support/org.vim.Vim/after
@@ -51,6 +44,9 @@ set hlsearch
 set incsearch
 " Remove all highlighted matches upon pressing Escape
 nnoremap <silent> <Space> :nohlsearch<Bar>:echo<CR>
+" Smart case search: case-insensitive when search query does not contain
+" any capital letters, case-sensitive otherwise
+set smartcase
 
 " Graciously taken from https://gist.github.com/benawad/b768f5a5bbd92c8baabd363b7e79786f
 " Make j/k move along lines that wrap
@@ -69,7 +65,7 @@ autocmd BufRead,BufNewFile *.py set expandtab
 
 " Use Ctrl+a to toggle showing hidden characters or not
 set listchars=eol:$,tab:>-,trail:~,extends:>,precedes:<
-nnoremap <silent> <C-a> :set list!<CR>
+nnoremap <silent> <C-l> :set list!<CR>
 
 " Settings for NERDTree, a file finder that appears at the left
 " Show NERDTree if no files were specified when invoking Vim

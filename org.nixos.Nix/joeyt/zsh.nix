@@ -28,7 +28,7 @@
 
   # Environment variables that will be set for Zsh session
   sessionVariables = {
-    EDITOR = "micro";    
+    EDITOR = "vim";    
 
     SPROMPT = "Correct $fg[red]%R$reset_color to $fg[green]%r$reset_color?\n\t[Yes, No, Abort, Edit] ";
 

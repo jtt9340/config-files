@@ -14,6 +14,7 @@ batman:
       fallbackToNoIndex = true;
     };
     man.man.path = "${batman}/bin/batman";
+    pull.ff = "only";
   };
   aliases = {
     a = "add";

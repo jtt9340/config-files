@@ -93,10 +93,8 @@
     htop
     # Text editor part of the KDE ecosystem
     kate
-    # PDE viewer part of the KDE ecosystem
+    # PDF viewer part of the KDE ecosystem
     okular
-    # A user-friendly terminal-based text editor
-    micro
     # View documentation for Nix functions
     nix-doc
     # A files database for nixpkgs

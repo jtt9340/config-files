@@ -1,5 +1,11 @@
 # Configuation settings for Vim
-{ vimPlugins, buildVimPluginFrom2Nix, fetchFromGitHub }:
+{ vimPlugins
+, buildVimPluginFrom2Nix
+, fetchFromGitHub
+, xdgConfigHome
+, xdgDataHome
+, xdgCacheHome
+}:
 
 let
   xuyuanp-nerdtree-git-plugin = buildVimPluginFrom2Nix rec {
@@ -19,6 +25,10 @@ in {
   settings = {
     number = true;
     relativenumber = true;
+    smartcase = true;
+    undodir = [ "${xdgCacheHome}/vim/undo" ];
+    directory = [ "${xdgCacheHome}/vim/swap" ];
+    backupdir = [ "${xdgCacheHome}/vim/backup" ];
   };
 
   # For an explanation of all these options, see the .vimrc in this repository
@@ -32,6 +42,14 @@ in {
     set backspace=indent,eol,start
 
     set encoding=utf-8
+
+    set viewdir=${xdgDataHome}/vim/view
+    set viminfo+='1000,n${xdgCacheHome}/vim/viminfo
+
+    call mkdir(&undodir, 'p')
+    call mkdir(&directory, 'p')
+    call mkdir(&backupdir, 'p')
+    call mkdir(&viewdir, 'p')
 
     set wildmode=longest,list,full
 
@@ -47,6 +65,9 @@ in {
     set tabstop=4 softtabstop=0 noexpandtab shiftwidth=4
     autocmd BufRead,BufNewFile *.nix,*.zsh*,*.yaml set tabstop=2 softtabstop=0 expandtab shiftwidth=2
     autocmd BufRead,BufNewFile *.py set expandtab
+    
+    set listchars=eol:$,tab:>-,trail:~,extends:>,precedes:<
+    nnoremap <silent> <C-l> :set list!<CR>
 
     autocmd StdinReadPre * let s:std_in = 1
     autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif

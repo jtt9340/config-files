@@ -7,6 +7,9 @@ let
   # pkgsUnstable = import <nixpkgs-unstable> {
   #   config = { allowUnfree = true; };
   # };
+  xdgConfigHome = config.xdg.configHome;
+  xdgDataHome = config.xdg.dataHome;
+  xdgCacheHome = config.xdg.cacheHome;
 in
 {
   xdg = {
@@ -16,7 +19,6 @@ in
     # Home manager will manage these dotfiles
     configFile = {
       "nixpkgs/config.nix".source = "${configFiles}/org.nixos.Nix/config.nix";
-      "micro/settings.json".source = "${configFiles}/io.github.micro-editor/settings.json";
       "ripgreprc".source = "${configFiles}/com.github.burntsushi.Ripgrep/ripgreprc";
       "zsh/zfunc" = {
         source = "${configFiles}/net.sourceforge.Zsh/zfunc";
@@ -34,8 +36,8 @@ in
     zsh = (import ./zsh.nix) {
       inherit (pkgs) fetchFromGitHub;
       inherit configFiles;
-      xdgConfigHome = config.xdg.configHome;
-      xdgDataHome = config.xdg.dataHome;
+      inherit xdgConfigHome;
+      inherit xdgDataHome;
     };
 
     # Git config
@@ -48,13 +50,16 @@ in
     # Use skim, a command-line fuzzy finder written in Rust
     skim.enable = true;
 
-    # Use lsd, an ls clone written in Rust
+    # Use lsd, an ls clone with more colors and icons
     lsd.enable = true;
 
     # Use Vim with custom configuration and plugins
     vim = (import ./vim.nix) {
       inherit (pkgs) vimPlugins fetchFromGitHub;
       inherit (pkgs.vimUtils) buildVimPluginFrom2Nix;
+      inherit xdgConfigHome;
+      inherit xdgDataHome;
+      inherit xdgCacheHome;
     };
   };
 
