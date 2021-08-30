@@ -15,8 +15,6 @@ config:
   instignore:
   - '*/.DS_Store'
   - '*.swp'
-  func_file:
-  - re.deadc0de.dotdrop/funcs.py
   filter_file:
   - re.deadc0de.dotdrop/filters.py
 variables:
