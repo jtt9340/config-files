@@ -46,7 +46,10 @@ if ! zgen saved; then
   zgen oh-my-zsh
 
   # Specify plugins part of oh-my-zsh
-  whence git &>/dev/null && zgen oh-my-zsh plugins/git
+  whence git &>/dev/null && {
+    zgen oh-my-zsh plugins/git
+    zgen oh-my-zsh plugins/gitignore
+  }
   whence pip &>/dev/null && zgen oh-my-zsh plugins/pip
   zgen oh-my-zsh plugins/virtualenv
   whence docker &>/dev/null && zgen oh-my-zsh plugins/docker

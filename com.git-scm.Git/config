@@ -139,5 +139,6 @@
 	ams = am --skip
 	ama = am --abort
 	amscp = am --show-current-patch
+	i = "!gi() { curl -sL https://www.toptal.com/developers/gitignore/api/$@ ;}; gi"
 [pull]
 	ff = only

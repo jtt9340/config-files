@@ -68,12 +68,14 @@ dotfiles:
     - swap
     - undo
     - viminfo
+    - view
     cmpignore:
     - .netrwhist*
     - backup
     - swap
     - undo
     - viminfo
+    - view
   f_org.dystroy.broot_conf.toml:
     src: org.dystroy.broot/conf.toml
     dst: "{{@@ '~/Library/Application Support/org.dystroy.broot/conf.toml' if profile == 'macos'\
