@@ -115,7 +115,7 @@ name = "view"
 invocation = "view"
 execution = "$PAGER {file}"
 
-{%@@ if exists_in_path('bat') @@%}
+{%@@ if bat_exe @@%}
 [[verbs]]
 name = "bat"
 invocation = "bat"
@@ -127,7 +127,7 @@ invocation = "touch {item}"
 execution = "{{@@ touch_exe @@}} {item}"
 leave_broot = false
 
-{%@@ if exists_in_path('trash') @@%}
+{%@@ if trash_exe @@%}
 [[verbs]]
 name = "trash"
 description = "Move to trash"
