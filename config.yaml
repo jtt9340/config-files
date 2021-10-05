@@ -78,8 +78,8 @@ dotfiles:
     - view
   f_org.dystroy.broot_conf.toml:
     src: org.dystroy.broot/conf.toml
-    dst: "{{@@ '~/Library/Application Support/org.dystroy.broot/conf.toml' if profile == 'macos'\
-      \ else '~/.config/broot/conf.toml' @@}}"
+    dst: "{{@@ '~/Library/Application Support/org.dystroy.broot/conf.toml' if profile\
+      \ == 'macos' else '~/.config/broot/conf.toml' @@}}"
     link: link
   f_nixpkgs_config.nix:
     src: org.nixos.Nix/config.nix
@@ -129,6 +129,10 @@ dotfiles:
     src: com.git-scm.Git/config
     dst: '{{@@ gitconfig_config_path @@}}'
     link: link
+  f_virtualenv.ini:
+    src: io.pypa.virtualenv/virtualenv.ini
+    dst: ~/Library/Preferences/virtualenv/virtualenv.ini
+    link: link
 profiles:
   macos:
     dotfiles:
@@ -139,6 +143,7 @@ profiles:
     - f_ripgreprc
     - f_bat_config
     - f_git_config
+    - f_virtualenv.ini
   linux:
     dotfiles:
     - d_vim
