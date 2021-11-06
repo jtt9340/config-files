@@ -144,3 +144,7 @@
 	ff = only
 [advice]
 	detachedHead = false
+[init]
+	defaultBranch = master
+[fetch]
+	prune = true
