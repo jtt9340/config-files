@@ -6,3 +6,4 @@
 -m '*.zsh:Bourne Again Shell (bash)'
 -m '*.sh:Bourne Again Shell (bash)'
 -m '*.zsh-theme:Bourne Again Shell (bash)'
+-m '*.csproj:XML'
