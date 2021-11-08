@@ -87,7 +87,7 @@ if ! zgen saved; then
     unixorn/autoupdate-zgen
     zsh-users/zsh-autosuggestions
     zsh-users/zsh-history-substring-search
-    zdharma/fast-syntax-highlighting
+    zdharma-continuum/fast-syntax-highlighting
 EOPLUGINS
 
   # Set the theme
