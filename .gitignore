@@ -14,6 +14,11 @@ result
 # we don't need to check that into Git.
 templated
 
+# Some variables we don't want checked into Git, so
+# dotdrop will prompt for their values upon dotfile
+# deployment and store them in this file.
+uservariables.yaml
+
 # This directory stores scripts that provide shell tab
 # completion for Zsh and can be generated from external programs,
 # so since those can be re-generated from said programs we

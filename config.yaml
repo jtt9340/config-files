@@ -1,3 +1,5 @@
+uservariables:
+  git_email: "Git email"
 config:
   backup: true
   banner: false
@@ -6,6 +8,7 @@ config:
   workdir: templated
   keepdot: false
   link_on_import: link
+  template_dotfile_default: false
   cmpignore:
   - '*/.DS_Store'
   - '*.swp'
@@ -17,6 +20,8 @@ config:
   - '*.swp'
   filter_file:
   - re.deadc0de.dotdrop/filters.py
+  import_variables:
+  - uservariables.yaml:optional
 variables:
   vimdir: >-
     {{@@
@@ -62,6 +67,7 @@ dotfiles:
     src: org.vim.Vim
     dst: '{{@@ vimdir @@}}'
     link: link_children
+    template: true
     upignore:
     - .netrwhist*
     - backup
@@ -81,6 +87,7 @@ dotfiles:
     dst: "{{@@ '~/Library/Application Support/org.dystroy.broot/conf.toml' if profile\
       \ == 'macos' else '~/.config/broot/conf.toml' @@}}"
     link: link
+    template: true
   f_nixpkgs_config.nix:
     src: org.nixos.Nix/config.nix
     dst: ~/.config/nixpkgs/config.nix
@@ -95,6 +102,7 @@ dotfiles:
     src: net.sourceforge.Zsh
     dst: '{{@@ zdotdir @@}}'
     link: link_children
+    template: true
     cmpignore:
     - .zcompdump*
     - .zsh_history
@@ -129,6 +137,7 @@ dotfiles:
     src: com.git-scm.Git/config
     dst: '{{@@ gitconfig_config_path @@}}'
     link: link
+    template: true
   f_virtualenv.ini:
     src: io.pypa.virtualenv/virtualenv.ini
     dst: ~/Library/Preferences/virtualenv/virtualenv.ini

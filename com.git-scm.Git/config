@@ -1,10 +1,8 @@
 [user]
 	# Name the appears when authoring commits
 	name = Joey Territo
-{%@@ if env['git-email'] is string @@%}
 	# Email that appears when authoring commits
-	email = {{@@ env['git-email'] @@}}
-{%@@ endif @@%}
+	email = {{@@ git_email @@}}
 [grep]
 	# Show line number in search results
 	lineNumber = true
