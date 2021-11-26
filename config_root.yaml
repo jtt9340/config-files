@@ -1,17 +1,24 @@
+uservariables:
+  git_email: "Git email"
 config:
   backup: true
   banner: false
   create: false
   dotpath: org.nixos.Nix
   link_dotfile_default: nolink
+  template_dotfile_default: false
+  import_variables:
+  - uservariables.yaml:optional
 dotfiles:
   f_etc_nixos_configuration.nix:
     src: configuration.nix
     dst: /etc/nixos/configuration.nix
     link: nolink
+    template: false
   d_joeyt:
     src: joeyt
     dst: /etc/nixos/joeyt
+    template: true
 profiles:
   nixos:
     dotfiles:
