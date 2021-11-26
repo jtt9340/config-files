@@ -124,6 +124,7 @@ batman:
     ams = "am --skip";
     ama = "am --abort";
     amscp = "am --show-current-patch";
+    i = "!gi() { curl -sL https://www.toptal.com/developers/gitignore/api/$@ ;}; gi";
   };
   # Use Delta, a diff tool that makes diffs look like they do on GitHub
   delta = {

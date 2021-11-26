@@ -216,7 +216,7 @@
 
     # Which Oh-My-Zsh plugins to use
     plugins = [
-      "git" "cp" "virtualenv"
+      "git" "gitignore" "cp" "virtualenv"
     ];
     
     theme = "joeys-avit";
