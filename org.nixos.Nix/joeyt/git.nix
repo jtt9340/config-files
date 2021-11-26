@@ -13,6 +13,10 @@ batman:
     };
     man.man.path = "${batman}/bin/batman";
     pull.ff = "only";
+    advice.detachedHead = false;
+    init.defaultBranch = "master";
+    fetch.prune = true;
+    commit.verbose = 1;
   };
   aliases = {
     a = "add";
