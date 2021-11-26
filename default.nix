@@ -7,13 +7,13 @@ let
     let
       dotdrop = python39.pkgs.buildPythonPackage rec {
         pname = "dotdrop";
-        version = "1.5.4";
+        version = "1.8.1";
 
         src = fetchFromGitHub {
           owner = "deadc0de6";
           repo = pname;
           rev = "v${version}";
-          sha256 = "03bisnmlly83qxjvx3pzf9ijw7hmmqmz043jrbn3aa5kch8yh4qz";
+          sha256 = "0j0kihrj6gbp9dkkzqh51wcnp9xjxwq3bki97bal01jzgxq09vf5";
         };
 
         # TODO: Figure out how to get the unit tests to pass so that
@@ -26,6 +26,8 @@ let
           docopt
           ruamel_yaml
           python_magic
+          packaging
+          requests
         ];
 
         # Build/test time dependencies
