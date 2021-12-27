@@ -13,7 +13,7 @@
 # solves my problem.
 ##############
 
-# Setting PATH for Python 3.8
+# Setting PATH for Python 3.9
 # The original version is saved in .bash_profile.pysave
 # And also use a version of LLVM that supports LeakSanitizer
 # export PATH="/usr/local/opt/python@3.8/bin:${PATH}"
@@ -30,14 +30,19 @@ path=(/usr/local/opt/python@3.9/bin /usr/local/opt/llvm@11/bin $path)
 
 # Load standard Homebrew shellenv into the shell session.
 # Load 'HOMEBREW_' prefixed vairables only. Avoid loading 'PATH' related
-# variables as thay are already handled in standard Zsh configuration.
+# variables as they are already handled in standard Zsh configuration.
 eval "${(@M)${(f)"$(brew shellenv 2> /dev/null)"}:#export HOMEBREW*}"
+export HOMEBREW_NO_ENV_HINTS=1
 {%@@ endif @@%}
 
 {#@@ Bat (its configuration file location changed for some reason) @@#}
 {%@@ if profile == 'macos' and exists_in_path('bat') @@%}
 export BAT_CONFIG_PATH="$HOME/Library/Application Support/bat/config"
 export BAT_CACHE_PATH=$HOME/Library/Caches/bat
+{%@@ if exists_in_path('brew') @@%}
+export HOMEBREW_BAT=1
+export HOMEBREW_BAT_CONFIG_PATH="$BAT_CONFIG_PATH"
+{%@@ endif @@%}
 {%@@ endif @@%}
 
 # Reconfiguring programs to store their configuation/data files somewhere besides the home directory
