@@ -55,7 +55,7 @@ batman:
     dw = "diff --word-diff";
     f = "fetch";
     fa = "fetch --all --prune";
-    fo = "fetch --origin";
+    fo = "fetch origin";
     hh = "help";
     ignore = "update-index --assume-unchanged";
     l = "pull";
