@@ -7,13 +7,13 @@ let
     let
       dotdrop = python39.pkgs.buildPythonPackage rec {
         pname = "dotdrop";
-        version = "1.8.1";
+        version = "1.8.2";
 
         src = fetchFromGitHub {
           owner = "deadc0de6";
           repo = pname;
           rev = "v${version}";
-          sha256 = "0j0kihrj6gbp9dkkzqh51wcnp9xjxwq3bki97bal01jzgxq09vf5";
+          sha256 = "066w3mvsisrv3ni8l6l5vnjcszmvln70c196xymxsxjcxrvi3sjm";
         };
 
         # TODO: Figure out how to get the unit tests to pass so that
