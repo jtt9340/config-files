@@ -168,8 +168,8 @@
       src = fetchFromGitHub {
         owner = "chisui";
         repo = name;
-        rev = "v0.1.0";
-        sha256 = "0snhch9hfy83d4amkyxx33izvkhbwmindy0zjjk28hih1a9l2jmx";
+        rev = "v0.4.0";
+        sha256 = "037wz9fqmx0ngcwl9az55fgkipb745rymznxnssr3rx9irb6apzg";
       };
     }
   ];
