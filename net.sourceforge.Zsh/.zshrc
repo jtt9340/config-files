@@ -1,48 +1,53 @@
-##############################################################################################################################
-# This .zshrc requires Zgen, a program that makes it easy to manage Zsh plugins. If it is not installed, it will be installed.
-##############################################################################################################################
+# This .zshrc requires zgenom, a program that makes it easy to manage Zsh plugins. If it is not installed, it will be installed.
 [[ -d $ZGEN_DIR || -d $ZDOTDIR/zgen || -d $ZDOTDIR/.zgen || -d $HOME/.zgen ]] || {
-  [[ -z "$ZGEN_DIR" ]] && {
-    [[ -n "$ZDOTDIR" ]] && ZGEN_DIR="${ZDOTDIR}/zgen" || ZGEN_DIR="${HOME}/.zgen"
-  }
-  # Use my custom fork of Zgen
-  git clone git@github.com:jtt9340/zgen.git $ZGEN_DIR 
+  [[ -z "$ZGEN_DIR" ]] && ZGEN_DIR="${ZDOTDIR:-${HOME}}/.zgen"
+  if whence git &>/dev/null; then
+    git clone git@github.com:jandamm/zgenom.git "$ZGEN_DIR" 
+  else
+    echo "The zsh configuration you have loaded requires a program called zgenom (github.com/jandamm/zgenom)" >&2
+    echo "to load all plugins, but zgenom was not found and git was not found to be able to clone and install it." >&2
+    echo "Some functions may not work properly." >&2
+  fi
 }
 
-#############################
+#
 # These are part of Oh-My-Zsh
-#############################
+#
+
 # Display little red dots while waiting for Zsh to fill in a completion
 COMPLETION_WAITING_DOTS=true
 # This probably does something useful
 DISABLE_UNTRACKED_FILES_DIRTY=true
 # Make hyphens and underscores indistuinguishable completion-wise
 HYPHEN_INSENSITIVE=true
-# Disable biweekly auto-update checks for Oh-My-Zsh; this is handled by the unixorn/autoupdate-zgen plugin below
-DISABLE_AUTO_UPDATE=true
 # This technically isn't part of Oh-My-Zsh but I don't know where else to put this; it's part of djui/alias-tips
 export ZSH_PLUGINS_ALIAS_TIPS_TEXT='Found existing alias: '
 export ZSH_PLUGINS_ALIAS_TIPS_EXCLUDES='_ fsh-alias'
 
-############################
+#
 # Enabling shell completions
-############################
+#
 {%@@ if exists_in_path('brew') @@%}
 fpath+=($(brew --prefix)/share/zsh/site-functions $ZDOTDIR/zfunc)
 {%@@ else @@%}
 fpath+=$ZDOTDIR/zfunc
 {%@@ endif @@%}
 
-###################################################################################################################
-# Source the init script created by zgen; this loads all the plugins specified in the "if ! zgen saved" block below 
-###################################################################################################################
-source "$ZGEN_DIR/zgen.zsh"
+#
+# Source the init script created by zgenom
+# This loads all the plugins specified in the "if ! zgen saved" block below 
+#
+source "$ZGEN_DIR/zgenom.zsh"
 
-######################################################################################################################
-# If the init script exists, skip the following. Otherwise, we will download and use the following themes/plugins/etc.
-######################################################################################################################
+# From the "example .zshrc" given in the README of the zgenom repository:
+# Check for plugin and zgenom updates every 14 days
+# This does not increase the startup time.
+zgen autoupdate 14
+
+# If the init script exists, skip the following.
+# Otherwise, we will download and use the following themes/plugins/etc.
 if ! zgen saved; then
-  # Per the zgen documentation: "It's a good idea to load the base components before specifying any plugins"
+  # Per the zgenom documentation: "It's a good idea to load the base components before specifying any plugins"
   zgen oh-my-zsh
 
   # Specify plugins part of oh-my-zsh
@@ -55,7 +60,7 @@ if ! zgen saved; then
   whence docker &>/dev/null && zgen oh-my-zsh plugins/docker
   whence rsync &>/dev/null && zgen oh-my-zsh plugins/cp
 
-  zgen load zsh-users/zsh-completions 
+  zgen load zsh-users/zsh-completions
 
   # Aliases
   if [[ -f $ALIASRC ]]; then
@@ -84,7 +89,6 @@ if ! zgen saved; then
   zgen loadall <<EOPLUGINS
     djui/alias-tips
     agkozak/zsh-z
-    unixorn/autoupdate-zgen
     zsh-users/zsh-autosuggestions
     zsh-users/zsh-history-substring-search
     zdharma-continuum/fast-syntax-highlighting
@@ -131,16 +135,14 @@ export SPROMPT="Correct $fg[red]%R$reset_color to $fg[green]%r$reset_color?
 # Case-insensitive globbing
 setopt NO_CASE_GLOB
 
-###########
-# Functions
-###########
+#
+# Miscellaneous
+#
+
 for fn in `ls $ZDOTDIR/zfunc`; do
   [[ $fn != _* ]] && autoload $fn
 done
 
-###############
-# Miscellaneous
-###############
 {%@@ if exists_in_path('brew') @@%}
 # Command-not-found functionality for Homebrew
 HB_CNF_HANDLER="$(brew --prefix)/Homebrew/Library/Taps/homebrew/homebrew-command-not-found/handler.sh"
