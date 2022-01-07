@@ -56,6 +56,7 @@ if ! zgen saved; then
     zgen oh-my-zsh plugins/gitignore
   }
   whence pip &>/dev/null && zgen oh-my-zsh plugins/pip
+  whence rustc &>/dev/null && zgen oh-my-zsh plugins/rust
   zgen oh-my-zsh plugins/virtualenv
   whence docker &>/dev/null && zgen oh-my-zsh plugins/docker
   whence rsync &>/dev/null && zgen oh-my-zsh plugins/cp
