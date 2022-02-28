@@ -1,5 +1,5 @@
 [user]
-	# Name the appears when authoring commits
+	# Name that appears when authoring commits
 	name = Joey Territo
 	# Email that appears when authoring commits
 	email = {{@@ git_email @@}}
