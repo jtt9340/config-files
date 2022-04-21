@@ -49,6 +49,7 @@ set incsearch
 nnoremap <silent> <Space> :nohlsearch<Bar>:echo<CR>
 " Smart case search: case-insensitive when search query does not contain
 " any capital letters, case-sensitive otherwise
+set ignorecase
 set smartcase
 
 " Graciously taken from https://gist.github.com/benawad/b768f5a5bbd92c8baabd363b7e79786f
@@ -63,8 +64,8 @@ filetype plugin indent on
 set tabstop=4 softtabstop=0 noexpandtab shiftwidth=4
 " Unless we're in a *.nix or *.zsh* or *.yaml file, and then I want the tab key to literally be 2 spaces
 autocmd BufRead,BufNewFile *.nix,*.zsh*,*.yaml set tabstop=2 softtabstop=0 expandtab shiftwidth=2
-" Use spaces instead of tabs in Python files
-autocmd BufRead,BufNewFile *.py set expandtab
+" Use spaces instead of tabs in Python and JavaScript files
+autocmd BufRead,BufNewFile *.py,*.js set expandtab
 
 " Use Ctrl+a to toggle showing hidden characters or not
 set listchars=eol:$,tab:>-,trail:~,extends:>,precedes:<
