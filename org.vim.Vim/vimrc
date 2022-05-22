@@ -36,21 +36,31 @@ autocmd BufRead,BufNewFile *.toml set filetype=toml
 " Only enable the vim-toml plugin if we are in a *.toml file
 autocmd FileType toml packadd! vim-toml
 
-" Syntax highlighting
-syntax on
-colorscheme koehler
-autocmd BufRead,BufNewFile *.zsh* set syntax=zsh
+" Syntax highlighting (when the terminal supports multiple colors, hence the
+" t_Co > 2, t_Co is "terminal colors")
+if &t_Co > 2 || has('gui_running')
+	syntax on
+	colorscheme koehler
+	autocmd BufRead,BufNewFile *.zsh* set syntax=zsh
 
-" Highlight all matches when searching with '/' or '?'
-set hlsearch
+	" Highlight all matches when searching with '/' or '?'
+	set hlsearch
+endif
+
 " Show matches as you find them
-set incsearch
+if has('reltime')
+	set incsearch
+endif
+
 " Remove all highlighted matches upon pressing Escape
 nnoremap <silent> <Space> :nohlsearch<Bar>:echo<CR>
 " Smart case search: case-insensitive when search query does not contain
 " any capital letters, case-sensitive otherwise
 set ignorecase
 set smartcase
+
+" Keep 5 lines above and below the cursor
+set scrolloff=5
 
 " Graciously taken from https://gist.github.com/benawad/b768f5a5bbd92c8baabd363b7e79786f
 " Make j/k move along lines that wrap
@@ -67,9 +77,17 @@ autocmd BufRead,BufNewFile *.nix,*.zsh*,*.yaml set tabstop=2 softtabstop=0 expan
 " Use spaces instead of tabs in Python and JavaScript files
 autocmd BufRead,BufNewFile *.py,*.js set expandtab
 
-" Use Ctrl+a to toggle showing hidden characters or not
+" Use Ctrl+l to toggle showing hidden characters or not
 set listchars=eol:$,tab:>-,trail:~,extends:>,precedes:<
 nnoremap <silent> <C-l> :set list!<CR>
+
+" Taken from Fedora's default /etc/vimrc: Convenient command to see the
+" difference between the current buffer and the file it was loaded from, thus
+" the changes you made.
+if !exists(':DiffOrig') " Only define it when not defined already
+	command DiffOrig vert new | set bt=nofile | r ++edit # | 0d_ | diffthis
+		\ | wincmd p | diffthis
+endif
 
 " Settings for NERDTree, a file finder that appears at the left
 " Show NERDTree if no files were specified when invoking Vim
