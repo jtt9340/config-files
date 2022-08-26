@@ -107,6 +107,34 @@ in
     thunderbird
   ];
 
+  # Define systemd per-user service units
+  systemd.user.services.rclone-automount-google-drive =
+    let googleDriveDir = ''%h/"RIT Google Drive"'';
+    in {
+      Unit = {
+        Description =
+          "Automatically mount my Google Drive in my home directory at startup using rclone";
+        AssertPathIsDirectory = "%h/RIT Google Drive";
+      };
+
+      Service = {
+        Type = "simple";
+        ExecStart = with pkgs.lib.strings;
+          concatStringsSep " " [
+            "${pkgs.rclone}/bin/rclone mount --vfs-cache-mode writes"
+            "--config ${config.xdg.configHome}/rclone/rclone.conf"
+            "--drive-import-formats docx,xlsx,pptx,svg rit-google-drive:"
+            googleDriveDir
+          ];
+        ExecStop = "/run/wrappers/bin/fusermount -u ${googleDriveDir}";
+        # Restart the service whenever rclone exits with non-zero exit code
+        Restart = "on-failure";
+        RestartSec = 15;
+      };
+
+      Install = { WantedBy = [ "default.target" ]; };
+    };
+
   # How many times do I have to say that I am okay with non-free software?! I guess when
   # you specify packages with home.packages you also need to specify it here?
   # (Me from the future: yes that is the case - the following line applies only to packages
