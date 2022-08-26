@@ -101,42 +101,32 @@ in
   ];
 
   # Define systemd per-user service units
-  systemd.user.services.check-online = {
-    Unit.Description = "Check for a DNS name resolution to succeed";
+  systemd.user.services.rclone-automount-google-drive =
+    let googleDriveDir = ''%h/"RIT Google Drive"'';
+    in {
+      Unit = {
+        Description =
+          "Automatically mount my Google Drive in my home directory at startup using rclone";
+        AssertPathIsDirectory = "%h/RIT Google Drive";
+      };
 
-    Service = {
-      Type = "simple";
-      ExecStart = "/run/wrappers/bin/ping -n -c 1 -w 5 8.8.8.8";
-      Restart = "always";
-      RestartSec = 30;
-      StartLimitIntervalSec = 200;
-      StartLimitBurst = 3;
-    };
-  };
-  
-  systemd.user.services.rclone-automount-google-drive = {
-    Unit = {
-      Description = "Automatically mount my Google Drive in my home directory at startup using rclone";
-      After = "check-online.service";
-      Requires = "check-online.service";
-    };
+      Service = {
+        Type = "simple";
+        ExecStart = with pkgs.lib.strings;
+          concatStringsSep " " [
+            "${pkgs.rclone}/bin/rclone mount --vfs-cache-mode writes"
+            "--config ${config.xdg.configHome}/rclone/rclone.conf"
+            "--drive-import-formats docx,xlsx,pptx,svg rit-google-drive:"
+            googleDriveDir
+          ];
+        ExecStop = "/run/wrappers/bin/fusermount -u ${googleDriveDir}";
+        # Restart the service whenever rclone exits with non-zero exit code
+        Restart = "on-failure";
+        RestartSec = 15;
+      };
 
-    Service = {
-      Type = "simple";
-      ExecStart = with pkgs.lib.strings; concatStringsSep " " [
-        "${pkgs.rclone}/bin/rclone mount --vfs-cache-mode writes"
-        "--config ${config.xdg.configHome}/rclone/rclone.conf"
-        "--drive-import-formats docx,xlsx,pptx,svg rit-google-drive:"
-        "${config.home.homeDirectory}/\"RIT Google Drive\""
-      ];
-      ExecStop = "/run/wrappers/bin/fusermount -u ${config.home.homeDirectory}/\"RIT Google Drive\"";
-      Restart = "on-abort";
+      Install = { WantedBy = [ "default.target" ]; };
     };
-
-    Install = {
-      WantedBy = [ "default.target" ];
-    };
-  };
 
   # How many times do I have to say that I am okay with non-free software?! I guess when
   # you specify packages with home.packages you also need to specify it here?
