@@ -1,11 +1,6 @@
 # Configuation settings for Vim
-{ vimPlugins
-, buildVimPluginFrom2Nix
-, fetchFromGitHub
-, xdgConfigHome
-, xdgDataHome
-, xdgCacheHome
-}:
+{ vimPlugins, buildVimPluginFrom2Nix, fetchFromGitHub, xdgConfigHome
+, xdgDataHome, xdgCacheHome }:
 
 let
   xuyuanp-nerdtree-git-plugin = buildVimPluginFrom2Nix rec {
@@ -66,7 +61,7 @@ in {
     set tabstop=4 softtabstop=0 noexpandtab shiftwidth=4
     autocmd BufRead,BufNewFile *.nix,*.zsh*,*.yaml set tabstop=2 softtabstop=0 expandtab shiftwidth=2
     autocmd BufRead,BufNewFile *.py,*.js set expandtab
-    
+
     set listchars=eol:$,tab:>-,trail:~,extends:>,precedes:<
     nnoremap <silent> <C-l> :set list!<CR>
 

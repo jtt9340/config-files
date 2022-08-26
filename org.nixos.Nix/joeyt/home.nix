@@ -10,8 +10,7 @@ let
   xdgConfigHome = config.xdg.configHome;
   xdgDataHome = config.xdg.dataHome;
   xdgCacheHome = config.xdg.cacheHome;
-in
-{
+in {
   xdg = {
     # Enable management of XDG Base Directories
     enable = true;
@@ -19,7 +18,8 @@ in
     # Home manager will manage these dotfiles
     configFile = {
       "nixpkgs/config.nix".source = "${configFiles}/org.nixos.Nix/config.nix";
-      "ripgreprc".source = "${configFiles}/com.github.burntsushi.Ripgrep/ripgreprc";
+      "ripgreprc".source =
+        "${configFiles}/com.github.burntsushi.Ripgrep/ripgreprc";
       "zsh/zfunc" = {
         source = "${configFiles}/net.sourceforge.Zsh/zfunc";
         recursive = true;

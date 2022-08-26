@@ -1,7 +1,7 @@
 { fetchFromGitHub # Function for cloning GitHub repositories
-, configFiles     # The path to my "config-files" repo
-, xdgConfigHome   # The path to $XDG_CONFIG_HOME
-, xdgDataHome     # The path to $XDG_DATA_HOME
+, configFiles # The path to my "config-files" repo
+, xdgConfigHome # The path to $XDG_CONFIG_HOME
+, xdgDataHome # The path to $XDG_DATA_HOME
 }:
 
 # Configuration settings for Zsh
@@ -28,9 +28,11 @@
 
   # Environment variables that will be set for Zsh session
   sessionVariables = {
-    EDITOR = "vim";    
+    EDITOR = "vim";
 
-    SPROMPT = "Correct $fg[red]%R$reset_color to $fg[green]%r$reset_color?\n\t[Yes, No, Abort, Edit] ";
+    SPROMPT = ''
+      Correct $fg[red]%R$reset_color to $fg[green]%r$reset_color?
+      	[Yes, No, Abort, Edit] '';
 
     ZSH_PLUGINS_ALIAS_TIPS_TEXT = "Found existing alias: ";
     ZSH_PLUGINS_ALIAS_TIPS_EXCLUDES = "_";
@@ -215,10 +217,8 @@
     custom = "${xdgConfigHome}/zsh";
 
     # Which Oh-My-Zsh plugins to use
-    plugins = [
-      "git" "gitignore" "cp" "virtualenv"
-    ];
-    
+    plugins = [ "git" "gitignore" "cp" "virtualenv" ];
+
     theme = "joeys-avit";
   };
 }

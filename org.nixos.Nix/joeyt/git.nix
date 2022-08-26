@@ -65,11 +65,16 @@ batman:
     lgga = "log --graph --decorate --all";
     lgm = "log --graph --max-count=10";
     lo = "log --oneline --decorate";
-    lol = "log --graph --pretty='%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset'";
-    lols = "log --graph --pretty='%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --stat";
-    lod = "log --graph --pretty='%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%ad) %C(bold blue)<%an>%Creset'";
-    lods = "log --graph --pretty='%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%ad) %C(bold blue)<%an>%Creset' --date=short";
-    lola = "log --graph --pretty='%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --all";
+    lol =
+      "log --graph --pretty='%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset'";
+    lols =
+      "log --graph --pretty='%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --stat";
+    lod =
+      "log --graph --pretty='%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%ad) %C(bold blue)<%an>%Creset'";
+    lods =
+      "log --graph --pretty='%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%ad) %C(bold blue)<%an>%Creset' --date=short";
+    lola =
+      "log --graph --pretty='%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --all";
     loga = "log --oneline --decorate --graph --all";
     m = "merge";
     ma = "merge --abort";
@@ -128,7 +133,8 @@ batman:
     ams = "am --skip";
     ama = "am --abort";
     amscp = "am --show-current-patch";
-    i = "!gi() { curl -sL https://www.toptal.com/developers/gitignore/api/$@ ;}; gi";
+    i =
+      "!gi() { curl -sL https://www.toptal.com/developers/gitignore/api/$@ ;}; gi";
   };
   # Use Delta, a diff tool that makes diffs look like they do on GitHub
   delta = {
@@ -141,7 +147,7 @@ batman:
       file-decoration-style = "cyan ul";
       line-numbers = true;
       line-numbers-left-style = "cyan";
-      line-numbers-right-style = "cyan";  
+      line-numbers-right-style = "cyan";
       hunk-header-decoration-style = "cyan box";
     };
   };

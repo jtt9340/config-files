@@ -5,12 +5,11 @@
 { config, pkgs, ... }:
 
 {
-  imports =
-    [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-      # Introduce a new NixOS option called home-manager.users
-      <home-manager/nixos>
-    ];
+  imports = [ # Include the results of the hardware scan.
+    ./hardware-configuration.nix
+    # Introduce a new NixOS option called home-manager.users
+    <home-manager/nixos>
+  ];
 
   # Use the GRUB 2 boot loader.
   boot.loader.grub.enable = true;
