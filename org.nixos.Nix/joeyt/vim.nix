@@ -25,6 +25,7 @@ in {
   settings = {
     number = true;
     relativenumber = true;
+    ignorecase = true;
     smartcase = true;
     undodir = [ "${xdgCacheHome}/vim/undo" ];
     directory = [ "${xdgCacheHome}/vim/swap" ];
@@ -64,7 +65,7 @@ in {
 
     set tabstop=4 softtabstop=0 noexpandtab shiftwidth=4
     autocmd BufRead,BufNewFile *.nix,*.zsh*,*.yaml set tabstop=2 softtabstop=0 expandtab shiftwidth=2
-    autocmd BufRead,BufNewFile *.py set expandtab
+    autocmd BufRead,BufNewFile *.py,*.js set expandtab
     
     set listchars=eol:$,tab:>-,trail:~,extends:>,precedes:<
     nnoremap <silent> <C-l> :set list!<CR>
