@@ -7,13 +7,12 @@ let
     let
       dotdrop = python39.pkgs.buildPythonPackage rec {
         pname = "dotdrop";
-        version = "1.8.2";
+        version = "1.10.3";
 
-        src = fetchFromGitHub {
-          owner = "deadc0de6";
-          repo = pname;
-          rev = "v${version}";
-          sha256 = "066w3mvsisrv3ni8l6l5vnjcszmvln70c196xymxsxjcxrvi3sjm";
+        src = python39.pkgs.fetchPypi {
+          inherit pname;
+          inherit version;
+          sha256 = "1xadmf2rbclr0c7x8wd6c7xfgx3ax8gcx9k4gllwfh6vb4vbgxbv";
         };
 
         # TODO: Figure out how to get the unit tests to pass so that
@@ -28,6 +27,7 @@ let
           python_magic
           packaging
           requests
+          toml
         ];
 
         # Build/test time dependencies

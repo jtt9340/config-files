@@ -1,1 +1,1 @@
-dotdrop>=1.4.3
+dotdrop>=1.10.3

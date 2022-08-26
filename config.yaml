@@ -22,6 +22,7 @@ config:
   - re.deadc0de.dotdrop/filters.py
   import_variables:
   - uservariables.yaml:optional
+  minversion: 1.10.3
 variables:
   vimdir: >-
     {{@@
@@ -52,13 +53,9 @@ variables:
     @@}}
 dynvariables:
   bat_config_path: command -v bat >/dev/null && bat --config-file || echo $HOME/.bat-not-installed
-  # The path to the Vim binary, or else nano if Vim is not installed
   editor_exe: command -v vim >/dev/null && which vim || which nano
-  # The path to the Bat binary
   bat_exe: which bat || echo -n
-  # The path to the touch binary
   touch_exe: which touch
-  # The path to the trash binary
   trash_exe: which trash || echo -n
 actions:
   zshenv: ln -i -s {{@@ _dotfile_abs_dst @@}}/.zshenv ~/.zshenv
@@ -86,7 +83,7 @@ dotfiles:
     src: org.dystroy.broot/conf.toml
     dst: "{{@@ '~/Library/Application Support/org.dystroy.broot/conf.toml' if profile\
       \ == 'macos' else '~/.config/broot/conf.toml' @@}}"
-    link: link
+    link: absolute 
     template: true
   f_nixpkgs_config.nix:
     src: org.nixos.Nix/config.nix
@@ -97,7 +94,7 @@ dotfiles:
   f_npmrc:
     src: com.npmjs.Npm/npmrc
     dst: ~/Library/Application Support/com.npmjs.Npm/npmrc
-    link: link
+    link: absolute
   d_zdotdir:
     src: net.sourceforge.Zsh
     dst: '{{@@ zdotdir @@}}'
@@ -127,21 +124,21 @@ dotfiles:
   f_ripgreprc:
     src: com.github.burntsushi.Ripgrep/ripgreprc
     dst: '{{@@ ripgrep_config_path @@}}'
-    link: link
+    link: absolute
   f_bat_config:
     src: com.github.sharkdp.Bat/config
     dst: "{{@@ '~/Library/Application Support/bat/config' if profile == 'macos' else\
       \ bat_config_path @@}}"
-    link: link
+    link: absolute
   f_git_config:
     src: com.git-scm.Git/config
     dst: '{{@@ gitconfig_config_path @@}}'
-    link: link
+    link: absolute 
     template: true
   f_virtualenv.ini:
     src: io.pypa.virtualenv/virtualenv.ini
     dst: ~/Library/Preferences/virtualenv/virtualenv.ini
-    link: link
+    link: absolute
 profiles:
   macos:
     dotfiles:
