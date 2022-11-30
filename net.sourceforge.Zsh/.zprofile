@@ -79,7 +79,7 @@ fi
 {%@@ endif @@%}
 
 {#@@ Android SDK @@#}
-{%@@ if profile == 'macos'  @@%}
+{%@@ if profile == 'macos' @@%}
 # Tell the Android SDK where its dotfiles are
 # (why do I even have the Android SDK? I think it's because of JetBrains IDEs)
 export ANDROID_SDK_HOME="$HOME/Library/Application Support/Android"
