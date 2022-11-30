@@ -27,4 +27,4 @@ to my git config if delta is installed on the machine.
 [git-config]: https://git-scm.com/docs/git-config
 [git-delta]: https://github.com/dandavison/delta
 [uservariables]: https://dotdrop.readthedocs.io/en/latest/howto/prompt-user-for-variables/
-[templating]: https://dotdrop.readthedocs.io/en/latest/templating/
+[templating]: https://dotdrop.readthedocs.io/en/latest/template/templating/

@@ -8,10 +8,10 @@ The config file in this directory is a modification of the default one installed
 keybindings, and adds a few new "verbs", Broot's name for commands:
 
 - `:gd` - Show a git diff of the currently selected file
-- `:bat` - Open the currently selected file in [bat](../com.github.sharkdb.Bat/README.md)
+- `:bat` - Open the currently selected file in [bat](../com.github.sharkdp.Bat/README.md)
 - `:trash` - Moves the currently selected file to the trash (as opposed to permanently deleting it,
    requires a program with a `trash` binary to provide this functionality)
 - `:zshconfig` - Open my [`.zshrc`](../net.sourceforge.Zsh/README.md) in the default command line text editor
 - `:vimconfig` - Open my [`.vimrc`](../org.vim.Vim/README.md) in the default command line text editor
-- `:vimconfig` - Open the config file in this directory in the default command line text editor
+- `:brootconfig` - Open my [`conf.toml`](./conf.toml) in the default command line text editor
 - `:ql` - Use macOS' Quick Look feature to preview the currently selected file 

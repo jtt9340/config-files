@@ -62,7 +62,7 @@ some options used by plugins, it downloads and installs my plugins of choice.
   your shell history that start with what you've already typed. This is so intuitive you don't even think this was something that had to be
   added by a plugin.
 - [**zdharma-continuum/fast-syntax-highlighting**][fast-syntax-highlighting]: Syntax highlighting at the command line, also inspired by Fish.
-- [**chisui/zsh-niz-shell**][zsh-nix-shell]: (only on NixOS) Allows Zsh to be used in Nix shells.
+- [**chisui/zsh-nix-shell**][zsh-nix-shell]: (only on NixOS) Allows Zsh to be used in Nix shells.
 
 ### Shell Prompt
 [My shell prompt](joeys-avit.zsh-theme) is based off the [Oh My Zsh Avit Theme][omz-avit] and is customized to add support for Python virtualenvs via the

@@ -32,7 +32,7 @@ each respective repository, run
 git submodule update --remote --merge
 ```
 
-This will show as unstaged changed that can be commited as a commit that updates all the Vim
+This will show as unstaged changes that can be commited as a commit that updates all the Vim
 plugins to a specific version.
 
 The plugins I currently use are:
