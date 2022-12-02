@@ -66,19 +66,24 @@ dotfiles:
     link: link_children
     template: true
     upignore:
-    - .netrwhist*
-    - backup
-    - swap
-    - undo
-    - viminfo
-    - view
+    - '*/.netrwhist*'
+    - '*/backup'
+    - '*/swap'
+    - '*/undo'
+    - '*/viminfo'
+    - '*/view'
+    - '*/README.md'
     cmpignore:
-    - .netrwhist*
-    - backup
-    - swap
-    - undo
-    - viminfo
-    - view
+    - '*/.netrwhist*'
+    - '*/backup'
+    - '*/swap'
+    - '*/undo'
+    - '*/viminfo'
+    - '*/view'
+    - '*/pack'
+    - '*/README.md'
+    instignore:
+    - '*/README.md'
   f_org.dystroy.broot_conf.toml:
     src: org.dystroy.broot/conf.toml
     dst: "{{@@ '~/Library/Application Support/org.dystroy.broot/conf.toml' if profile\
@@ -111,6 +116,7 @@ dotfiles:
     - bookmarks
     - zgen*
     - z.txt
+    - '*/README.md'
     upignore:
     - .zcompdump*
     - .zsh_history
@@ -119,6 +125,9 @@ dotfiles:
     - bookmarks
     - zgen*
     - z.txt
+    - '*/README.md'
+    instignore:
+    - '*/README.md'
     actions:
     - zshenv
   f_ripgreprc:
