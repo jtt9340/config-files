@@ -6,16 +6,18 @@ let
   pythonEnv = let
     dotdrop = python39.pkgs.buildPythonPackage rec {
       pname = "dotdrop";
-      version = "1.10.3";
+      version = "1.12.1";
 
       src = python39.pkgs.fetchPypi {
         inherit pname;
         inherit version;
-        sha256 = "1xadmf2rbclr0c7x8wd6c7xfgx3ax8gcx9k4gllwfh6vb4vbgxbv";
+        sha256 = "bvr1Oqw03Qq+PN+ts5huBnWb7SUT5Xy+w/AUCI201QA=";
       };
 
-      # TODO: Figure out how to get the unit tests to pass so that
-      # this can be set to true
+      # dotdrop is kind of hard to test -- until I can figure
+      # out how to run the tests.sh script in the checkPhase
+      # we will disable tests and just check to see that
+      # "import dotdrop" doesn't crash.
       doCheck = false;
 
       # Runtime dependencies
@@ -27,20 +29,10 @@ let
         packaging
         requests
         toml
+        distro
       ];
 
-      # Build/test time dependencies
-      # Uncomment when doCheck can be set to true
-      # nativeBuildInputs = with python39.pkgs; [
-      #   pycodestyle
-      #   nose
-      #   coverage
-      #   coveralls
-      #   pyflakes
-      #   pylint
-      #   halo
-      #   file
-      # ];
+      pythonImportsCheck = [ "dotdrop" ];
     };
   in python39.withPackages (ps: with ps; [ dotdrop ]);
 in mkShell {

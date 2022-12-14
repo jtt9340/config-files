@@ -20,10 +20,6 @@
   # Define on which hard drive you want to install Grub.
   boot.loader.grub.device = "/dev/sda"; # or "nodev" for efi only
 
-  nix.extraOptions = ''
-    plugin-files = ${pkgs.nix-doc}/lib/libnix_doc_plugin.so
-  '';
-
   networking.hostName = "craigscomputer"; # Define your hostname.
   # The following does not need to be enabled, so long as a user is in the "networkmanager" group
   # and NetworkManager is enabled
@@ -94,8 +90,6 @@
     kate
     # PDF viewer part of the KDE ecosystem
     okular
-    # View documentation for Nix functions
-    nix-doc
     # A files database for nixpkgs
     nix-index
     # Generate SHA-256 sums from Git repositories
