@@ -15,7 +15,7 @@ else
 fi
 {%@@ endif @@%} 
 {%@@ if exists_in_path('broot') and profile == 'macos' @@%}
-alias brootconfig="${EDITOR:-vim} $HOME/Library/Application Support/org.dystroy.broot/conf.toml"
+alias brootconfig="${EDITOR:-vim} $HOME/Library/Application\ Support/org.dystroy.broot/conf.toml"
 {%@@ elif exists_in_path('broot') @@%}
 if [[ -n $XDG_CONFIG_HOME ]]; then
   alias brootconfig="${EDITOR:-vim} $XDG_CONFIG_HOME/broot/conf.toml"

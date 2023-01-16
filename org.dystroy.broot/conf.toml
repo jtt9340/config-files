@@ -156,13 +156,13 @@ description = "Edit Broot configuration file"
 execution = "brootconfig"
 from_shell = true
 
-{%@@ if profile == "macos" @@%}
+{%@@ if profile == "macos" and ql_exe @@%}
 [[verbs]]
 name = "Quick Look"
 description = "Quick Look"
 invocation = "ql"
-execution = "ql {file}"
-from_shell = true
+execution = "{{@@ ql_exe @@}} {file}"
+leave_broot = false
 {%@@ else @@%}
 # If you uncomment the two next shortcuts, the left
 # and right arrow keys will be used to go to the parent
@@ -200,6 +200,16 @@ from_shell = true
 # [[verbs]]
 # key = "ctrl-g"
 # execution = ":toggle_git_status"
+{%@@ endif @@%}
+
+{%@@ if markdown_exe @@%}
+[[verbs]]
+name = "Markdown"
+description = "View markdown file in the terminal"
+invocation = "markdown"
+external = ["{{@@ markdown_exe @@}}", "{file}"]
+extensions = [ "md" ]
+apply_to = "file"
 {%@@ endif @@%}
 
 #####################

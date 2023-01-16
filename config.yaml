@@ -57,6 +57,8 @@ dynvariables:
   bat_exe: which bat || echo -n
   touch_exe: which touch
   trash_exe: which trash || echo -n
+  ql_exe: '[ "$(uname)" = Darwin ] && command -v ql || echo -n'
+  markdown_exe: which markdown || command -v glow
 actions:
   zshenv: ln -i -s {{@@ _dotfile_abs_dst @@}}/.zshenv ~/.zshenv
 dotfiles:
