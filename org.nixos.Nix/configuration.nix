@@ -57,6 +57,12 @@
   # Configure Zsh as an interactive shell
   programs.zsh.enable = true;
 
+  # Install wireshark
+  programs.wireshark = {
+    enable = true;
+    package = pkgs.wireshark;
+  };
+
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   # These are packages that are automatically available to all users, and are
@@ -184,7 +190,8 @@
       isNormalUser = true;
       # 'wheel' enables ‘sudo’ for the user;
       # 'networkmanager' allows the user to change network settings  
-      extraGroups = [ "wheel" "networkmanager" ];
+      # 'wireshark' is needed for wireshark to be able to collect packet captures
+      extraGroups = [ "wheel" "networkmanager" "wireshark" ];
     };
   };
 
