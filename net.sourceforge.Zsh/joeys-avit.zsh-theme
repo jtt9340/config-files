@@ -15,7 +15,7 @@ $(prompt_nix_shell)%{%(!.%F{red}.%F{white})%}▶%{$resetcolor%} '
 
 PROMPT2='%{%(!.%F{red}.%F{white})%}%_ ◀%{$reset_color%} '
 
-RPROMPT='$(vi_mode_prompt_info)%{$(echotc UP 1)%}$(_git_time_since_commit) $(git_prompt_status) ${_return_status}%{$(echotc DO 1)%}'
+RPROMPT='$(vi_mode_prompt_info)%{$(echotc UP 1)%}$(date +"%r")$(_git_time_since_commit) $(git_prompt_status) ${_return_status}%{$(echotc DO 1)%}'
 
 {%@@ if profile == "nixos" @@%}
 # Graciously taken from this custom agnoster theme: https://gist.github.com/chisui/0d12bd51a5fd8e6bb52e6e6a43d31d5e
@@ -77,7 +77,7 @@ function _git_time_since_commit() {
       commit_age="${minutes}m"
     fi
 
-    echo "${ZSH_THEME_GIT_TIME_SINCE_COMMIT_NEUTRAL}${commit_age}%{$reset_color%}"
+    echo " - ${ZSH_THEME_GIT_TIME_SINCE_COMMIT_NEUTRAL}${commit_age}%{$reset_color%}"
   fi
 }
 
