@@ -42,52 +42,52 @@ source "$ZGEN_DIR/zgenom.zsh"
 # From the "example .zshrc" given in the README of the zgenom repository:
 # Check for plugin and zgenom updates every 14 days
 # This does not increase the startup time.
-zgen autoupdate 14
+zgenom autoupdate 14
 
 # If the init script exists, skip the following.
 # Otherwise, we will download and use the following themes/plugins/etc.
-if ! zgen saved; then
+if ! zgenom saved; then
   # Per the zgenom documentation: "It's a good idea to load the base components before specifying any plugins"
-  zgen oh-my-zsh
+  zgenom oh-my-zsh
 
   # Specify plugins part of oh-my-zsh
   whence git &>/dev/null && {
-    zgen oh-my-zsh plugins/git
-    zgen oh-my-zsh plugins/gitignore
+    zgenom oh-my-zsh plugins/git
+    zgenom oh-my-zsh plugins/gitignore
   }
-  whence pip &>/dev/null && zgen oh-my-zsh plugins/pip
-  whence rustc &>/dev/null && zgen oh-my-zsh plugins/rust
-  zgen oh-my-zsh plugins/virtualenv
-  whence docker &>/dev/null && zgen oh-my-zsh plugins/docker
-  whence rsync &>/dev/null && zgen oh-my-zsh plugins/cp
+  whence pip &>/dev/null && zgenom oh-my-zsh plugins/pip
+  whence rustc &>/dev/null && zgenom oh-my-zsh plugins/rust
+  zgenom oh-my-zsh plugins/virtualenv
+  whence docker &>/dev/null && zgenom oh-my-zsh plugins/docker
+  whence rsync &>/dev/null && zgenom oh-my-zsh plugins/cp
 
-  zgen load zsh-users/zsh-completions
+  zgenom load zsh-users/zsh-completions
 
   # Aliases
   if [[ -f $ALIASRC ]]; then
-    zgen load $ALIASRC
+    zgenom load $ALIASRC
   elif [[ -f $ZDOTDIR/aliases.zsh ]]; then
-    zgen load $ZDOTDIR/aliases.zsh
+    zgenom load $ZDOTDIR/aliases.zsh
   elif [[ -f $HOME/.aliases.zsh ]]; then
-    zgen load $HOME/.aliases.zsh
+    zgenom load $HOME/.aliases.zsh
   fi
 
   # Directory bookmark mechanism
-  zgen load $ZDOTDIR/bookmark.zsh
+  zgenom load $ZDOTDIR/bookmark.zsh
 
 {%@@ if exists_in_path('broot') @@%}
   # Broot
 {%@@ if profile == 'macos' @@%}
-  zgen load "$HOME/Library/Application Support/org.dystroy.broot/launcher/bash/br"
+  zgenom load "$HOME/Library/Application Support/org.dystroy.broot/launcher/bash/br"
 {%@@ else @@%}
-  zgen load $HOME/.config/broot/launcher/bash/br
+  zgenom load $HOME/.config/broot/launcher/bash/br
 {%@@ endif @@%}
 {%@@ endif @@%}
 
   # So when you use `zsh-users/zsh-syntax-highlighting` it needs to be
   # sourced last. I'm not sure if that's the same for fast-syntax-highlighing,
   # but might as well adhere to that.
-  zgen loadall <<EOPLUGINS
+  zgenom loadall <<EOPLUGINS
     djui/alias-tips
     agkozak/zsh-z
     zsh-users/zsh-autosuggestions
@@ -96,14 +96,14 @@ if ! zgen saved; then
 EOPLUGINS
 
   # Set the theme
-  # TODO: figure out why this theme only sort-of works when using 'zgen load', for now I am resorting back to
+  # TODO: figure out why this theme only sort-of works when using 'zgenom load', for now I am resorting back to
   # normal source
   # By 'sort-of works' I mean the variables declared with 'typeset +H' at the top of the joeys-avit file aren't
   # actually present 🤔 
-  # zgen load $ZDOTDIR/joeys-avit
+  # zgenom load $ZDOTDIR/joeys-avit
 
   # Generate the init script from plugins above
-  zgen save
+  zgenom save
 fi
 
 {#@@
