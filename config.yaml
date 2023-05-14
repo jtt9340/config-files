@@ -70,6 +70,7 @@ dotfiles:
     upignore:
     - '*/.netrwhist*'
     - '*/backup'
+    - '*/bundle'
     - '*/swap'
     - '*/undo'
     - '*/viminfo'
@@ -78,6 +79,7 @@ dotfiles:
     cmpignore:
     - '*/.netrwhist*'
     - '*/backup'
+    - '*/bundle'
     - '*/swap'
     - '*/undo'
     - '*/viminfo'
