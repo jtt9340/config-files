@@ -155,7 +155,7 @@ dotfiles:
     template: true
   f_virtualenv.ini:
     src: io.pypa.virtualenv/virtualenv.ini
-    dst: ~/Library/Preferences/virtualenv/virtualenv.ini
+    dst: ~/Library/Application Support/virtualenv/virtualenv.ini
     link: absolute
 profiles:
   macos:
