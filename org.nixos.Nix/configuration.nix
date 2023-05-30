@@ -180,6 +180,13 @@
     allowReboot = false;
   };
 
+  # Periodically clean out the Nix store
+  nix.gc = {
+    automatic = true;
+    dates = "*-*-1,15 3:15"; # 3:15 AM (local time) on the 1st and 15th of every month (man systemd.time)
+    options = "--delete-older-than 365d";
+  };
+
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users = {
     # Zsh is the default shell for everyone...mwah ha ha!

@@ -134,6 +134,11 @@ dotfiles:
     - '*/README.md'
     actions:
     - zshenv
+  f_joeys_avit.zsh-theme:
+    src: net.sourceforge.Zsh/joeys-avit.zsh-theme
+    dst: '{{@@ zdotdir @@}}/themes/joeys-avit.zsh-theme'
+    link: absolute
+    template: true
   f_ripgreprc:
     src: com.github.burntsushi.Ripgrep/ripgreprc
     dst: '{{@@ ripgrep_config_path @@}}'
@@ -174,3 +179,4 @@ profiles:
   nixos:
     dotfiles:
     - f_org.dystroy.broot_conf.toml
+    - f_joeys_avit.zsh-theme
