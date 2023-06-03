@@ -19,6 +19,7 @@ config:
   - re.deadc0de.dotdrop/funcs.py
   filter_file:
   - re.deadc0de.dotdrop/filters.py
+  minversion: 1.10.3
 variables:
   vimdir: >-
     {{@@
@@ -74,7 +75,7 @@ dotfiles:
     src: org.dystroy.broot/conf.toml
     dst: "{{@@ '~/Library/Preferences/org.dystroy.broot/conf.toml' if profile == 'macos'\
       \ else '~/.config/broot/conf.toml' @@}}"
-    link: link
+    link: absolute
   f_nixpkgs_config.nix:
     src: org.nixos.Nix/config.nix
     dst: ~/.config/nixpkgs/config.nix
@@ -84,7 +85,7 @@ dotfiles:
   f_npmrc:
     src: com.npmjs.Npm/npmrc
     dst: ~/Library/Application Support/com.npmjs.Npm/npmrc
-    link: link
+    link: absolute
   d_zdotdir:
     src: net.sourceforge.Zsh
     dst: '{{@@ zdotdir @@}}'
@@ -117,12 +118,12 @@ dotfiles:
   f_ripgreprc:
     src: com.github.burntsushi.Ripgrep/ripgreprc
     dst: '{{@@ ripgrep_config_path @@}}'
-    link: link
+    link: absolute
   f_bat_config:
     src: com.github.sharkdp.Bat/config
     dst: "{{@@ '~/Library/Application Support/bat/config' if profile == 'macos' else\
       \ bat_config_path @@}}"
-    link: link
+    link: absolute
   f_git_config:
     src: com.git-scm.Git/config
     dst: >-
@@ -131,7 +132,7 @@ dotfiles:
         else env['XDG_CONFIG_HOME'] + '/git/config' if env['XDG_CONFIG_HOME'] is string
         else '~/.config/git/config'
       @@}}
-    link: link
+    link: absolute
 profiles:
   macos:
     dotfiles:

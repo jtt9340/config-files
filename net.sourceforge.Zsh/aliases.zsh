@@ -55,16 +55,16 @@ for (( i = 2; i <= 9; i++ ))
 
 alias g=git
 # Convert Git aliases into shell aliases
+OLD_IFS="$IFS"
 IFS='
 '
-for galias in `git config --global --list`; do
-  if [[ $galias =~ ^alias\. ]]; then
-    galias=$(echo $galias | cut -c 7-)
-    galias_key=$(echo $galias | cut -d = -f 1)
-    galias_value=$(echo $galias | cut -d = -f 2-)
-    alias "g$galias_key"="git $galias_value"
-  fi
+for galias in `git config --global --get-regex alias`; do
+  local i=$galias[(i)[[:space:]]]
+  local galias_key=$galias[1,$i-1]
+  local galias_value=$galias[$i+1,-1]
+  alias "g${galias_key#alias\.}"="git $galias_value"
 done
+IFS="$OLD_IFS"
 
 {%@@ if exists_in_path('brew') @@%}
 # These aliases are graciously taken from the Prezto Homebrew plugin; I have decided not to add the plugin

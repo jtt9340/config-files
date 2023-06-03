@@ -94,6 +94,9 @@ setopt INTERACTIVE_COMMENTS
 # Do not allow '>' to clear (truncate) files
 unsetopt CLOBBER
 
+# Do not overwrite the last line of output if it does not end with a newline (https://www.zsh.org/mla/workers/2000/msg03870.html)
+setopt NO_PROMPT_CR
+
 ###########
 # Functions
 ###########
