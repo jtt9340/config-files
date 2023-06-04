@@ -150,3 +150,19 @@ fi
 # Tell ripgrep where it's configuration file is
 export RIPGREP_CONFIG_PATH={{@@ ripgrep_config_path | shellescape @@}}
 {%@@ endif @@%}
+
+{#@@ Docker @@#}
+{%@@ if exists_in_path('docker') @@%}
+# Docker
+{%@@ if profile == 'macos' @@%}
+export DOCKER_CONFIG="$HOME/Library/Application Support/com.docker.docker"
+export DOCKER_HOST="unix://$DOCKER_CONFIG/run/docker.sock"
+{%@@ else @@%}
+if [[ -n $XDG_CONFIG_HOME ]]; then
+  export DOCKER_CONFIG="$XDG_CONFIG_HOME"/docker
+  # Not sure if setting DOCKER_HOST is needed
+else
+  export DOCKER_CONFIG="$HOME/.config/docker"
+fi
+{%@@ endif @@%}
+{%@@ endif @@%}
