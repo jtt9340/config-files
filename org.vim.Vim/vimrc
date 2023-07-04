@@ -96,7 +96,7 @@ function! s:initialize_nerdtree()
 	" Show hidden files all the time (it would be cool if I could just change this on the fly and have this
 	" automatically update without having to close and re-open NERDTree, similar to how I can just do
 	" :toggle_hidden in Broot)
-	let NERDTreeShowHidden = 1
+	let g:NERDTreeShowHidden = 1
 endfunction
 
 " Function to call when Xuyuanp/nerdtree-git-plugin is sourced
