@@ -1,5 +1,5 @@
 # Lines configured by zsh-newuser-install
-HISTFILE={{@@ zdotdir @@}}/.zsh_history
+HISTFILE="$ZDOTDIR/.zsh_history"
 HISTSIZE=1000
 SAVEHIST=1000
 setopt autocd
@@ -7,10 +7,10 @@ unsetopt beep
 bindkey -e
 # End of lines configured by zsh-newuser-install
 # The following lines were added by compinstall
-zstyle :compinstall filename '{{@@ zdotdir @@}}/.zshrc'
+zstyle :compinstall filename "$ZDOTDIR/.zshrc"
 
 # Enabling shell completions
-fpath+=$ZDOTDIR/zfunc
+fpath+="$ZDOTDIR/zfunc"
 
 autoload -Uz compinit
 compinit
@@ -51,6 +51,10 @@ zmodload zsh/complist
 autoload -U colors
 colors
 
+# Shell prompt
+autoload -Uz promptinit
+prompt redhat
+
 # Make ctrl-left and ctrl-right go left and right by words
 bindkey ';5D' backward-word
 bindkey ';5C' forward-word
@@ -58,16 +62,13 @@ bindkey ';5C' forward-word
 ###############
 # Shell Options
 ###############
-# Spell check
-setopt CORRECT
+setopt CORRECT                  # Spell check
 export SPROMPT="Correct $fg[red]%R$reset_color to $fg[green]%r$reset_color?
 	[Yes, No, Abort, Edit] "
 
-# Case-insensitive globbing
-setopt NO_CASE_GLOB
+setopt NO_CASE_GLOB             # Case-insensitive globbing
 
-# Allow tab completion in the middle of a word
-setopt COMPLETE_IN_WORD
+setopt COMPLETE_IN_WORD         # Allow tab completion in the middle of a word
 
 # History-related options
 setopt APPEND_HISTORY           # Add to the history file instead of overwriting it every time
@@ -76,26 +77,24 @@ setopt HIST_IGNORE_DUPS         # Don't store duplicate history commands
 setopt HIST_FIND_NO_DUPS        # When searching through the command history don't show duplicates
 setopt HIST_IGNORE_SPACE        # Remove commands from the history that begin with a space
 setopt HIST_REDUCE_BLANKS       # Trim commands of whitespace before saving them in HISTFILE
-setopt HIST_FCNTL_LOCK          # I don't really understand what this does but it seems useful
+setopt HIST_FCNTL_LOCK          # Invoke fcntl() to lock the history file when writing to it
 setopt HIST_VERIFY              # When invoking history with a !, check first before running the command
 setopt SHARE_HISTORY            # For sharing history between zsh processes
 
 # cd-ing related options
-setopt AUTO_PUSHD        # Automatically push directories onto the directory stack
-setopt PUSHD_IGNORE_DUPS # Don't add directories to the directory stack that are already on it
-setopt PUSHD_MINUS       # From `man zshoptions`: "Exchanges the meanings of `+' and `-' when
-                         # used with a number to specify a directory in the stack."
-setopt PUSHD_SILENT      # From `man zshoptions`: "Do not print the directory stack after pushd or popd."
-setopt PUSHD_TO_HOME     # Make `pushd` behave as `pushd $HOME` similar to how `cd` behaves as `cd $HOME`
+setopt AUTO_PUSHD               # Automatically push directories onto the directory stack
+setopt PUSHD_IGNORE_DUPS        # Don't add directories to the directory stack that are already on it
+setopt PUSHD_MINUS              # From `man zshoptions`: "Exchanges the meanings of `+' and `-' when
+                                # used with a number to specify a directory in the stack."
+setopt PUSHD_SILENT             # From `man zshoptions`: "Do not print the directory stack after pushd or popd."
+setopt PUSHD_TO_HOME            # Make `pushd` behave as `pushd $HOME` similar to how `cd` behaves as `cd $HOME`
 
-# Allow comments even in interactive shells
-setopt INTERACTIVE_COMMENTS
+setopt INTERACTIVE_COMMENTS     # Allow comments even in interactive shells
 
-# Do not allow '>' to clear (truncate) files
-unsetopt CLOBBER
+unsetopt CLOBBER                # Do not allow '>' to clear (truncate) files
 
-# Do not overwrite the last line of output if it does not end with a newline (https://www.zsh.org/mla/workers/2000/msg03870.html)
-setopt NO_PROMPT_CR
+setopt NO_PROMPT_CR             # Do not overwrite the last line of output if it does not end with a newline
+                                # (https://www.zsh.org/mla/workers/2000/msg03870.html)
 
 ###########
 # Functions
@@ -115,42 +114,11 @@ add-zsh-hook chpwd _python-workon-cwd
 # Run ls when changing directories
 add-zsh-hook chpwd lsGF
 
-# Ignore these users (taken from github.com/zpm-zsh/ignored-users)
-if [[ -e /etc/passwd ]]; then
-  CACHE_FILE=$ZDOTDIR/ignored-users.zsh
-  if [[ -f "$CACHE_FILE" ]]; then
-    source "$CACHE_FILE"
-  else
-    ignored=( $(cat /etc/passwd | awk -F':' '($3<1000 && $3>0)||$3>10000{print $1}' | xargs) )
-    zstyle ':completion:*:*:*:users' ignored-patterns $ignored
-    echo "zstyle ':completion:*:*:*:users' ignored-patterns $ignored" >! "$CACHE_FILE" 2>/dev/null
-    zcompile "$CACHE_FILE"
-  fi
-fi
-
 ####################
 # Additional scripts
 ####################
 source $ZDOTDIR/aliases.zsh   # Shell aliases
 source $ZDOTDIR/bookmark.zsh  # Bookmark mechanism
-
-# If a plugins script exists, then load these plugins
-ZSH_PLUGINS=$ZDOTDIR/zsh_plugins.zsh
-if [[ -f $ZSH_PLUGINS ]]; then
-  # Needed for djui/alias-tips
-  export ZSH_PLUGINS_ALIAS_TIPS_TEXT='Found existing alias: '
-  export ZSH_PLUGINS_ALIAS_TIPS_EXCLUDES='_ fsh-alias'
-  source $ZSH_PLUGINS
-fi
-
-# Only load these plugins if not logged a login shell
-ZSH_PLUGINS_LOGIN=$ZDOTDIR/zsh_plugins_login.zsh
-if [[ $0 != -zsh && -f $ZSH_PLUGINS_LOGIN ]]; then
-  source $ZSH_PLUGINS_LOGIN
-  # Needed for zsh-users/zsh-history-substring-search
-  bindkey '^[[A' history-substring-search-up
-  bindkey '^[[B' history-substring-search-down
-fi
 
 {%@@ if exists_in_path('broot') @@%}
 # Broot
@@ -160,3 +128,50 @@ source $HOME/Library/Preferences/org.dystroy.broot/launcher/bash/br
 source $HOME/.config/broot/launcher/bash/br
 {%@@ endif @@%}
 {%@@ endif @@%}
+
+##########################################################################################
+# Zgenom - plugin manager
+# Not installed by default...to install run
+# git clone https://github.com/jandamm/zgenom.git "${ZGEN_DIR:-${ZDOTDIR:-${HOME}}/.zgen}"
+##########################################################################################
+[[ -z "$ZGEN_DIR" ]] && ZGEN_DIR="${ZDOTDIR:-${HOME}}/.zgen"
+[[ -d "$ZGEN_DIR" ]] || return
+
+# Needed for djui/alias-tips
+export ZSH_PLUGINS_ALIAS_TIPS_TEXT='Found existing alias: '
+export ZSH_PLUGINS_ALIAS_TIPS_EXCLUDES='_ fsh-alias'
+
+# Needed for zsh-users/zsh-history-substring-search
+bindkey '^[[A' history-substring-search-up
+bindkey '^[[B' history-substring-search-down
+
+# Source the init script created by zgenom
+# This loads all the plugins specified in the "if ! zgen saved" block below
+source "$ZGEN_DIR/zgenom.zsh"
+
+# From the "example .zshrc" given in the README of the zgenom repository:
+# Check for plugin and zgenom updates every 14 days
+# This does not increase the startup time.
+zgenom autoupdate 14
+
+# If the init script exists, we are done.
+# Otherwise, we will download and use the following themes/plugins/etc.
+zgenom saved && return
+
+zgenom load zsh-users/zsh-completions src --completion
+
+zgenom loadall <<EOPLUGINS
+  zpm-zsh/ls
+  zpm-zsh/colorize
+  zpm-zsh/ssh
+  zpm-zsh/ignored-users
+  zpm-zsh/dot
+  zsh-users/zsh-completions
+  djui/alias-tips
+  agkozak/zsh-z
+  zpm-zsh/clipboard
+  zdharma-continuum/fast-syntax-highlighting
+  zsh-users/zsh-history-substring-search
+  zsh-users/autosuggestions
+  zdharma-continuum/history-search-multi-word
+EOPLUGINS

@@ -33,12 +33,6 @@ alias lab='ls -AbFG'
 alias lbr='br -sdp'
 {%@@ endif @@%}
 
-{%@@ if exists_in_path('lsd') @@%}
-alias lsdl='lsd -lF --date relative'
-alias lsda='lsd -aF'
-alias lsdla='lsd -laF --date relative'
-{%@@ endif @@%}
-
 {%@@ if exists(env['HOME'] + '/Library/Application Support/org.dystroy.broot/launcher/bash/1') or
         exists(env.get('XDG_DATA_HOME', default='') + '/broot/launcher/bash/1') or 
         exists(env['HOME'] + '/.local/share/broot/launcher/bash/1') @@%}
@@ -54,6 +48,7 @@ for (( i = 2; i <= 9; i++ ))
   alias "$i"="cd -$i" 
 
 alias g=git
+alias grm='git rm'
 # Convert Git aliases into shell aliases
 OLD_IFS="$IFS"
 IFS='
