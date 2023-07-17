@@ -1,5 +1,5 @@
 uservariables:
-  git_email: "Git email"
+  git_email: Git email
 config:
   backup: true
   banner: false
@@ -22,7 +22,7 @@ config:
   - re.deadc0de.dotdrop/filters.py
   import_variables:
   - uservariables.yaml:optional
-  minversion: 1.10.3
+  minversion: 1.13.0
 variables:
   vimdir: >-
     {{@@
@@ -50,6 +50,11 @@ variables:
       '~/.gitconfig' if profile == 'macos'
       else env['XDG_CONFIG_HOME'] + '/git/config' if env['XDG_CONFIG_HOME'] is string
       else '~/.config/git/config'
+    @@}}
+  tmux_config_path: >-
+    {{@@
+      env['XDG_CONFIG_HOME'] + '/tmux/tmux.conf' if env['XDG_CONFIG_HOME'] is string
+      else '~/.tmux.conf'
     @@}}
 dynvariables:
   bat_config_path: command -v bat >/dev/null && bat --config-file || echo $HOME/.bat-not-installed
@@ -92,7 +97,7 @@ dotfiles:
     src: org.dystroy.broot/conf.toml
     dst: "{{@@ '~/Library/Application Support/org.dystroy.broot/conf.toml' if profile\
       \ == 'macos' else '~/.config/broot/conf.toml' @@}}"
-    link: absolute 
+    link: absolute
     template: true
   f_nixpkgs_config.nix:
     src: org.nixos.Nix/config.nix
@@ -151,12 +156,18 @@ dotfiles:
   f_git_config:
     src: com.git-scm.Git/config
     dst: '{{@@ gitconfig_config_path @@}}'
-    link: absolute 
+    link: absolute
     template: true
   f_virtualenv.ini:
     src: io.pypa.virtualenv/virtualenv.ini
     dst: ~/Library/Application Support/virtualenv/virtualenv.ini
     link: absolute
+  f_tmux.conf:
+    src: io.github.tmux/tmux.conf
+    dst: '{{@@ tmux_config_path @@}}'
+    link: absolute
+    chmod: '600'
+    template: true
 profiles:
   macos:
     dotfiles:
@@ -176,6 +187,7 @@ profiles:
     - d_zdotdir
     - f_bat_config
     - f_git_config
+    - f_tmux.conf
   nixos:
     dotfiles:
     - f_org.dystroy.broot_conf.toml
