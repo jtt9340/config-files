@@ -110,7 +110,7 @@ dotfiles:
     dst: ~/Library/Application Support/com.npmjs.Npm/npmrc
     link: absolute
   d_zdotdir:
-    src: net.sourceforge.Zsh
+    src: net.sourceforge.Zsh/omz
     dst: '{{@@ zdotdir @@}}'
     link: link_children
     template: true
