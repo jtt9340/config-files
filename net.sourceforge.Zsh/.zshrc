@@ -52,7 +52,7 @@ autoload -U colors
 colors
 
 # Shell prompt
-autoload -Uz promptinit
+autoload -Uz promptinit && promptinit
 prompt redhat
 
 # Make ctrl-left and ctrl-right go left and right by words
@@ -142,8 +142,8 @@ export ZSH_PLUGINS_ALIAS_TIPS_TEXT='Found existing alias: '
 export ZSH_PLUGINS_ALIAS_TIPS_EXCLUDES='_ fsh-alias'
 
 # Needed for zsh-users/zsh-history-substring-search
-bindkey '^[[A' history-substring-search-up
-bindkey '^[[B' history-substring-search-down
+bindkey '\eOA' history-substring-search-up
+bindkey '\eOB' history-substring-search-down
 
 # Source the init script created by zgenom
 # This loads all the plugins specified in the "if ! zgen saved" block below
@@ -160,6 +160,9 @@ zgenom saved && return
 
 zgenom load zsh-users/zsh-completions src --completion
 
+{#@@ The last three or so plugins need to be sourced in a very specific order in
+  order for them to work. It was basically trial and error to figure out the correct
+  order, so do not rearrange the last few, whatever you do. @@#}
 zgenom loadall <<EOPLUGINS
   zpm-zsh/ls
   zpm-zsh/colorize
@@ -170,8 +173,11 @@ zgenom loadall <<EOPLUGINS
   djui/alias-tips
   agkozak/zsh-z
   zpm-zsh/clipboard
-  zdharma-continuum/fast-syntax-highlighting
-  zsh-users/zsh-history-substring-search
-  zsh-users/autosuggestions
   zdharma-continuum/history-search-multi-word
+  zsh-users/zsh-autosuggestions
+  zsh-users/zsh-history-substring-search
+  zdharma-continuum/fast-syntax-highlighting
 EOPLUGINS
+
+zgenom save
+zgenom compile "$ZDOTDIR"
