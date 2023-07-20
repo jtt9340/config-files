@@ -1,3 +1,7 @@
+" Ward off unexpected things that your OS might have set, as well as sanely reset options
+" when re-sourcing .vimrc
+set nocompatible
+
 " Hybrid line numbers outside of INSERT mode and absolute line numbers inside INSERT mode
 set number relativenumber
 
@@ -15,19 +19,12 @@ set backspace=indent,eol,start
 " UTF-8 encoding
 set encoding=utf-8
 
-{#@@
-	For some reason, on NixOS, changing the following settings
-	to try to consolidate where Vim spits out all of its files
-	fails with error E303. I've tried several things to get it
-	to work and just cannot fix it; that's why the following
-	is only on macOS. I wonder if Neovim has the same problem?
-@@#}
 {%@@ if profile == "macos" @@%}
 " Settings to make Vim not clutter the home directory
-set undodir=$HOME/Library/Application\ Support/org.vim.Vim/undo
-set directory=$HOME/Library/Application\ Support/org.vim.Vim/swap
-set backupdir=$HOME/Library/Application\ Support/org.vim.Vim/backup
-set viewdir=$HOME/Library/Application\ Support/org.vim.Vim/view
+set undodir=$HOME/Library/Application\ Support/org.vim.Vim/undo | call mkdir(&undodir, 'p')
+set directory=$HOME/Library/Application\ Support/org.vim.Vim/swap | call mkdir(&directory, 'p')
+set backupdir=$HOME/Library/Application\ Support/org.vim.Vim/backup | call mkdir(&backupdir, 'p')
+set viewdir=$HOME/Library/Application\ Support/org.vim.Vim/view | call mkdir(&viewdir, 'p')
 set viminfo+='1000,n$HOME/Library/Application\ Support/org.vim.Vim/viminfo
 set runtimepath=$HOME/Library/Application\ Support/org.vim.Vim,$VIMRUNTIME,$HOME/Library/Application\ Support/org.vim.Vim/after
 set packpath=$HOME/Library/Application\ Support/org.vim.Vim,/usr/local/share/vim/vimfiles,$VIMRUNTIME,/usr/local/share/vim/vimfiles/after,$HOME/Library/Application\ Support/org.vim.Vim/after
@@ -37,61 +34,144 @@ set packpath=$HOME/Library/Application\ Support/org.vim.Vim,/usr/local/share/vim
 " Enable autocompletion
 set wildmode=longest,list,full
 
-" Only enable the vim-toml plugin if we are in a *.toml file
-autocmd FileType toml packadd! vim-toml
+" Files that end in .toml are TOML files
+autocmd BufRead,BufNewFile *.toml set filetype=toml
+" Files that end in .nix are Nix expressions
+autocmd BufRead,BufNewFile *.nix set filetype=nix
+" flake.lock, a Nix abstraction, is actually a JSON file
+autocmd BufRead,BufNewFile flake.lock set filetype=json
 
-" Syntax highlighting
-syntax on
-colorscheme koehler
-autocmd BufRead,BufNewFile *.zsh* set syntax=zsh
+" Use 4 spaces instead of tabs (https://stackoverflow.com/questions/1878974/redefine-tab-as-4-spaces)
+set tabstop=4 softtabstop=0 expandtab shiftwidth=4
+" Unless we're in a *.nix or *.zsh* or *.yaml file, then tabs are 2 spaces
+autocmd BufRead,BufNewFile *.nix,*.zsh*,*.yaml set tabstop=2 shiftwidth=2
 
-" Highlight all matches when searching with '/' or '?'
-set hlsearch
+" Use Ctrl+l to toggle showing hidden characters or not
+set listchars=eol:$,tab:>-,trail:~,extends:>,precedes:<
+nnoremap <silent> <C-l> :set list!<CR>
+
+" Taken from Fedora's default /etc/vimrc: Convenient command to see the
+" difference between the current buffer and the file it was loaded from, thus
+" the changes you made.
+if !exists(':DiffOrig') " Only define it when not defined already
+	command DiffOrig vert new | set bt=nofile | r ++edit # | 0d_ | diffthis
+		\ | wincmd p | diffthis
+endif
+
 " Show matches as you find them
-set incsearch
-" Remove all highlighted matches upon pressing Escape
+if has('reltime')
+	set incsearch
+endif
+
+" Remove all highlighted matches upon pressing spacebar
 nnoremap <silent> <Space> :nohlsearch<Bar>:echo<CR>
+" Smart case search: case-insensitive when search query does not contain
+" any capital letters, case-sensitive otherwise
+set ignorecase
+set smartcase
+
+" Keep 5 lines above and below the cursor
+set scrolloff=5
 
 " Graciously taken from https://gist.github.com/benawad/b768f5a5bbd92c8baabd363b7e79786f
 " Make j/k move along lines that wrap
 noremap <silent> <expr> j (v:count == 0 ? 'gj' : 'j')
 noremap <silent> <expr> k (v:count == 0 ? 'gk' : 'k')
 
+" Mouse support
+set mouse=a
+
+" Function to call when (if) dein#add('preservim/nerdtree') is invoked
+function! s:initialize_nerdtree()
+	" Show NERDTree if no files were specified when invoking Vim
+	autocmd StdinReadPre * let s:std_in = 1
+	autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+
+	" Bind Ctrl-N to toggle opening and closing NERDTree
+	nmap <C-n> :NERDTreeToggle<CR>
+
+	" :q quits even when NERDTree is open
+	autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+
+	" Show hidden files all the time (it would be cool if I could just change this on the fly and have this
+	" automatically update without having to close and re-open NERDTree, similar to how I can just do
+	" :toggle_hidden in Broot)
+	let g:NERDTreeShowHidden = 1
+endfunction
+
+" Function to call when Xuyuanp/nerdtree-git-plugin is sourced
+function! s:initialize_nerdtree_git_plugin()
+	let g:NERDTreeGitStatusUseNerdFonts = 1    " Use Nerd fonts
+	let g:NERDTreeGitStatusConcealBrackets = 1 " Hide the [ ] around the icons
+endfunction
+
+" Dein - plugin manager
+" Not installed by default...to install run
+" git clone https://github.com/Shougo/dein.vim '{{@@ vimdir @@}}/bundle/repos/github.com/Shougo/dein.vim'
+let s:dein_base = expand('{{@@ vimdir @@}}/bundle')
+let s:dein_src = s:dein_base .. '/repos/github.com/Shougo/dein.vim'
+if isdirectory(s:dein_src)
+	" Set Dein runtime path (req'd)
+	exec 'set runtimepath+=' .. fnameescape(s:dein_src)
+
+	" Call Dein initialization (req'd)
+	call dein#begin(s:dein_base) " To uninstall Dein, remove the directory pointed to by s:dein_base
+	call dein#add(s:dein_src)
+
+	" File browser right inside of Vim
+	call dein#add('preservim/nerdtree', #{
+				\   on_cmd: ['NERDTree', 'NERDTreeToggle', 'NERDTreeFocus'],
+				\   hook_add: function('s:initialize_nerdtree'),
+				\ })
+
+	" Adds icons next to each of the files displayed in the NERDTree file
+	" browser according to their Git statuses
+	call dein#add('Xuyuanp/nerdtree-git-plugin', #{
+				\   on_source: 'nerdtree',
+				\   hook_source: function('s:initialize_nerdtree_git_plugin'),
+				\ })
+
+	" Shows ASCII icons in the gutter for lines that have been added, removed,
+	" or changed since the last Git commit
+	call dein#add('airblade/vim-gitgutter')
+
+	" TOML syntax highlighting
+	call dein#add('cespare/vim-toml', #{
+				\   on_ft: 'toml',
+				\ })
+
+	" Nix expression syntax highlighting
+	call dein#add('LnL7/vim-nix', #{
+				\   on_ft: 'nix',
+				\ })
+
+	" Finish dein initialization (req'd)
+	call dein#end()
+endif
+
 " Detect the file type and automatically indent, following the indentation rules of the detected programming language
 filetype plugin indent on
 
-" Make a tab appear to be 4 spaces wide (https://stackoverflow.com/questions/1878974/redefine-tab-as-4-spaces)
-set tabstop=4 softtabstop=0 noexpandtab shiftwidth=4
-" Unless we're in a *.nix or *.zsh* or *.yaml file, and then I want the tab key to literally be 2 spaces
-autocmd BufRead,BufNewFile *.nix,*.zsh*,*.yaml set tabstop=2 softtabstop=0 expandtab shiftwidth=2
-" Use spaces instead of tabs in Python files
-autocmd BufRead,BufNewFile *.py set expandtab
+" Syntax highlighting (when the terminal supports multiple colors, hence the
+" t_Co > 2, t_Co is "terminal colors")
+if has('syntax') && (&t_Co > 2 || has('gui_running'))
+	syntax on
+	colorscheme koehler
+	autocmd BufRead,BufNewFile *.zsh* set syntax=zsh
 
-" Use Ctrl+a to toggle showing hidden characters or not
-set listchars=eol:$,tab:>-,trail:~,extends:>,precedes:<
-nnoremap <silent> <C-a> :set list!<CR>
+	" Highlight all matches when searching with '/' or '?'
+	set hlsearch
+endif
 
-" Settings for NERDTree, a file finder that appears at the left
-" Show NERDTree if no files were specified when invoking Vim
-autocmd StdinReadPre * let s:std_in = 1
-autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+" Uncomment if you want to install not-installed plugins on startup
+" if dein#check_install()
+" 	call dein#install()
+" endif
+" Function to call when airblade/vim-gitgutter is sourced
 
-" Bind Ctrl-N to toggle opening and closing NERDTree
-nmap <C-n> :NERDTreeToggle<CR>
-
-" :q quits even when NERDTree is open
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
-
-" Show hidden files all the time (it would be cool if I could just change this on the fly and have this
-" automatically update without having to close and re-open NERDTree, similar to how I can just do
-" :toggle_hidden in Broot)
-let NERDTreeShowHidden = 1
-
-" Settings for NERDTree-git-plugin which integrates NERDTree with Git
-let g:NERDTreeGitStatusUseNerdFonts = 1 " Use Nerd fonts
-let g:NERDTreeGitStatusConcealBrackets = 1 " Hide the [ ] around the icons
-
-" Settings for vim-gitgutter
-set updatetime=300
-highlight! link SignColumn LineNr
-let g:gitgutter_set_sign_backgrounds = 1
+if exists('*dein#is_sourced') && dein#is_sourced('vim-gitgutter')
+	" Settings for vim-gitgutter
+	set updatetime=300
+	highlight! link SignColumn LineNr
+	let g:gitgutter_set_sign_backgrounds = 1
+endif

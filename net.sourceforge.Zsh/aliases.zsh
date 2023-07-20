@@ -15,13 +15,16 @@ else
 fi
 {%@@ endif @@%} 
 {%@@ if exists_in_path('broot') and profile == 'macos' @@%}
-alias brootconfig="${EDITOR:-vim} $HOME/Library/Preferences/org.dystroy.broot/conf.toml"
+alias brootconfig="${EDITOR:-vim} $HOME/Library/Application\ Support/org.dystroy.broot/conf.toml"
 {%@@ elif exists_in_path('broot') @@%}
 if [[ -n $XDG_CONFIG_HOME ]]; then
   alias brootconfig="${EDITOR:-vim} $XDG_CONFIG_HOME/broot/conf.toml"
 else
   alias brootconfig="${EDITOR:-vim} $HOME/.config/broot/conf.toml"
 fi
+{%@@ endif @@%}
+{%@@ if exists_in_path('git') @@%}
+alias gitconfig="${EDITOR:-vim} {{@@ gitconfig_config_path @@}}"
 {%@@ endif @@%}
 
 # ls aliases
@@ -75,7 +78,6 @@ alias brewu='brew upgrade' # updates and upgrdes Homebrew packages and formulae
 alias brewx='brew uninstall' # uninstalls a formula
 
 # brew cask
-alias cask='brew cask'
 alias caski='brew install --cask' # installs a cask
 alias caskl='brew list --cask' # lists installed casks
 alias casko='brew outdated --cask' # lists casks which have an update available

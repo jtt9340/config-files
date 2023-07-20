@@ -1,3 +1,5 @@
+uservariables:
+  git_email: Git email
 config:
   backup: true
   banner: false
@@ -6,6 +8,7 @@ config:
   workdir: templated
   keepdot: false
   link_on_import: link
+  template_dotfile_default: false
   cmpignore:
   - '*/.DS_Store'
   - '*.swp'
@@ -15,11 +18,11 @@ config:
   instignore:
   - '*/.DS_Store'
   - '*.swp'
-  func_file:
-  - re.deadc0de.dotdrop/funcs.py
   filter_file:
   - re.deadc0de.dotdrop/filters.py
-  minversion: 1.10.3
+  import_variables:
+  - uservariables.yaml:optional
+  minversion: 1.13.0
 variables:
   vimdir: >-
     {{@@
@@ -27,6 +30,12 @@ variables:
       else env['XDG_CONFIG_HOME'] + '/vim' if env['XDG_CONFIG_HOME'] is string
       else '~/.config/vim' if exists('~/.config/vim')
       else '~/.vim'
+    @@}}
+  zdotdir: >-
+    {{@@
+      '~/Library/Application Support/net.sourceforge.Zsh' if profile == 'macos'
+      else env['XDG_CONFIG_HOME'] + '/zsh' if env['XDG_CONFIG_HOME'] is string
+      else '~/.zsh'
     @@}}
   ripgrep_config_path: >-
     {{@@
@@ -36,22 +45,25 @@ variables:
       else env['XDG_CONFIG_HOME'] + '/ripgreprc' if env['XDG_CONFIG_HOME'] is string
       else '~/.config/ripgreprc'
     @@}}
-  zdotdir: >-
+  gitconfig_config_path: >-
     {{@@
-      '~/Library/Application Support/net.sourceforge.Zsh' if profile == 'macos'
-      else env['XDG_CONFIG_HOME'] + '/zsh' if env['XDG_CONFIG_HOME'] is string
-      else '~/.zsh'
+      '~/.gitconfig' if profile == 'macos'
+      else env['XDG_CONFIG_HOME'] + '/git/config' if env['XDG_CONFIG_HOME'] is string
+      else '~/.config/git/config'
+    @@}}
+  tmux_config_path: >-
+    {{@@
+      env['XDG_CONFIG_HOME'] + '/tmux/tmux.conf' if env['XDG_CONFIG_HOME'] is string
+      else '~/.tmux.conf'
     @@}}
 dynvariables:
   bat_config_path: command -v bat >/dev/null && bat --config-file || echo $HOME/.bat-not-installed
-  # The path to the Vim binary, or else nano if Vim is not installed
-  editor_exe: which vim || which nano
-  # The path to the Bat binary
-  bat_exe: which bat
-  # The path to the touch binary
+  editor_exe: command -v vim >/dev/null && which vim || which nano
+  bat_exe: which bat || echo -n
   touch_exe: which touch
-  # The path to the trash binary
-  trash_exe: which trash || echo 'trash-cli not installed'
+  trash_exe: which trash || echo -n
+  ql_exe: '[ "$(uname)" = Darwin ] && command -v ql || echo -n'
+  markdown_exe: which markdown || command -v glow || printf ''
 actions:
   zshenv: ln -i -s {{@@ _dotfile_abs_dst @@}}/.zshenv ~/.zshenv
 dotfiles:
@@ -59,23 +71,34 @@ dotfiles:
     src: org.vim.Vim
     dst: '{{@@ vimdir @@}}'
     link: link_children
+    template: true
     upignore:
-    - .netrwhist*
-    - backup
-    - swap
-    - undo
-    - viminfo
+    - '*/.netrwhist*'
+    - '*/backup'
+    - '*/bundle'
+    - '*/swap'
+    - '*/undo'
+    - '*/viminfo'
+    - '*/view'
+    - '*/README.md'
     cmpignore:
-    - .netrwhist*
-    - backup
-    - swap
-    - undo
-    - viminfo
+    - '*/.netrwhist*'
+    - '*/backup'
+    - '*/bundle'
+    - '*/swap'
+    - '*/undo'
+    - '*/viminfo'
+    - '*/view'
+    - '*/pack'
+    - '*/README.md'
+    instignore:
+    - '*/README.md'
   f_org.dystroy.broot_conf.toml:
     src: org.dystroy.broot/conf.toml
-    dst: "{{@@ '~/Library/Preferences/org.dystroy.broot/conf.toml' if profile == 'macos'\
-      \ else '~/.config/broot/conf.toml' @@}}"
+    dst: "{{@@ '~/Library/Application Support/org.dystroy.broot/conf.toml' if profile\
+      \ == 'macos' else '~/.config/broot/conf.toml' @@}}"
     link: absolute
+    template: true
   f_nixpkgs_config.nix:
     src: org.nixos.Nix/config.nix
     dst: ~/.config/nixpkgs/config.nix
@@ -90,6 +113,7 @@ dotfiles:
     src: net.sourceforge.Zsh
     dst: '{{@@ zdotdir @@}}'
     link: link_children
+    template: true
     cmpignore:
     - .zcompdump*
     - .zsh_history
@@ -103,6 +127,7 @@ dotfiles:
     - bookmarks
     - zgen*
     - z.txt
+    - '*/README.md'
     upignore:
     - .zcompdump*
     - .zsh_history
@@ -113,8 +138,16 @@ dotfiles:
     - bookmarks
     - zgen*
     - z.txt
+    - '*/README.md'
+    instignore:
+    - '*/README.md'
     actions:
     - zshenv
+  f_joeys_avit.zsh-theme:
+    src: net.sourceforge.Zsh/joeys-avit.zsh-theme
+    dst: '{{@@ zdotdir @@}}/themes/joeys-avit.zsh-theme'
+    link: absolute
+    template: true
   f_ripgreprc:
     src: com.github.burntsushi.Ripgrep/ripgreprc
     dst: '{{@@ ripgrep_config_path @@}}'
@@ -126,13 +159,19 @@ dotfiles:
     link: absolute
   f_git_config:
     src: com.git-scm.Git/config
-    dst: >-
-      {{@@
-        '~/.gitconfig' if profile == 'macos'
-        else env['XDG_CONFIG_HOME'] + '/git/config' if env['XDG_CONFIG_HOME'] is string
-        else '~/.config/git/config'
-      @@}}
+    dst: '{{@@ gitconfig_config_path @@}}'
     link: absolute
+    template: true
+  f_virtualenv.ini:
+    src: io.pypa.virtualenv/virtualenv.ini
+    dst: ~/Library/Application Support/virtualenv/virtualenv.ini
+    link: absolute
+  f_tmux.conf:
+    src: io.github.tmux/tmux.conf
+    dst: '{{@@ tmux_config_path @@}}'
+    link: absolute
+    chmod: '600'
+    template: true
 profiles:
   macos:
     dotfiles:
@@ -143,6 +182,7 @@ profiles:
     - f_ripgreprc
     - f_bat_config
     - f_git_config
+    - f_virtualenv.ini
   linux:
     dotfiles:
     - d_vim
@@ -151,6 +191,8 @@ profiles:
     - d_zdotdir
     - f_bat_config
     - f_git_config
+    - f_tmux.conf
   nixos:
     dotfiles:
     - f_org.dystroy.broot_conf.toml
+    - f_joeys_avit.zsh-theme

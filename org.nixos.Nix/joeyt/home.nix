@@ -7,8 +7,13 @@ let
   # pkgsUnstable = import <nixpkgs-unstable> {
   #   config = { allowUnfree = true; };
   # };
-in
-{
+  xdgConfigHome = config.xdg.configHome;
+  xdgDataHome = config.xdg.dataHome;
+  xdgCacheHome = config.xdg.cacheHome;
+in {
+  # (Hopefully) Temporary workaround for https://github.com/nix-community/home-manager/issues/3344
+  manual.manpages.enable = false;
+
   xdg = {
     # Enable management of XDG Base Directories
     enable = true;
@@ -16,8 +21,8 @@ in
     # Home manager will manage these dotfiles
     configFile = {
       "nixpkgs/config.nix".source = "${configFiles}/org.nixos.Nix/config.nix";
-      "micro/settings.json".source = "${configFiles}/io.github.micro-editor/settings.json";
-      "ripgreprc".source = "${configFiles}/com.github.burntsushi.Ripgrep/ripgreprc";
+      "ripgreprc".source =
+        "${configFiles}/com.github.burntsushi.Ripgrep/ripgreprc";
       "zsh/zfunc" = {
         source = "${configFiles}/net.sourceforge.Zsh/zfunc";
         recursive = true;
@@ -34,6 +39,8 @@ in
     zsh = (import ./zsh.nix) {
       inherit (pkgs) fetchFromGitHub;
       inherit configFiles;
+      inherit xdgConfigHome;
+      inherit xdgDataHome;
     };
 
     # Git config
@@ -46,13 +53,16 @@ in
     # Use skim, a command-line fuzzy finder written in Rust
     skim.enable = true;
 
-    # Use lsd, an ls clone written in Rust
+    # Use lsd, an ls clone with more colors and icons
     lsd.enable = true;
 
     # Use Vim with custom configuration and plugins
     vim = (import ./vim.nix) {
       inherit (pkgs) vimPlugins fetchFromGitHub;
       inherit (pkgs.vimUtils) buildVimPluginFrom2Nix;
+      inherit xdgConfigHome;
+      inherit xdgDataHome;
+      inherit xdgCacheHome;
     };
   };
 
@@ -88,6 +98,8 @@ in
     jetbrains.idea-ultimate
     # Python IDE
     jetbrains.pycharm-professional
+    # ISO image writer for KDE
+    k3b
     # Free and open-source office suite
     libreoffice
     # Makes it easier to run games/Windows-only applications on GNU/Linux
@@ -97,6 +109,34 @@ in
     # Email client
     thunderbird
   ];
+
+  # Define systemd per-user service units
+  systemd.user.services.rclone-automount-google-drive =
+    let googleDriveDir = ''%h/"RIT Google Drive"'';
+    in {
+      Unit = {
+        Description =
+          "Automatically mount my Google Drive in my home directory at startup using rclone";
+        AssertPathIsDirectory = "%h/RIT Google Drive";
+      };
+
+      Service = {
+        Type = "simple";
+        ExecStart = with pkgs.lib.strings;
+          concatStringsSep " " [
+            "${pkgs.rclone}/bin/rclone mount --vfs-cache-mode writes"
+            "--config ${config.xdg.configHome}/rclone/rclone.conf"
+            "--drive-import-formats docx,xlsx,pptx,svg rit-google-drive:"
+            googleDriveDir
+          ];
+        ExecStop = "/run/wrappers/bin/fusermount -u ${googleDriveDir}";
+        # Restart the service whenever rclone exits with non-zero exit code
+        Restart = "on-failure";
+        RestartSec = 15;
+      };
+
+      Install = { WantedBy = [ "default.target" ]; };
+    };
 
   # How many times do I have to say that I am okay with non-free software?! I guess when
   # you specify packages with home.packages you also need to specify it here?

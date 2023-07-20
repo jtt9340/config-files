@@ -4,16 +4,12 @@
 
 { config, pkgs, ... }:
 
-let
-  pypi2nix = import (import ./program/pypi2nix/default.nix pkgs.fetchFromGitHub) {};
-in
 {
-  imports =
-    [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-      # Introduce a new NixOS option called home-manager.users
-      <home-manager/nixos>
-    ];
+  imports = [ # Include the results of the hardware scan.
+    ./hardware-configuration.nix
+    # Introduce a new NixOS option called home-manager.users
+    <home-manager/nixos>
+  ];
 
   # Use the GRUB 2 boot loader.
   boot.loader.grub.enable = true;
@@ -23,10 +19,6 @@ in
   # boot.loader.efi.efiSysMountPoint = "/boot/efi";
   # Define on which hard drive you want to install Grub.
   boot.loader.grub.device = "/dev/sda"; # or "nodev" for efi only
-
-  nix.extraOptions = ''
-    plugin-files = ${pkgs.callPackage ./program/nix-doc/default.nix {}}/lib/libnix_doc_plugin.so
-  '';
 
   networking.hostName = "craigscomputer"; # Define your hostname.
   # The following does not need to be enabled, so long as a user is in the "networkmanager" group
@@ -65,11 +57,19 @@ in
   # Configure Zsh as an interactive shell
   programs.zsh.enable = true;
 
+  # Install wireshark
+  programs.wireshark = {
+    enable = true;
+    package = pkgs.wireshark;
+  };
+
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   # These are packages that are automatically available to all users, and are
   # automatically updated every time you rebuild the system configuration
   environment.systemPackages = with pkgs; [
+    # Print a list of paths as a tree of paths
+    as-tree
     # A cat/less alternative with syntax highlighting
     bat
     # "A command-line tool for transferring files with URL syntax"
@@ -94,12 +94,10 @@ in
     htop
     # Text editor part of the KDE ecosystem
     kate
-    # PDE viewer part of the KDE ecosystem
+    # PDF viewer part of the KDE ecosystem
     okular
-    # A user-friendly terminal-based text editor
-    micro
-    # View documentation for Nix functions
-    (callPackage ./program/nix-doc/default.nix {})
+    # A files database for nixpkgs
+    nix-index
     # Generate SHA-256 sums from Git repositories
     nix-prefetch-git
     # Generate SHA-256 sums from GitHub repositories
@@ -108,8 +106,6 @@ in
     partition-manager
     # Screen recorder
     peek
-    # Convert Python requirements.txt files to Nix expressions
-    pypi2nix
     # Integrate ripgrep (grep alternative) with additional document formats like PDFs and Word documents
     ripgrep-all
     # Put files in the trash from the command line
@@ -184,6 +180,13 @@ in
     allowReboot = false;
   };
 
+  # Periodically clean out the Nix store
+  nix.gc = {
+    automatic = true;
+    dates = "*-*-1,15 3:15"; # 3:15 AM (local time) on the 1st and 15th of every month (man systemd.time)
+    options = "--delete-older-than 365d";
+  };
+
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users = {
     # Zsh is the default shell for everyone...mwah ha ha!
@@ -194,7 +197,8 @@ in
       isNormalUser = true;
       # 'wheel' enables ‘sudo’ for the user;
       # 'networkmanager' allows the user to change network settings  
-      extraGroups = [ "wheel" "networkmanager" ];
+      # 'wireshark' is needed for wireshark to be able to collect packet captures
+      extraGroups = [ "wheel" "networkmanager" "wireshark" ];
     };
   };
 
