@@ -29,22 +29,12 @@ It starts by downloading and installing my plugin manager of choice: [zgenom]. T
 some options used by plugins, it downloads and installs my plugins of choice.
 
 ### Plugins Used
-- [**Oh My Zsh**][omz]: Set of common settings to make Zsh user-friendly right off the bat, as well as
-  a large repository of plugins and shell prompts.
-- [**Oh My Zsh Git Plugin**][omz-git]: (only if `git` is installed) Defines many git aliases. I'm so used
-  to these using git on another machine without this plugin is a struggle.
-- [**Oh My Zsh Gitignore Plugin**][omz-gitignore]: (only if `git` is installed) Command line interface to
-  [gitignore.io](https://www.gitignore.io/), a website containing many `.gitignore` templates for
-  various programming languages, IDEs, and operating systems.
-- [**Oh My Zsh Pip Plugin**][omz-pip]: (only if `pip` is installed) Auto-completion for `pip`. Not only
-  does it autocomplete `pip`'s subcommands, but names of packages that can be installed too!
-- [**Oh My Zsh Rust Plugin**][omz-rust]: (only if `rustc` is installed) Auto-completion for `rustc`, `cargo`,
-  and `rustup`.
-- [**Oh My Zsh Virtualenv Plugin**][omz-virtualenv]: Allows the name of the current active Python virtual environment,
-  if any, to be displayed in the shell prompt.
-- [**Oh My Zsh Docker Plugin**][omz-docker]: (only if `docker` is installed) Auto-completion and aliases for Docker.
-- [**Oh My Zsh cp Plugin**][omz-cp]: (onlf if `rsync` is installed) Defines an alias `cpv` that uses `rsync` instead of
-  `cp` to copy files for added security.
+- [**zpm-zsh/ls**][zpm-zsh-ls]: Use common `ls` aliases (can optionally use [exa] or [lsd])
+- [**zpm-zsh/colorize**][zpm-zsh-colorize]: Try to add color to many common commands (can optionally use [grc])
+- [**zpm-zsh/ssh**][zpm-zsh-ssh]: SSH-related completions
+- [**zpm-zsh/ignored-users**][zpm-zsh-ignored-users]: Don't suggest completions for users with a UID between 0 (exclusive) and 1000 (exclusive),
+  or greater than 10,000
+- [**zpm-zsh/dot**][zpm-zsh-dot]: Dot rationalization: every two `..`s becomes a `/..`
 - [**zsh-users/zsh-completions**][zsh-completions]: Auto-completions for many popular commands and CLI tools.
 - [**djui/alias-tips**][alias-tips]: Reminds you if you have an alias for a command you just used. This was helpful
   when I first started using Oh My Zsh's git plugin, since it taught me many of the aliases it defines. For example,
@@ -53,20 +43,19 @@ some options used by plugins, it downloads and installs my plugins of choice.
   Then, you can type a substring of one of these directories and it will `cd` to the directory for you. For example, if you
   `cd` to a directory named `llvm-interpreter` a lot, then after a while typing `z llvm` will `cd` you to `llvm-interpreter`.
   I've defined my own function `j` which uses `cd` as a fallback if `z` can't find a directory with the given substring in its name.
-- [**zsh-users/zsh-autosuggestions**][zsh-autosuggestions]: Inspired by a similar feature built into the Fish shell, this will show
-  suggestions for common commands you type as you type them. Then, just hit the right arrow key to fill in the rest of the command.
-  This is sort of like the predictive keyboards on smartphones, however `zsh-users/zsh-autosuggestions` has found a way to make this
-  feature way less annoying.
+- [**zpm-zsh/clipboard**][zpm-zsh-clipboard]: Standardizes macOS' `pbcopy` and `pbpaste` commands to work as expected regardless
+  of whether you are on Linux or macOS (Linux dependences: `xdg-open`, `xclip`)
+- [**zdharma-continuum/fast-syntax-highlighting**][fast-syntax-highlighting]: Syntax highlighting at the command line, also inspired by Fish.
 - [**zsh-users/zsh-history-substring-search**][zsh-history-substring-search]: At first, I didn't understand what this plugin did,
   because what it does is very subtle. When you start typing a command, if you hit the up arrow, it will cycle through all the commands in
   your shell history that start with what you've already typed. This is so intuitive you don't even think this was something that had to be
   added by a plugin.
-- [**zdharma-continuum/fast-syntax-highlighting**][fast-syntax-highlighting]: Syntax highlighting at the command line, also inspired by Fish.
+- [**zsh-users/zsh-autosuggestions**][zsh-autosuggestions]: Inspired by a similar feature built into the Fish shell, this will show
+  suggestions for common commands you type as you type them. Then, just hit the right arrow key to fill in the rest of the command.
+  This is sort of like the predictive keyboards on smartphones, however `zsh-users/zsh-autosuggestions` has found a way to make this
+  feature way less annoying.
+- [**zdharma-continuum/history-search-multi-word**][history-search-multi-word]: More interactive ctrl-R reverse history search
 - [**chisui/zsh-nix-shell**][zsh-nix-shell]: (only on NixOS) Allows Zsh to be used in Nix shells.
-
-### Shell Prompt
-[My shell prompt](joeys-avit.zsh-theme) is based off the [Oh My Zsh Avit Theme][omz-avit] and is customized to add support for Python virtualenvs via the
-[Oh My Zsh Virtualenv Plugin][omz-virtualenv] as well as Nix shell support when on NixOS.
 
 ## [`bookmark.zsh`](bookmark.zsh)
 This file is sourced by `.zshrc` and adds a directory bookmark mechanism. When in a directory you want to bookmark, run
@@ -119,19 +108,20 @@ virtual environment is automatically deactivated upon leaving the directory.
 
 [zsh]: https://zsh.sourceforge.io/
 [zgenom]: https://github.com/jandamm/zgenom
-[omz]: https://ohmyz.sh
-[omz-git]: https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/git
-[omz-gitignore]: https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/gitignore
-[omz-pip]: https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/pip
-[omz-rust]: https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/rust 
-[omz-virtualenv]: https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/virtualenv
-[omz-docker]: https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/docker
-[omz-cp]: https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/cp
-[omz-avit]: https://github.com/ohmyzsh/ohmyzsh/blob/master/themes/avit.zsh-theme
+[zpm-zsh-ls]: https://github.com/zpm-zsh/ls
+[zpm-zsh-colorize]: https://github.com/zpm-zsh/colorize
+[zpm-zsh-ssh]: https://github.com/zpm-zsh/ssh
+[zpm-zsh-ignored-users]: https://github.com/zpm-zsh/ignored-users
+[zpm-zsh-dot]: https://github.com/zpm-zsh/dot
 [zsh-completions]: https://github.com/zsh-users/zsh-completions
 [alias-tips]: https://github.com/djui/alias-tips
 [zsh-z]: https://github.com/agkozak/zsh-z
-[zsh-autosuggestions]: https://github.com/zsh-users/zsh-autosuggestions
-[zsh-history-substring-search]: https://github.com/zsh-users/zsh-history-substring-search
+[zpm-zsh-clipboard]: https://github.com/zpm-zsh/clipboard
 [fast-syntax-highlighting]: https://github.com/zdharma-continuum/fast-syntax-highlighting
+[zsh-history-substring-search]: https://github.com/zsh-users/zsh-history-substring-search
+[zsh-autosuggestions]: https://github.com/zsh-users/zsh-autosuggestions
+[history-search-multi-word]: https://github.com/zdharma-continuum/history-search-multi-word
 [zsh-nix-shell]: https://github.com/chisui/zsh-nix-shell
+[exa]: https://the.exa.website/
+[lsd]: https://github.com/Peltoche/lsd
+[grc]: https://kassiopeia.juls.savba.sk/~garabik/software/grc.html
