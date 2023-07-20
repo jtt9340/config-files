@@ -29,7 +29,7 @@ alias gitconfig="${EDITOR:-vim} {{@@ gitconfig_config_path @@}}"
 
 # ls aliases
 alias ldot='ls -d .*'
-alias lab='ls -AbFG'
+alias lab='command ls -AbFG'
 {%@@ if exists(env['HOME'] + '/Library/Application Support/org.dystroy.broot/launcher/bash/1') or
         exists(env.get('XDG_DATA_HOME', default='') + '/broot/launcher/bash/1') or 
         exists(env['HOME'] + '/.local/share/broot/launcher/bash/1') @@%}
@@ -52,6 +52,7 @@ for (( i = 2; i <= 9; i++ ))
 
 alias g=git
 alias grm='git rm'
+alias gmv='git mv'
 # Convert Git aliases into shell aliases
 OLD_IFS="$IFS"
 IFS='
