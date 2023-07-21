@@ -1,0 +1,8 @@
+# Graciously taken from Oh-My-Zsh
+function d {
+  if [[ -n $1 ]]; then
+    dirs "$@"
+  else
+    dirs -v | head
+  fi
+}

@@ -27,23 +27,13 @@ fi
 alias gitconfig="${EDITOR:-vim} {{@@ gitconfig_config_path @@}}"
 {%@@ endif @@%}
 
-# git aliases
-alias grm='git rm'
-alias gmv='git mv'
-
 # ls aliases
 alias ldot='ls -d .*'
-alias lab='ls -AbFG'
+alias lab='command ls -AbFG'
 {%@@ if exists(env['HOME'] + '/Library/Application Support/org.dystroy.broot/launcher/bash/1') or
         exists(env.get('XDG_DATA_HOME', default='') + '/broot/launcher/bash/1') or
         exists(env['HOME'] + '/.local/share/broot/launcher/bash/1') @@%}
 alias lbr='br -sdp'
-{%@@ endif @@%}
-
-{%@@ if exists_in_path('lsd') @@%}
-alias lsdl='lsd -lF --date relative'
-alias lsda='lsd -aF'
-alias lsdla='lsd -laF --date relative'
 {%@@ endif @@%}
 
 {%@@ if exists(env['HOME'] + '/Library/Application Support/org.dystroy.broot/launcher/bash/1') or
@@ -54,6 +44,26 @@ alias tree='br --cmd :pt'
 {%@@ if exists_in_path('lsd') @@%}
 alias ltree='lsd --tree'
 {%@@ endif @@%}
+
+# Create cd aliases
+alias 1='cd -'
+for (( i = 2; i <= 9; i++ ))
+  alias "$i"="cd -$i"
+
+alias g=git
+alias grm='git rm'
+alias gmv='git mv'
+# Convert Git aliases into shell aliases
+OLD_IFS="$IFS"
+IFS='
+'
+for galias in `git config --global --get-regex alias`; do
+  local i=$galias[(i)[[:space:]]]
+  local galias_key=$galias[1,$i-1]
+  local galias_value=$galias[$i+1,-1]
+  alias "g${galias_key#alias\.}"="git $galias_value"
+done
+IFS="$OLD_IFS"
 
 {%@@ if exists_in_path('brew') @@%}
 # These aliases are graciously taken from the Prezto Homebrew plugin; I have decided not to add the plugin
@@ -94,4 +104,4 @@ alias diff='diff -s'
 alias diff='diff -s --color=always'
 {%@@ endif @@%}
 alias cp='cp -v'
-
+alias grep='grep -n --color=always'

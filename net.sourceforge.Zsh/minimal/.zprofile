@@ -45,6 +45,9 @@ export HOMEBREW_BAT_CONFIG_PATH="$BAT_CONFIG_PATH"
 {%@@ endif @@%}
 {%@@ endif @@%}
 
+# Used by zpm-zsh/ignored-users
+export ZSH_CACHE_DIR="$ZDOTDIR"
+
 # Reconfiguring programs to store their configuation/data files somewhere besides the home directory
 {#@@ Rustup @@#}
 {%@@ if exists_in_path('rustup') @@%}

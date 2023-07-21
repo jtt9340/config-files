@@ -28,7 +28,11 @@ fi
 {%@@ if profile == 'macos' @@%}
 export ZDOTDIR="$HOME/Library/Application Support/net.sourceforge.Zsh"
 {%@@ else @@%}
-[[ -n $XDG_CONFIG_HOME ]] \
-  && export ZDOTDIR="$XDG_CONFIG_HOME"/zsh \
-  || export ZDOTDIR="$HOME/.zsh"
+if [[ -n $XDG_CONFIG_HOME ]]; then
+  export ZDOTDIR="$XDG_CONFIG_HOME"/zsh
+elif [[ -d $HOME/.config ]]; then
+  export ZDOTDIR=$HOME/.config/zsh
+else
+  export ZDOTDIR="$HOME/.zsh"
+fi
 {%@@ endif @@%}
