@@ -6,9 +6,9 @@ set nocompatible
 set number relativenumber
 
 augroup numbertoggle
-	autocmd!
-	autocmd BufEnter,FocusGained,InsertLeave * set relativenumber
-	autocmd BufLeave,FocusLost,InsertEnter * set norelativenumber
+    autocmd!
+    autocmd BufEnter,FocusGained,InsertLeave * set relativenumber
+    autocmd BufLeave,FocusLost,InsertEnter * set norelativenumber
 augroup END
 
 " Make backspace work like in most programs (apparently Vim has a feature that tries
@@ -54,13 +54,13 @@ nnoremap <silent> <C-l> :set list!<CR>
 " difference between the current buffer and the file it was loaded from, thus
 " the changes you made.
 if !exists(':DiffOrig') " Only define it when not defined already
-	command DiffOrig vert new | set bt=nofile | r ++edit # | 0d_ | diffthis
-		\ | wincmd p | diffthis
+    command DiffOrig vert new | set bt=nofile | r ++edit # | 0d_ | diffthis
+        \ | wincmd p | diffthis
 endif
 
 " Show matches as you find them
 if has('reltime')
-	set incsearch
+    set incsearch
 endif
 
 " Remove all highlighted matches upon pressing spacebar
@@ -83,26 +83,36 @@ set mouse=a
 
 " Function to call when (if) dein#add('preservim/nerdtree') is invoked
 function! s:initialize_nerdtree()
-	" Show NERDTree if no files were specified when invoking Vim
-	autocmd StdinReadPre * let s:std_in = 1
-	autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+    " Show NERDTree if no files were specified when invoking Vim
+    autocmd StdinReadPre * let s:std_in = 1
+    autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 
-	" Bind Ctrl-N to toggle opening and closing NERDTree
-	nmap <C-n> :NERDTreeToggle<CR>
+    " Bind Ctrl-N to toggle opening and closing NERDTree
+    nmap <C-n> :NERDTreeToggle<CR>
 
-	" :q quits even when NERDTree is open
-	autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+    " :q quits even when NERDTree is open
+    autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
-	" Show hidden files all the time (it would be cool if I could just change this on the fly and have this
-	" automatically update without having to close and re-open NERDTree, similar to how I can just do
-	" :toggle_hidden in Broot)
-	let g:NERDTreeShowHidden = 1
+    " Show hidden files all the time (it would be cool if I could just change this on the fly and have this
+    " automatically update without having to close and re-open NERDTree, similar to how I can just do
+    " :toggle_hidden in Broot)
+    let g:NERDTreeShowHidden = 1
 endfunction
 
-" Function to call when Xuyuanp/nerdtree-git-plugin is sourced
+" Function to call when (if) Xuyuanp/nerdtree-git-plugin is sourced
 function! s:initialize_nerdtree_git_plugin()
-	let g:NERDTreeGitStatusUseNerdFonts = 1    " Use Nerd fonts
-	let g:NERDTreeGitStatusConcealBrackets = 1 " Hide the [ ] around the icons
+    let g:NERDTreeGitStatusUseNerdFonts = 1    " Use Nerd fonts
+    let g:NERDTreeGitStatusConcealBrackets = 1 " Hide the [ ] around the icons
+endfunction
+
+" Function to call when (if) christoomey/vim-tmux-navigator is sourced
+function! s:initialize_vim_tmux_navigator()
+    let g:tmux_navigator_no_mappings = 1
+
+    noremap <silent> <C-w>h :<C-U>TmuxNavigateLeft<cr>
+    noremap <silent> <C-w>j :<C-U>TmuxNavigateDown<cr>
+    noremap <silent> <C-w>k :<C-U>TmuxNavigateUp<cr>
+    noremap <silent> <C-w>l :<C-U>TmuxNavigateRight<cr>
 endfunction
 
 " Dein - plugin manager
@@ -111,42 +121,49 @@ endfunction
 let s:dein_base = expand('{{@@ vimdir @@}}/bundle')
 let s:dein_src = s:dein_base .. '/repos/github.com/Shougo/dein.vim'
 if isdirectory(s:dein_src)
-	" Set Dein runtime path (req'd)
-	exec 'set runtimepath+=' .. fnameescape(s:dein_src)
+    " Set Dein runtime path (req'd)
+    exec 'set runtimepath+=' .. fnameescape(s:dein_src)
 
-	" Call Dein initialization (req'd)
-	call dein#begin(s:dein_base) " To uninstall Dein, remove the directory pointed to by s:dein_base
-	call dein#add(s:dein_src)
+    " Call Dein initialization (req'd)
+    call dein#begin(s:dein_base) " To uninstall Dein, remove the directory pointed to by s:dein_base
+    call dein#add(s:dein_src)
 
-	" File browser right inside of Vim
-	call dein#add('preservim/nerdtree', #{
-				\   on_cmd: ['NERDTree', 'NERDTreeToggle', 'NERDTreeFocus'],
-				\   hook_add: function('s:initialize_nerdtree'),
-				\ })
+    " File browser right inside of Vim
+    call dein#add('preservim/nerdtree', #{
+                \   on_cmd: ['NERDTree', 'NERDTreeToggle', 'NERDTreeFocus'],
+                \   hook_add: function('s:initialize_nerdtree'),
+                \ })
 
-	" Adds icons next to each of the files displayed in the NERDTree file
-	" browser according to their Git statuses
-	call dein#add('Xuyuanp/nerdtree-git-plugin', #{
-				\   on_source: 'nerdtree',
-				\   hook_source: function('s:initialize_nerdtree_git_plugin'),
-				\ })
+    " Adds icons next to each of the files displayed in the NERDTree file
+    " browser according to their Git statuses
+    call dein#add('Xuyuanp/nerdtree-git-plugin', #{
+                \   on_source: 'nerdtree',
+                \   hook_source: function('s:initialize_nerdtree_git_plugin'),
+                \ })
 
-	" Shows ASCII icons in the gutter for lines that have been added, removed,
-	" or changed since the last Git commit
-	call dein#add('airblade/vim-gitgutter')
+    " Shows ASCII icons in the gutter for lines that have been added, removed,
+    " or changed since the last Git commit
+    call dein#add('airblade/vim-gitgutter')
 
-	" TOML syntax highlighting
-	call dein#add('cespare/vim-toml', #{
-				\   on_ft: 'toml',
-				\ })
+    " When running Vim inside Tmux, Ctrl-w + h/j/k/l move both between splits
+    " and between Tmux panes
+    call dein#add('christoomey/vim-tmux-navigator', #{
+                \   on_if: '!empty($TMUX)',
+                \   hook_source: function('s:initialize_vim_tmux_navigator'),
+                \ })
 
-	" Nix expression syntax highlighting
-	call dein#add('LnL7/vim-nix', #{
-				\   on_ft: 'nix',
-				\ })
+    " TOML syntax highlighting
+    call dein#add('cespare/vim-toml', #{
+                \   on_ft: 'toml',
+                \ })
 
-	" Finish dein initialization (req'd)
-	call dein#end()
+    " Nix expression syntax highlighting
+    call dein#add('LnL7/vim-nix', #{
+                \   on_ft: 'nix',
+                \ })
+
+    " Finish dein initialization (req'd)
+    call dein#end()
 endif
 
 " Detect the file type and automatically indent, following the indentation rules of the detected programming language
@@ -155,23 +172,23 @@ filetype plugin indent on
 " Syntax highlighting (when the terminal supports multiple colors, hence the
 " t_Co > 2, t_Co is "terminal colors")
 if has('syntax') && (&t_Co > 2 || has('gui_running'))
-	syntax on
-	colorscheme koehler
-	autocmd BufRead,BufNewFile *.zsh* set syntax=zsh
+    syntax on
+    colorscheme koehler
+    autocmd BufRead,BufNewFile *.zsh* set syntax=zsh
 
-	" Highlight all matches when searching with '/' or '?'
-	set hlsearch
+    " Highlight all matches when searching with '/' or '?'
+    set hlsearch
 endif
 
 " Uncomment if you want to install not-installed plugins on startup
 " if dein#check_install()
-" 	call dein#install()
+"     call dein#install()
 " endif
-" Function to call when airblade/vim-gitgutter is sourced
 
+" Function to call when airblade/vim-gitgutter is sourced
 if exists('*dein#is_sourced') && dein#is_sourced('vim-gitgutter')
-	" Settings for vim-gitgutter
-	set updatetime=300
-	highlight! link SignColumn LineNr
-	let g:gitgutter_set_sign_backgrounds = 1
+    " Settings for vim-gitgutter
+    set updatetime=300
+    highlight! link SignColumn LineNr
+    let g:gitgutter_set_sign_backgrounds = 1
 endif
