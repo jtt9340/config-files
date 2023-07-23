@@ -78,7 +78,7 @@ and hit enter.
 Zsh has the notion of [autoloaded functions](https://zsh.sourceforge.io/Doc/Release/Functions.html#Autoloading-Functions).
 Instead of defining a function directly in, say, your `.zshrc`, you place your function in a file
 in a directory listed in the `$fpath` variable (note that you can add directories to this variable
-with the `$fpath+=` syntax). The name of the file is the name of themfunction you are defining with
+with the `$fpath+=` syntax). The name of the file is the name of the function you are defining with
 no extension. Then, in your `.zshrc` add
 
 ```zsh
