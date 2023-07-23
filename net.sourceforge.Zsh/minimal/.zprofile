@@ -21,7 +21,7 @@ path=(/usr/local/opt/python@3.9/bin /usr/local/opt/llvm@11/bin $path)
 # export PATH="/usr/local/opt/llvm/bin:$PATH"
 {%@@ endif @@%}
 
-# Other environment variables that don't need to be set in ${ZDOTDIR:-$HOME} 
+# Other environment variables that don't need to be set in ${ZDOTDIR:-$HOME}
 
 {%@@ if exists_in_path('brew') @@%}
 # The following code segment was graciously adapted from the Prezto Homebrew plugin; the reason I am not just sourcing
@@ -45,6 +45,9 @@ export HOMEBREW_BAT_CONFIG_PATH="$BAT_CONFIG_PATH"
 {%@@ endif @@%}
 {%@@ endif @@%}
 
+# Used by zpm-zsh/ignored-users
+export ZSH_CACHE_DIR="$ZDOTDIR"
+
 # Reconfiguring programs to store their configuation/data files somewhere besides the home directory
 {#@@ Rustup @@#}
 {%@@ if exists_in_path('rustup') @@%}
@@ -56,7 +59,7 @@ if [[ -n $XDG_DATA_HOME ]]; then
   export RUSTUP_HOME=$XDG_DATA_HOME/rustup
 elif [[ -d $HOME/.local/share ]]; then
   export RUSTUP_HOME=$HOME/.local/share/rustup
-fi	
+fi
 {%@@ endif @@%}
 {%@@ endif @@%}
 

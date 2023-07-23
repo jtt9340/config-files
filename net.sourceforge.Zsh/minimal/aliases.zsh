@@ -13,7 +13,7 @@ elif [[ -f $HOME/.vim/vimrc ]]; then
 else
   alias vimconfig="${EDITOR:-vim} $HOME/.vimrc"
 fi
-{%@@ endif @@%} 
+{%@@ endif @@%}
 {%@@ if exists_in_path('broot') and profile == 'macos' @@%}
 alias brootconfig="${EDITOR:-vim} $HOME/Library/Application\ Support/org.dystroy.broot/conf.toml"
 {%@@ elif exists_in_path('broot') @@%}
@@ -29,27 +29,41 @@ alias gitconfig="${EDITOR:-vim} {{@@ gitconfig_config_path @@}}"
 
 # ls aliases
 alias ldot='ls -d .*'
-alias lab='ls -AbFG'
+alias lab='command ls -AbFG'
 {%@@ if exists(env['HOME'] + '/Library/Application Support/org.dystroy.broot/launcher/bash/1') or
-        exists(env.get('XDG_DATA_HOME', default='') + '/broot/launcher/bash/1') or 
+        exists(env.get('XDG_DATA_HOME', default='') + '/broot/launcher/bash/1') or
         exists(env['HOME'] + '/.local/share/broot/launcher/bash/1') @@%}
 alias lbr='br -sdp'
 {%@@ endif @@%}
 
-{%@@ if exists_in_path('lsd') @@%}
-alias lsdl='lsd -lF --date relative'
-alias lsda='lsd -aF'
-alias lsdla='lsd -laF --date relative'
-{%@@ endif @@%}
-
 {%@@ if exists(env['HOME'] + '/Library/Application Support/org.dystroy.broot/launcher/bash/1') or
-        exists(env.get('XDG_DATA_HOME', default='') + '/broot/launcher/bash/1') or 
+        exists(env.get('XDG_DATA_HOME', default='') + '/broot/launcher/bash/1') or
         exists(env['HOME'] + '/.local/share/broot/launcher/bash/1') @@%}
 alias tree='br --cmd :pt'
 {%@@ endif @@%}
 {%@@ if exists_in_path('lsd') @@%}
 alias ltree='lsd --tree'
 {%@@ endif @@%}
+
+# Create cd aliases
+alias 1='cd -'
+for (( i = 2; i <= 9; i++ ))
+  alias "$i"="cd -$i"
+
+alias g=git
+alias grm='git rm'
+alias gmv='git mv'
+# Convert Git aliases into shell aliases
+OLD_IFS="$IFS"
+IFS='
+'
+for galias in `git config --global --get-regex alias`; do
+  local i=$galias[(i)[[:space:]]]
+  local galias_key=$galias[1,$i-1]
+  local galias_value=$galias[$i+1,-1]
+  alias "g${galias_key#alias\.}"="git $galias_value"
+done
+IFS="$OLD_IFS"
 
 {%@@ if exists_in_path('brew') @@%}
 # These aliases are graciously taken from the Prezto Homebrew plugin; I have decided not to add the plugin
@@ -68,7 +82,7 @@ alias brewx='brew uninstall' # uninstalls a formula
 alias caski='brew install --cask' # installs a cask
 alias caskl='brew list --cask' # lists installed casks
 alias casko='brew outdated --cask' # lists casks which have an update available
-alias casks='brew search --casks' # same as brew search 
+alias casks='brew search --casks' # same as brew search
 alias caskx='brew uninstall --cask' # uninstalls a cask
 {%@@ endif @@%}
 
@@ -90,4 +104,4 @@ alias diff='diff -s'
 alias diff='diff -s --color=always'
 {%@@ endif @@%}
 alias cp='cp -v'
-
+alias grep='grep -n --color=always'

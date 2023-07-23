@@ -110,7 +110,7 @@ dotfiles:
     dst: ~/Library/Application Support/com.npmjs.Npm/npmrc
     link: absolute
   d_zdotdir:
-    src: net.sourceforge.Zsh
+    src: net.sourceforge.Zsh/omz
     dst: '{{@@ zdotdir @@}}'
     link: link_children
     template: true
@@ -119,6 +119,7 @@ dotfiles:
     - .zsh_history
     - .zsh_sessions
     - .zshdb_hist
+    - ignored-users.zsh*
     # See comments in .gitignore regarding these next two ignore patterns
     - zfunc/_*
     - '!zfunc/_python-workon-cwd'
@@ -131,12 +132,48 @@ dotfiles:
     - .zsh_history
     - .zsh_sessions
     - .zshdb_hist
+    - ignored-users.zsh*
     - bookmarks
     - zgen*
     - z.txt
     - '*/README.md'
     instignore:
     - '*/README.md'
+    - '*/zfunc/_*'
+    - '!zfunc/_python-workon-cwd'
+    actions:
+    - zshenv
+  d_zdotdir_minimal:
+    src: net.sourceforge.Zsh/minimal
+    dst: '{{@@ zdotdir @@}}'
+    link: link_children
+    template: true
+    cmpignore:
+    - .zcompdump*
+    - .zsh_history
+    - .zsh_sessions
+    - .zshdb_hist
+    - ignored-users.zsh*
+    - zfunc/_*
+    - '!zfunc/_python-workon-cwd'
+    - bookmarks
+    - zgen*
+    - z.txt
+    - '*/README.md'
+    upignore:
+    - .zcompdump*
+    - .zsh_history
+    - .zsh_sessions
+    - .zshdb_hist
+    - ignored-users.zsh*
+    - bookmarks
+    - zgen*
+    - z.txt
+    - '*/README.md'
+    instignore:
+    - '*/README.md'
+    - '*/zfunc/_*'
+    - '!zfunc/_python-workon-cwd'
     actions:
     - zshenv
   f_joeys_avit.zsh-theme:
@@ -184,7 +221,7 @@ profiles:
     - d_vim
     - f_ripgreprc
     - f_org.dystroy.broot_conf.toml
-    - d_zdotdir
+    - d_zdotdir_minimal
     - f_bat_config
     - f_git_config
     - f_tmux.conf
