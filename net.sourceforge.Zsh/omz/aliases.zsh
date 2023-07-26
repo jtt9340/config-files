@@ -26,6 +26,9 @@ fi
 {%@@ if exists_in_path('git') @@%}
 alias gitconfig="${EDITOR:-vim} {{@@ gitconfig_config_path @@}}"
 {%@@ endif @@%}
+{%@@ if exists_in_path('tmux') @@%}
+alias tmuxconfig="${EDITOR:-vim} {{@@ tmux_config_path @@}}"
+{%@@ endif @@%}
 
 # git aliases
 alias grm='git rm'
