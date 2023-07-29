@@ -62,9 +62,23 @@ IFS='
 '
 for galias in `git config --global --get-regex alias`; do
   local i=$galias[(i)[[:space:]]]
-  local galias_key=$galias[1,$i-1]
+  # Start at index 7 to exclude the "alias."
+  local galias_key=$galias[7,$i-1]
   local galias_value=$galias[$i+1,-1]
-  alias "g${galias_key#alias\.}"="git $galias_value"
+  if [[ $galias_key = i ]]; then
+    # Treat this alias specially because it's defined weird
+    function gi {
+      curl -sL https://www.toptal.com/developers/gitignore/api/$@
+    }
+  elif [[ $galias_value == \!* ]]; then
+    eval """
+    function g$galias_key {
+      $galias_value[2,-1]
+    }
+    """
+  else
+    alias "g$galias_key"="git $galias_value"
+  fi
 done
 IFS="$OLD_IFS"
 
