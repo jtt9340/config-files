@@ -1,1 +1,1 @@
-dotdrop>=1.10.3
+-e git+ssh://git@github.com/jtt9340/dotdrop.git@c1ab5cde540a1de53b24a847ef6c4b1d217c7f6b#egg=dotdrop
