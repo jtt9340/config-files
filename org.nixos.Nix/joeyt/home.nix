@@ -24,7 +24,7 @@ in {
       "ripgreprc".source =
         "${configFiles}/com.github.burntsushi.Ripgrep/ripgreprc";
       "zsh/zfunc" = {
-        source = "${configFiles}/net.sourceforge.Zsh/zfunc";
+        source = "${configFiles}/net.sourceforge.Zsh/omz/zfunc";
         recursive = true;
       };
       "bat/config".source = "${configFiles}/com.github.sharkdp.Bat/config";

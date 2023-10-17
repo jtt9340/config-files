@@ -129,7 +129,7 @@
     setopt correct # Spell check
 
     source ${xdgDataHome}/broot/launcher/bash/1
-    source ${configFiles}/net.sourceforge.Zsh/bookmark.zsh
+    source ${configFiles}/net.sourceforge.Zsh/omz/bookmark.zsh
   '';
 
   # Plugins not available in Oh-My-Zsh
