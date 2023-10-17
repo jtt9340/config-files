@@ -5,23 +5,28 @@
 let
   xuyuanp-nerdtree-git-plugin = buildVimPluginFrom2Nix rec {
     pname = "nerdtree-git-plugin";
-    version = "2020-12-05";
+    version = "2021-08-18";
     src = fetchFromGitHub {
       owner = "Xuyuanp";
       repo = pname;
-      rev = "5fa0e3e1487b17f8a23fc2674ebde5f55ce6a816";
-      sha256 = "0nwb3jla0rsg9vb52n24gjis9k4fwn38iqk13ixxd6w5pnn8ax9j";
+      rev = "e1fe727127a813095854a5b063c15e955a77eafb";
+      sha256 = "H3IxxQwz3Q1nO7oSDKCtoGCsoPDWO3jRjqtwp3Kp/TQ=";
     };
     meta.homepage = "https://github.com/Xuyuanp/nerdtree-git-plugin/";
   };
 in {
   enable = true;
+  defaultEditor = true;
 
   settings = {
     number = true;
     relativenumber = true;
     ignorecase = true;
     smartcase = true;
+    expandtab = true;
+    shiftwidth = 4;
+    tabstop = 4;
+    mouse = "a";
     undodir = [ "${xdgCacheHome}/vim/undo" ];
     directory = [ "${xdgCacheHome}/vim/swap" ];
     backupdir = [ "${xdgCacheHome}/vim/backup" ];
@@ -29,6 +34,8 @@ in {
 
   # For an explanation of all these options, see the .vimrc in this repository
   extraConfig = ''
+    set nocompatible
+
     augroup numbertoggle
       autocmd!
       autocmd BufEnter,FocusGained,InsertLeave * set relativenumber
@@ -58,12 +65,18 @@ in {
     noremap <silent> <expr> j (v:count == 0 ? 'gj' : 'j')
     noremap <silent> <expr> k (v:count == 0 ? 'gk' : 'k')
 
-    set tabstop=4 softtabstop=0 noexpandtab shiftwidth=4
-    autocmd BufRead,BufNewFile *.nix,*.zsh*,*.yaml set tabstop=2 softtabstop=0 expandtab shiftwidth=2
-    autocmd BufRead,BufNewFile *.py,*.js set expandtab
+    set softtabstop=0
+    autocmd BufRead,BufNewFile *.nix,*.zsh*,*.yaml set tabstop=2 shiftwidth=2
 
     set listchars=eol:$,tab:>-,trail:~,extends:>,precedes:<
     nnoremap <silent> <C-l> :set list!<CR>
+
+    if !exists(':DiffOrig')
+      command DiffOrig vert new | set bt=nofile | r ++edit
+        \ | wincmd p | diffthis
+    endif
+
+    set scrolloff=5
 
     autocmd StdinReadPre * let s:std_in = 1
     autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
