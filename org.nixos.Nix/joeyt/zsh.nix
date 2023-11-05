@@ -23,8 +23,8 @@
   # Where Zsh's dotfiles shall be located, relative to $HOME
   dotDir = ".config/zsh";
 
-  # Where the .zsh_history file is saved, again relative to $HOME
-  history.path = ".local/share/zsh/zsh_history";
+  # Where the .zsh_history file is saved
+  history.path = "${xdgDataHome}/zsh/zsh_history";
 
   # Environment variables that will be set for Zsh session
   sessionVariables = {
