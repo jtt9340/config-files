@@ -1,3 +1,5 @@
+stateVersion:
+
 { lib, pkgs, config, ... }:
 
 let
@@ -11,8 +13,7 @@ let
   xdgDataHome = config.xdg.dataHome;
   xdgCacheHome = config.xdg.cacheHome;
 in {
-  # (Hopefully) Temporary workaround for https://github.com/nix-community/home-manager/issues/3344
-  manual.manpages.enable = false;
+  home.stateVersion = stateVersion;
 
   xdg = {
     # Enable management of XDG Base Directories

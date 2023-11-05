@@ -4,7 +4,7 @@
 
 { config, pkgs, ... }:
 
-{
+rec {
   imports = [ # Include the results of the hardware scan.
     ./hardware-configuration.nix
     # Introduce a new NixOS option called home-manager.users
@@ -183,7 +183,8 @@
   # Periodically clean out the Nix store
   nix.gc = {
     automatic = true;
-    dates = "*-*-1,15 3:15"; # 3:15 AM (local time) on the 1st and 15th of every month (man systemd.time)
+    dates =
+      "*-*-1,15 3:15"; # 3:15 AM (local time) on the 1st and 15th of every month (man systemd.time)
     options = "--delete-older-than 365d";
   };
 
@@ -203,7 +204,7 @@
   };
 
   # Configure the Joey T user a little bit
-  home-manager.users.joeyt = import ./joeyt/home.nix;
+  home-manager.users.joeyt = (import ./joeyt/home.nix) system.stateVersion;
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
