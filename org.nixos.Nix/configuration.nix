@@ -79,8 +79,6 @@ rec {
     file
     # Web browser
     firefox
-    # Screenshots
-    flameshot
     # C/C++ compiler
     gcc
     # Distributed VCS
@@ -107,6 +105,8 @@ rec {
     peek
     # Integrate ripgrep (grep alternative) with additional document formats like PDFs and Word documents
     ripgrep-all
+    # Screenshots
+    spectacle
     # Put files in the trash from the command line
     trash-cli
     # Extract ZIP archives
@@ -138,6 +138,7 @@ rec {
 
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
+  programs.ssh.startAgent = true;
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
