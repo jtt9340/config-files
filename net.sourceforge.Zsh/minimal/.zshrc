@@ -56,8 +56,8 @@ autoload -Uz promptinit && promptinit
 prompt redhat
 
 # Make ctrl-left and ctrl-right go left and right by words
-bindkey ';5D' backward-word
-bindkey ';5C' forward-word
+bindkey '^[[1;5D' backward-word
+bindkey '^[[1;5C' forward-word
 
 ###############
 # Shell Options
