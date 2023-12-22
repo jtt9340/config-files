@@ -60,6 +60,10 @@ fi
 {%@@ endif @@%}
 {%@@ endif @@%}
 
+{%@@ if exists_in_path('ghcup') @@%}
+export GHCUP_SKIP_UPDATE_CHECK=true
+{%@@ endif @@%}
+
 # Tell Zsh to make all files in this directory
 export ZGEN_DIR=$ZDOTDIR/zgen
 export _Z_DATA=$ZDOTDIR/z.txt
