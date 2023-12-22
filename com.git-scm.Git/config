@@ -150,10 +150,10 @@
 	tv = !git tag | sort -V
 	unignore = update-index --no-assume-unchanged
 	unwip = !git rev-list --max-count=1 --format="%s" HEAD | grep -q \"\\--wip--\" && git reset HEAD~1
-	up = pull --rebase
-	upv = pull --rebase -v
-	upa = pull --rebase --autostash
-	upav = pull --rebase --autostash -v
+	pr = pull --rebase
+	prv = pull --rebase -v
+	pra = pull --rebase --autostash
+	prav = pull --rebase --autostash -v
 	wch = whatchanged -p --abbrev-commit --pretty=medium
 	wip = "!git add -A; git rm $(git ls-files --deleted) 2> /dev/null; git commit --no-verify --no-gpg-sign --message \"--wip-- [skip ci]\""
 	wt = worktree
