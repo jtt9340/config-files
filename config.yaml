@@ -140,7 +140,7 @@ dotfiles:
     instignore:
     - '*/README.md'
     - '*/zfunc/_*'
-    - '!zfunc/_python-workon-cwd'
+    - '!*/zfunc/_python-workon-cwd'
     actions:
     - zshenv
   d_zdotdir_minimal:
@@ -173,7 +173,7 @@ dotfiles:
     instignore:
     - '*/README.md'
     - '*/zfunc/_*'
-    - '!zfunc/_python-workon-cwd'
+    - '!*/zfunc/_python-workon-cwd'
     actions:
     - zshenv
   f_joeys_avit.zsh-theme:
