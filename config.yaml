@@ -7,7 +7,8 @@ config:
   dotpath: .
   workdir: templated
   keepdot: false
-  link_on_import: link
+  link_on_import: absolute
+  link_dotfile_default: absolute
   template_dotfile_default: false
   cmpignore:
   - '*/.DS_Store'
@@ -96,11 +97,13 @@ dotfiles:
     - '*/README.md'
     instignore:
     - '*/README.md'
+  f_coc_settings.json:
+    src: org.vim.Vim/coc-settings.json
+    dst: '~/.config/coc/coc-settings.json'
   f_org.dystroy.broot_conf.toml:
     src: org.dystroy.broot/conf.toml
     dst: "{{@@ '~/Library/Application Support/org.dystroy.broot/conf.toml' if profile\
       \ == 'macos' else '~/.config/broot/conf.toml' @@}}"
-    link: absolute
     template: true
   f_nixpkgs_config.nix:
     src: org.nixos.Nix/config.nix
@@ -111,7 +114,6 @@ dotfiles:
   f_npmrc:
     src: com.npmjs.Npm/npmrc
     dst: ~/Library/Application Support/com.npmjs.Npm/npmrc
-    link: absolute
   d_zdotdir:
     src: net.sourceforge.Zsh/omz
     dst: '{{@@ zdotdir @@}}'
@@ -180,32 +182,26 @@ dotfiles:
     actions:
     - zshenv
   f_joeys_avit.zsh-theme:
-    src: net.sourceforge.Zsh/joeys-avit.zsh-theme
+    src: net.sourceforge.Zsh/omz/joeys-avit.zsh-theme
     dst: '{{@@ zdotdir @@}}/themes/joeys-avit.zsh-theme'
-    link: absolute
     template: true
   f_ripgreprc:
     src: com.github.burntsushi.Ripgrep/ripgreprc
     dst: '{{@@ ripgrep_config_path @@}}'
-    link: absolute
   f_bat_config:
     src: com.github.sharkdp.Bat/config
     dst: "{{@@ '~/Library/Application Support/bat/config' if profile == 'macos' else\
       \ bat_config_path @@}}"
-    link: absolute
   f_git_config:
     src: com.git-scm.Git/config
     dst: '{{@@ gitconfig_config_path @@}}'
-    link: absolute
     template: true
   f_virtualenv.ini:
     src: io.pypa.virtualenv/virtualenv.ini
     dst: ~/Library/Application Support/virtualenv/virtualenv.ini
-    link: absolute
   f_tmux.conf:
     src: io.github.tmux/tmux.conf
     dst: '{{@@ tmux_config_path @@}}'
-    link: absolute
     chmod: '600'
     template: true
 profiles:
@@ -232,3 +228,4 @@ profiles:
     dotfiles:
     - f_org.dystroy.broot_conf.toml
     - f_joeys_avit.zsh-theme
+    - f_coc_settings.json

@@ -92,12 +92,19 @@ in {
     set updatetime=300
     highlight! link SignColumn LineNr
     let g:gitgutter_set_sign_backgrounds = 1
+
+    let g:coc_config_home = '~/.config/coc'
+
+    inoremap <expr> <cr> coc#pum#visible() ? coc#pum#confirm() : "\<CR>"
+
+    inoremap <silent><expr> <C-n> coc#refresh()
   '';
 
   plugins = with vimPlugins; [
     vim-toml
     nerdtree
     xuyuanp-nerdtree-git-plugin
+    coc-nvim
     vim-gitgutter
     vim-nix
   ];

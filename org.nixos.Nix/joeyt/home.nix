@@ -82,6 +82,8 @@ in {
     broot
     # A shell that aims to innovate on UNIX shells by using strongly-typed data structures as pipelines
     elvish
+    # JavaScript runtime - needed for coc.nvim
+    nodejs_18
     # A command line calculator with support for dimensional analysis
     nodePackages.insect
     # A simple scripting language
