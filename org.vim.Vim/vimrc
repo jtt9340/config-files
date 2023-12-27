@@ -58,6 +58,18 @@ if !exists(':DiffOrig') " Only define it when not defined already
         \ | wincmd p | diffthis
 endif
 
+{%@@ if profile == 'macos' @@%}
+command Vimconfig edit $HOME/Library/Application\ Support/org.vim.Vim/vimrc
+{%@@ else @@%}
+if !empty($XDG_CONFIG_HOME) && filereadable($XDG_CONFIG_HOME)
+    command Vimconfig edit $XDG_CONFIG_HOME/vim/vimrc
+elseif filereadable($HOME .. '/.vim/vimrc')
+    command Vimconfig edit $HOME/.vim/vimrc
+else
+    command Vimconfig edit $HOME/.vimrc
+endif
+{%@@ endif @@%}
+
 " Show matches as you find them
 if has('reltime')
     set incsearch
@@ -145,6 +157,12 @@ if isdirectory(s:dein_src)
     " or changed since the last Git commit
     call dein#add('airblade/vim-gitgutter')
 
+    " Completions
+    call dein#add('neoclide/coc.nvim', #{
+                \   merged: 0,
+                \   rev: 'release',
+                \ })
+
     " When running Vim inside Tmux, Ctrl-w + h/j/k/l move both between splits
     " and between Tmux panes
     call dein#add('christoomey/vim-tmux-navigator', #{
@@ -185,10 +203,27 @@ endif
 "     call dein#install()
 " endif
 
+if !exists('*dein#is_sourced') | finish | endif
+
 " Function to call when airblade/vim-gitgutter is sourced
-if exists('*dein#is_sourced') && dein#is_sourced('vim-gitgutter')
+if dein#is_sourced('vim-gitgutter')
     " Settings for vim-gitgutter
     set updatetime=300
     highlight! link SignColumn LineNr
     let g:gitgutter_set_sign_backgrounds = 1
+endif
+
+" Function to call when (if) neoclide/coc.nvim is sourced
+if dein#is_sourced('coc.nvim')
+    " From :help coc_config_home: "the directory which will be used to look
+    " for user's coc-settings.json""
+    let g:coc_config_home = '{{@@ vimdir @@}}'
+    " From :help coc_data_home: "the directory which will be used for data files"
+    let g:coc_data_home = g:coc_config_home .. '/coc'
+    " Make Enter instead of Ctrl-y insert completion
+    inoremap <expr> <cr> coc#pum#visible() ? coc#pum#confirm() : "\<CR>"
+    " In coc-settings.json, we disable automatic code completion suggestions
+    " since I find that annoying. So here we define the shortcut C-n to
+    " trigger completions
+   inoremap <silent><expr> <C-n> coc#refresh()
 endif
