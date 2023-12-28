@@ -138,7 +138,12 @@ rec {
 
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
-  programs.ssh.startAgent = true;
+  programs.ssh = {
+    startAgent = true;
+    extraConfig = ''
+      AddKeysToAgent yes
+    '';
+  };
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
