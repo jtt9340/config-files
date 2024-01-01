@@ -127,15 +127,6 @@ invocation = "touch {item}"
 execution = "{{@@ touch_exe @@}} {item}"
 leave_broot = false
 
-{%@@ if trash_exe @@%}
-[[verbs]]
-name = "trash"
-description = "Move to trash"
-invocation = "trash"
-execution = "{{@@ trash_exe @@}} {file}"
-leave_broot = false
-{%@@ endif @@%}
-
 {%@@ if profile != "nixos" @@%}
 [[verbs]]
 invocation = "zshconfig"

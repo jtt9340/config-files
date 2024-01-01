@@ -60,11 +60,11 @@ variables:
 dynvariables:
   bat_config_path: command -v bat >/dev/null && bat --config-file || echo $HOME/.bat-not-installed
   editor_exe: command -v vim >/dev/null && which vim || which nano
-  bat_exe: which bat || echo -n
+  bat_exe: command -v bat >/dev/null && which bat || echo -n
   touch_exe: which touch
-  trash_exe: which trash || echo -n
   ql_exe: '[ "$(uname)" = Darwin ] && command -v ql || echo -n'
-  markdown_exe: which markdown || command -v glow || printf ''
+  markdown_exe: command -v markdown >/dev/null && which markdown || command -v glow
+    || printf ''
 actions:
   zshenv: ln -i -s {{@@ _dotfile_abs_dst @@}}/.zshenv ~/.zshenv
 dotfiles:
@@ -99,11 +99,11 @@ dotfiles:
     - '*/README.md'
   f_coc_settings.json:
     src: org.vim.Vim/coc-settings.json
-    dst: '~/.config/coc/coc-settings.json'
+    dst: ~/.config/coc/coc-settings.json
   f_org.dystroy.broot_conf.toml:
     src: org.dystroy.broot/conf.toml
-    dst: "{{@@ '~/Library/Application Support/org.dystroy.broot/conf.toml' if profile\
-      \ == 'macos' else '~/.config/broot/conf.toml' @@}}"
+    dst: "{{@@ '~/Library/Application Support/org.dystroy.broot/conf.toml' if profile
+      == 'macos' else '~/.config/broot/conf.toml' @@}}"
     template: true
   f_nixpkgs_config.nix:
     src: org.nixos.Nix/config.nix
@@ -190,8 +190,8 @@ dotfiles:
     dst: '{{@@ ripgrep_config_path @@}}'
   f_bat_config:
     src: com.github.sharkdp.Bat/config
-    dst: "{{@@ '~/Library/Application Support/bat/config' if profile == 'macos' else\
-      \ bat_config_path @@}}"
+    dst: "{{@@ '~/Library/Application Support/bat/config' if profile == 'macos' else
+      bat_config_path @@}}"
   f_git_config:
     src: com.git-scm.Git/config
     dst: '{{@@ gitconfig_config_path @@}}'
