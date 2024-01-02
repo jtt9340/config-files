@@ -1,0 +1,11 @@
+# A fancier Python shell
+ipython
+
+# Print installed (Python) packages as a dependency tree
+pipdeptree
+
+# Tool for creating virtual environments...more powerful than Python's built-in venv module
+virtualenv
+
+# Download YouTube videos!
+youtube-dl

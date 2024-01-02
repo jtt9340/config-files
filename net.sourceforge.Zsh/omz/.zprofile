@@ -159,5 +159,6 @@ export ASDF_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/asdf"
 export ASDF_DATA_DIR="${XDG_DATA_HOME:-$HOME/.local/share}/asdf"
 {%@@ endif @@%}
 export ASDF_CRATE_DEFAULT_PACKAGES_FILE="{{@@ dirname(default_cargo_crates_path) @@}}"
+export ASDF_PYTHON_DEFAULT_PACKAGES_FILE="{{@@ dirname(default_python_packages_path) @@}}"
 export ASDF_CONFIG_FILE="$ASDF_DIR/asdfrc"
 [[ -d "$ASDF_DIR" ]] && path+="$ASDF_DIR/bin"
