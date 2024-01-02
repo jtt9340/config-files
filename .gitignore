@@ -3,6 +3,7 @@
 
 # Unecessary Python artifacts
 **/__pycache__
+
 # Call your Python virtualenv 'env'
 env
 
@@ -24,9 +25,3 @@ uservariables.yaml
 # so since those can be re-generated from said programs we
 # don't need to check this into Git either.
 net.sourceforge.Zsh/*/zfunc/_*
-
-# Except this function, I want this one. It has been graciously
-# taken from Prezto and allows your Python virtualenvs to automatically
-# be activated and deactivated upon entering and leaving directories that
-# contain them.
-!net.sourceforge.Zsh/*/zfunc/_python-workon-cwd

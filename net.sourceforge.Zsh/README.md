@@ -88,13 +88,7 @@ autoload <function-name>
 The benefit to autoloading functions rather than defining them directly in your `.zshrc` is that they are lazy
 loaded &#x2014; the function code will not be read and compiled to bytecode until the first time you call it.
 The only downside to this method is that you cannot see the source code of a function with the `functions` command
-until after you call it at least once.
-
-The [`zfunc`](omz/zfunc) directory contains many functions I autoload that I find useful. I think the most important one
-to point out is `_python-workon-cwd`. In addition to lazy loading, Zsh uses function autoloading for command completions
-and shell hooks &#x2014; functions that are invoked on a certain event. One such event is when the current directory changes.
-This function looks for a `.venv` file and, if present, activates the Python virtual environment named in that file. The
-virtual environment is automatically deactivated upon leaving the directory.
+until after you call it at least once. The [`zfunc`](omz/zfunc) directory contains many functions I autoload that I find useful.
 
 [zsh]: https://zsh.sourceforge.io/
 [omz]: https://ohmyz.sh

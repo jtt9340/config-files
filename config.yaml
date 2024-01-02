@@ -137,7 +137,6 @@ dotfiles:
     - ignored-users.zsh*
     # See comments in .gitignore regarding these next two ignore patterns
     - zfunc/_*
-    - '!zfunc/_python-workon-cwd'
     - bookmarks
     - zgen*
     - z.txt
@@ -155,7 +154,6 @@ dotfiles:
     instignore:
     - '*/README.md'
     - '*/zfunc/_*'
-    - '!*/zfunc/_python-workon-cwd'
     actions:
     - zshenv
   d_zdotdir_minimal:
@@ -170,7 +168,6 @@ dotfiles:
     - .zshdb_hist
     - ignored-users.zsh*
     - zfunc/_*
-    - '!zfunc/_python-workon-cwd'
     - bookmarks
     - zgen*
     - z.txt
@@ -188,7 +185,6 @@ dotfiles:
     instignore:
     - '*/README.md'
     - '*/zfunc/_*'
-    - '!*/zfunc/_python-workon-cwd'
     actions:
     - zshenv
   f_joeys_avit.zsh-theme:

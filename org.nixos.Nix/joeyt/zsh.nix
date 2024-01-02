@@ -95,7 +95,6 @@
     # inside of it are, and those functions have not been templated. So I can
     # only manually autoload the function definitions that do not rely on Jinja
     # templating.
-    autoload _python-workon-cwd
     autoload j
     autoload mkcd
     autoload print_array
@@ -122,7 +121,6 @@
     }
 
     autoload -Uz add-zsh-hook
-    add-zsh-hook chpwd _python-workon-cwd
     add-zsh-hook chpwd lsGF
 
     setopt NO_CASE_GLOB # Case-insensitive globbing
