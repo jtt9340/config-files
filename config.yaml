@@ -32,6 +32,11 @@ variables:
       else '~/.config/vim' if exists('~/.config/vim')
       else '~/.vim'
     @@}}
+  broot_config_path: >-
+    {{@@
+      '~/Library/Application Support/org.dystroy.broot/conf.toml' if profile == 'macos'
+      else '~/.config/broot/conf.toml'
+    @@}}
   zdotdir: >-
     {{@@
       '~/Library/Application Support/net.sourceforge.Zsh' if profile == 'macos'
@@ -102,8 +107,7 @@ dotfiles:
     dst: ~/.config/coc/coc-settings.json
   f_org.dystroy.broot_conf.toml:
     src: org.dystroy.broot/conf.toml
-    dst: "{{@@ '~/Library/Application Support/org.dystroy.broot/conf.toml' if profile
-      == 'macos' else '~/.config/broot/conf.toml' @@}}"
+    dst: '{{@@ broot_config_path @@}}'
     template: true
   f_nixpkgs_config.nix:
     src: org.nixos.Nix/config.nix

@@ -41,20 +41,15 @@ alias lab='ls -AbFG'
         exists(env.get('XDG_DATA_HOME', default='') + '/broot/launcher/bash/1') or
         exists(env['HOME'] + '/.local/share/broot/launcher/bash/1') @@%}
 alias lbr='br -sdp'
+{%@@ if not exists_in_path('tree') @@%}
+alias tree='br --cmd :pt'
+{%@@ endif @@%}
 {%@@ endif @@%}
 
 {%@@ if exists_in_path('lsd') @@%}
 alias lsdl='lsd -lF --date relative'
 alias lsda='lsd -aF'
 alias lsdla='lsd -laF --date relative'
-{%@@ endif @@%}
-
-{%@@ if exists(env['HOME'] + '/Library/Application Support/org.dystroy.broot/launcher/bash/1') or
-        exists(env.get('XDG_DATA_HOME', default='') + '/broot/launcher/bash/1') or
-        exists(env['HOME'] + '/.local/share/broot/launcher/bash/1') @@%}
-alias tree='br --cmd :pt'
-{%@@ endif @@%}
-{%@@ if exists_in_path('lsd') @@%}
 alias ltree='lsd --tree'
 {%@@ endif @@%}
 
