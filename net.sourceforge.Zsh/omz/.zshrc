@@ -32,6 +32,7 @@ fpath+=($(brew --prefix)/share/zsh/site-functions $ZDOTDIR/zfunc)
 {%@@ else @@%}
 fpath+=$ZDOTDIR/zfunc
 {%@@ endif @@%}
+[[ -d "$ASDF_DIR" ]] && fpath+="$ASDF_DIR/completions"
 
 #
 # Source the init script created by zgenom
@@ -149,11 +150,6 @@ done
 HB_CNF_HANDLER="$(brew --prefix)/Homebrew/Library/Taps/homebrew/homebrew-command-not-found/handler.sh"
 [ -f "$HB_CNF_HANDLER" ] && source "$HB_CNF_HANDLER"
 {%@@ endif @@%}
-
-# Automatically activate and deactivate Python virtualenv upon directory entry and exit
-type add-zsh-hook &>/dev/null || autoload -Uz add-zsh-hook
-autoload _python-workon-cwd
-add-zsh-hook chpwd _python-workon-cwd
 
 # Run ls when changing directories
 add-zsh-hook chpwd lsGF

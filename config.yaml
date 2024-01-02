@@ -62,6 +62,12 @@ variables:
       env['XDG_CONFIG_HOME'] + '/tmux/tmux.conf' if env['XDG_CONFIG_HOME'] is string
       else '~/.tmux.conf'
     @@}}
+  default_cargo_crates_path: >-
+    {{@@
+      '~/Library/Application Support/com.asdf-vm.Asdf/.default-cargo-crates' if profile == 'macos'
+      else env['XDG_CONFIG_HOME'] + '/asdf-rust/.default-cargo-crates' if env['XDG_CONFIG_HOME'] is string
+      else '~/.config/asdf-rust/.default-cargo-crates'
+    @@}}
 dynvariables:
   bat_config_path: command -v bat >/dev/null && bat --config-file || echo $HOME/.bat-not-installed
   editor_exe: command -v vim >/dev/null && which vim || which nano
@@ -208,6 +214,9 @@ dotfiles:
     dst: '{{@@ tmux_config_path @@}}'
     chmod: '600'
     template: true
+  f_default-cargo-crates:
+    src: com.asdf-vm.Asdf/default-cargo-crates
+    dst: '{{@@ default_cargo_crates_path @@}}'
 profiles:
   macos:
     dotfiles:
@@ -219,6 +228,7 @@ profiles:
     - f_bat_config
     - f_git_config
     - f_virtualenv.ini
+    - f_default-cargo-crates
   linux:
     dotfiles:
     - d_vim
@@ -228,6 +238,7 @@ profiles:
     - f_bat_config
     - f_git_config
     - f_tmux.conf
+    - f_default-cargo-crates
   nixos:
     dotfiles:
     - f_org.dystroy.broot_conf.toml

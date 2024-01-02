@@ -1,0 +1,14 @@
+// A cat/less alternative with syntax highlighting
+bat
+
+// More user-friendly alternative to find
+fd-find
+
+// grep written in Rust(tm), needed for bat-extras
+ripgrep
+
+// An ls clone with more colors and icons
+lsd
+
+// Tree-based file manager and fuzzy finder
+broot

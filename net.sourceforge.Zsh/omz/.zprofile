@@ -147,3 +147,17 @@ export LESSHISTFILE="${XDG_CACHE_HOME:-$HOME/.cache}/less/history"
 # Tell ripgrep where it's configuration file is
 export RIPGREP_CONFIG_PATH={{@@ ripgrep_config_path | shellescape @@}}
 {%@@ endif @@%}
+
+# asdf
+# Not installed by default...to install run
+# git clone https://github.com/asdf-vm/asdf.git "$ASDF_DIR" --branch v0.13.1
+# (or whatever the latest stable version is)
+{%@@ if profile == 'macos' @@%}
+export ASDF_DIR="$HOME/Library/Application Support/com.asdf-vm.Asdf"
+{%@@ else @@%}
+export ASDF_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/asdf"
+export ASDF_DATA_DIR="${XDG_DATA_HOME:-$HOME/.local/share}/asdf"
+{%@@ endif @@%}
+export ASDF_CRATE_DEFAULT_PACKAGES_FILE="{{@@ dirname(default_cargo_crates_path) @@}}"
+export ASDF_CONFIG_FILE="$ASDF_DIR/asdfrc"
+[[ -d "$ASDF_DIR" ]] && path+="$ASDF_DIR/bin"

@@ -11,6 +11,7 @@ zstyle :compinstall filename "$ZDOTDIR/.zshrc"
 
 # Enabling shell completions
 fpath+="$ZDOTDIR/zfunc"
+[[ -d "$ASDF_DIR" ]] && fpath+="$ASDF_DIR/completions"
 
 autoload -Uz compinit
 compinit
@@ -106,11 +107,6 @@ done
 ###############
 # Miscellaneous
 ###############
-# Automatically activate and deactivate Python virtualenv upon directory entry and exit
-type add-zsh-hook &>/dev/null || autoload -Uz add-zsh-hook
-autoload _python-workon-cwd
-add-zsh-hook chpwd _python-workon-cwd
-
 # Run ls when changing directories
 add-zsh-hook chpwd lsGF
 
