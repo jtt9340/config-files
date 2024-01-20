@@ -1,0 +1,8 @@
+# Create and run containers that are used as development environments
+@devcontainers/cli
+
+# CLI calculator that understands dimensional analysis
+insect
+
+# Render markdown to terminal
+cli-markdown

@@ -158,7 +158,10 @@ export ASDF_DIR="$HOME/Library/Application Support/com.asdf-vm.Asdf"
 export ASDF_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/asdf"
 export ASDF_DATA_DIR="${XDG_DATA_HOME:-$HOME/.local/share}/asdf"
 {%@@ endif @@%}
+{#@@ Annoyingly enough, the Rust and Python asdf plugins append ".default-cargo-crates"/".default-python-packages"
+to the default path whereas the Node plugin uses the path directly, hence why some of these call dirname and some don't. @@#}
 export ASDF_CRATE_DEFAULT_PACKAGES_FILE="{{@@ dirname(default_cargo_crates_path) @@}}"
 export ASDF_PYTHON_DEFAULT_PACKAGES_FILE="{{@@ dirname(default_python_packages_path) @@}}"
+export ASDF_NPM_DEFAULT_PACKAGES_FILE=""{{@@ default_npm_packages_path @@}}
 export ASDF_CONFIG_FILE="$ASDF_DIR/asdfrc"
 [[ -d "$ASDF_DIR" ]] && path+="$ASDF_DIR/bin"

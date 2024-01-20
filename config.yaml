@@ -74,6 +74,12 @@ variables:
       else env['XDG_CONFIG_HOME'] + '/asdf-python/.default-python-packages' if env['XDG_CONFIG_HOME'] is string
       else '~/.config/asdf-python/.default-python-packages'
     @@}}
+  default_npm_packages_path: >-
+    {{@@
+      '~/Library/Application Support/com.asdf-vm.Asdf/.default-npm-packages' if profile == 'macos'
+      else env['XDG_CONFIG_HOME'] + '/asdf-nodejs/.default-npm-packages' if env['XDG_CONFIG_HOME'] is string
+      else '~/.config/asdf-nodejs/.default-npm-packages'
+    @@}}
 dynvariables:
   bat_config_path: command -v bat >/dev/null && bat --config-file || echo $HOME/.bat-not-installed
   editor_exe: command -v vim >/dev/null && which vim || which nano
@@ -222,6 +228,9 @@ dotfiles:
   f_default-python-packages:
     src: com.asdf-vm.Asdf/default-python-packages
     dst: '{{@@ default_python_packages_path @@}}'
+  f_default-npm-packages:
+    src: com.asdf-vm.Asdf/default-npm-packages
+    dst: '{{@@ default_npm_packages_path @@}}'
 profiles:
   macos:
     dotfiles:
@@ -235,6 +244,7 @@ profiles:
     - f_virtualenv.ini
     - f_default-cargo-crates
     - f_default-python-packages
+    - f_default-npm-packages
   linux:
     dotfiles:
     - d_vim
@@ -246,6 +256,7 @@ profiles:
     - f_tmux.conf
     - f_default-cargo-crates
     - f_default-python-packages
+    - f_default-npm-packages
   nixos:
     dotfiles:
     - f_org.dystroy.broot_conf.toml
