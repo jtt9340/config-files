@@ -8,7 +8,7 @@ let
       pname = "dotdrop";
       version = "1.14.0";
 
-      src = python310.pkgs.fetchPypi {
+      src = python311.pkgs.fetchPypi {
         inherit pname;
         inherit version;
         sha256 = "sha256-Z3Nhrzeu9XWs1SM946ixs9i3vPHzWHlG0InjRFA6ok0=";

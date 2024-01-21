@@ -174,6 +174,15 @@ rec {
     desktopManager.plasma5.enable = true;
   };
 
+  services.avahi = {
+    enable = true;
+    nssmdns = true;
+    publish = {
+      enable = true;
+      addresses = true;
+    };
+  };
+
   # "On 64-bit systems, if you want OpenGL for 32-bit programs such as in Wine, you should also set the following"
   # Could this be why programs fail with an error saying my version of OpenGL is too old?
   # hardware.opengl.driSupport32Bit = true;
