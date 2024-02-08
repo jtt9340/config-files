@@ -1,5 +1,5 @@
 uservariables:
-  git_email: "Git email"
+  git_email: Git email
 config:
   backup: true
   banner: false
@@ -7,20 +7,27 @@ config:
   dotpath: org.nixos.Nix
   link_dotfile_default: nolink
   template_dotfile_default: false
+  cmpignore:
+  - '*/README.md'
+  instignore:
+  - '*/README.md'
   import_variables:
   - uservariables.yaml:optional
 dotfiles:
-  f_etc_nixos_configuration.nix:
-    src: configuration.nix
-    dst: /etc/nixos/configuration.nix
-    link: nolink
-    template: false
-  d_joeyt:
-    src: joeyt
-    dst: /etc/nixos/joeyt
+  d_etc_nixos:
+    src: .
+    dst: /etc/nixos
     template: true
+    instignore:
+    - '*/config.nix'
+    - '*/darwin-configuration.nix'
+    cmpignore:
+    - '*/config.nix'
+    - '*/darwin-configuration.nix'
+    upignore:
+    - '*/config.nix'
+    - '*/configuration.nix'
 profiles:
   nixos:
     dotfiles:
-    - f_etc_nixos_configuration.nix
-    - d_joeyt
+    - d_etc_nixos

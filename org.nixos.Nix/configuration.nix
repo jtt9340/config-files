@@ -54,7 +54,12 @@ rec {
   # nixpkgs.config.allowUnfree = true;
 
   # Configure Zsh as an interactive shell
-  programs.zsh.enable = true;
+  programs.zsh = {
+    enable = true;
+    # If true, then compinit is called in /etc/zshrc
+    # See https://github.com/rycee/home-manager/issues/108
+    enableCompletion = false;
+  };
 
   # Install wireshark
   programs.wireshark = {
@@ -89,12 +94,16 @@ rec {
     hunspellDicts.en-us
     # Terminal-based system monitor
     htop
+    # A command line calculator with support for dimensional analysis
+    nodePackages.insect
     # Text editor part of the KDE ecosystem
     kate
+    # SSH alternative that allows for interrupted connections
+    mosh
     # PDF viewer part of the KDE ecosystem
     okular
-    # A files database for nixpkgs
-    nix-index
+    # An opinionated formatter for Nix
+    nixfmt
     # Generate SHA-256 sums from Git repositories
     nix-prefetch-git
     # Generate SHA-256 sums from GitHub repositories
@@ -124,6 +133,9 @@ rec {
     # A UNIX shell alternative to Bash
     zsh
   ];
+
+  # Shell completion for system packages
+  environment.pathsToLink = [ "/share/zsh" ];
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
@@ -180,8 +192,10 @@ rec {
     allowReboot = false;
   };
 
-  # Periodically clean out the Nix store
-  nix.gc = {
+  nix = {
+    settings.experimental-features = [ "nix-command" "flakes" ];
+    # Periodically clean out the Nix store
+    gc = {
     automatic = true;
     dates =
       "*-*-1,15 3:15"; # 3:15 AM (local time) on the 1st and 15th of every month (man systemd.time)

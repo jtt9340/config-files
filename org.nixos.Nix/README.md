@@ -47,15 +47,13 @@ that Home Manager can install this file as a package.
 This is [my vim configuration](../org.vim.Vim/README.md) ported to the Nix expression language,
 so that Home Manager can install this file as a package.
 
+### [`joeyt/coc-settings.nix`](joeyt/coc-settings.nix)
+This is the settings for [the CoC Vim extension][coc.nvim] ported to the Nix expression language,
+so that Home Manager can install this file as a package.
+
 ### [`joeyt/zsh.nix`](joeyt/zsh.nix)
 This is [my zsh configuration](../net.sourceforge.Zsh/README.md) ported to the Nix expression
 language, so that Home Manager can install this file as a package.
-
-### [`joeyt/z-lua.nix`](joeyt/z-lua.nix)
-In [my zsh configuration](../net.sourceforge.Zsh/README.md) I use the
-[agkozak/zsh-z][zsh-z] plugin, but this is not available as a built-in
-module in Home Manager. While I could make one, there was already [z-lua] so I opted to use that
-and configure it via this file.
 
 ### [`joeyt/home.nix`](joeyt/home.nix)
 In addition to being the file that imports the configurations for all of the above into one
@@ -63,5 +61,4 @@ centralized file that is imported by `configuration.nix`, this also installs som
 didn't feel belonged in the system-wide configuration file, since I may stop using them at some
 point.
 
-[zsh-z]: https://github.com/agkozak/zsh-z
-[z-lua]: https://github.com/skywind3000/z.lua
+[coc.nvim]: https://github.com/neoclide/coc.nvim

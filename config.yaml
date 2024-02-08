@@ -12,12 +12,15 @@ config:
   cmpignore:
   - '*/.DS_Store'
   - '*.swp'
+  - '*/README.md'
   upignore:
   - '*/.DS_Store'
   - '*.swp'
+  - '*/README.md'
   instignore:
   - '*/.DS_Store'
   - '*.swp'
+  - '*/README.md'
   filter_file:
   - re.deadc0de.dotdrop/filters.py
   import_variables:
@@ -82,7 +85,6 @@ dotfiles:
     - '*/viminfo'
     - '*/view'
     - '*/pack'
-    - '*/README.md'
     cmpignore:
     - '*/.netrwhist*'
     - '*/backup'
@@ -93,24 +95,19 @@ dotfiles:
     - '*/viminfo'
     - '*/view'
     - '*/pack'
-    - '*/README.md'
-    instignore:
-    - '*/README.md'
   f_org.dystroy.broot_conf.toml:
     src: org.dystroy.broot/conf.toml
     dst: "{{@@ '~/Library/Application Support/org.dystroy.broot/conf.toml' if profile\
       \ == 'macos' else '~/.config/broot/conf.toml' @@}}"
     link: absolute
     template: true
-  f_nixpkgs_config.nix:
-    src: org.nixos.Nix/config.nix
-    dst: ~/.config/nixpkgs/config.nix
   f_micro_settings.json:
     src: io.github.micro-editor/settings.json
     dst: ~/.config/micro/settings.json
   f_npmrc:
     src: com.npmjs.Npm/npmrc
     dst: ~/Library/Application Support/com.npmjs.Npm/npmrc
+    template: true
     link: absolute
   d_zdotdir:
     src: net.sourceforge.Zsh/omz
@@ -129,7 +126,6 @@ dotfiles:
     - bookmarks
     - zgen*
     - z.txt
-    - '*/README.md'
     upignore:
     - .zcompdump*
     - .zsh_history
@@ -139,9 +135,7 @@ dotfiles:
     - bookmarks
     - zgen*
     - z.txt
-    - '*/README.md'
     instignore:
-    - '*/README.md'
     - '*/zfunc/_*'
     - '!*/zfunc/_python-workon-cwd'
     actions:
@@ -162,7 +156,6 @@ dotfiles:
     - bookmarks
     - zgen*
     - z.txt
-    - '*/README.md'
     upignore:
     - .zcompdump*
     - .zsh_history
@@ -172,15 +165,13 @@ dotfiles:
     - bookmarks
     - zgen*
     - z.txt
-    - '*/README.md'
     instignore:
-    - '*/README.md'
     - '*/zfunc/_*'
     - '!*/zfunc/_python-workon-cwd'
     actions:
     - zshenv
   f_joeys_avit.zsh-theme:
-    src: net.sourceforge.Zsh/joeys-avit.zsh-theme
+    src: net.sourceforge.Zsh/omz/joeys-avit.zsh-theme
     dst: '{{@@ zdotdir @@}}/themes/joeys-avit.zsh-theme'
     link: absolute
     template: true
@@ -208,6 +199,19 @@ dotfiles:
     link: absolute
     chmod: '600'
     template: true
+  d_nixpkgs:
+    src: org.nixos.Nix
+    dst: ~/.nixpkgs
+    template: true
+    instignore:
+    - '*/config.nix'
+    - '*/configuration.nix'
+    cmpignore:
+    - '*/config.nix'
+    - '*/configuration.nix'
+    upignore:
+    - '*/config.nix'
+    - '*/configuration.nix'
 profiles:
   macos:
     dotfiles:
@@ -219,6 +223,10 @@ profiles:
     - f_bat_config
     - f_git_config
     - f_virtualenv.ini
+  nix-darwin:
+    dotfiles:
+    - d_nixpkgs
+    - f_joeys_avit.zsh-theme
   linux:
     dotfiles:
     - d_vim
