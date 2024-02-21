@@ -68,7 +68,10 @@ dynvariables:
   ql_exe: '[ "$(uname)" = Darwin ] && command -v ql || echo -n'
   markdown_exe: which markdown || command -v glow || printf ''
 actions:
-  zshenv: ln -i -s {{@@ _dotfile_abs_dst @@}}/.zshenv ~/.zshenv
+  zshenv: ln -i -s {{@@ _dotfile_abs_dst | shellescape @@}}/.zshenv ~/.zshenv
+  # The action string is first processed by Jinja and then by Python's str.format, so we need
+  # to escape the {} passed to find
+  nixfmt: find {{@@ _dotfile_abs_dst | shellescape @@}} -name \*.nix -execdir nixfmt {{}} +
 dotfiles:
   d_vim:
     src: org.vim.Vim
@@ -201,17 +204,29 @@ dotfiles:
     template: true
   d_nixpkgs:
     src: org.nixos.Nix
-    dst: ~/.nixpkgs
+    dst: "{{@@ env['XDG_CONFIG_HOME'] @@}}/nix"
     template: true
     instignore:
     - '*/config.nix'
-    - '*/configuration.nix'
+    - '*/*-configuration.nix'
     cmpignore:
     - '*/config.nix'
-    - '*/configuration.nix'
+    - '*/*-configuration.nix'
+    - '*/channels'
+    - '*/defexpr'
+    - '*/profile'
+    - '*/profiles'
+    - '*/repl-history'
     upignore:
     - '*/config.nix'
-    - '*/configuration.nix'
+    - '*/*-configuration.nix'
+    - '*/channels'
+    - '*/defexpr'
+    - '*/profile'
+    - '*/profiles'
+    - '*/repl-history'
+    actions:
+    - nixfmt
 profiles:
   macos:
     dotfiles:

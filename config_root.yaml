@@ -20,13 +20,13 @@ dotfiles:
     template: true
     instignore:
     - '*/config.nix'
-    - '*/darwin-configuration.nix'
+    - '*/*-configuration.nix'
     cmpignore:
     - '*/config.nix'
-    - '*/darwin-configuration.nix'
+    - '*/*-configuration.nix'
     upignore:
     - '*/config.nix'
-    - '*/configuration.nix'
+    - '*/*-configuration.nix'
 profiles:
   nixos:
     dotfiles:

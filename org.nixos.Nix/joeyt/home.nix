@@ -23,7 +23,8 @@ in lib.mkMerge [
       configFile = {
         "nixpkgs/config.nix".source = /${configFiles}/org.nixos.Nix/config.nix;
         "npm/npmrc".source = /${configFiles}/com.npmjs.Npm/npmrc;
-        "ripgrep/ripgreprc".source = /${configFiles}/com.github.burntsushi.Ripgrep/ripgreprc;
+        "ripgrep/ripgreprc".source =
+          /${configFiles}/com.github.burntsushi.Ripgrep/ripgreprc;
         "coc/coc-settings.json".source =
           (import ./coc-settings.nix) (pkgs.formats.json { }).generate;
         # Instead of just symlinking the entire zsh/zfunc directory we have to do it file

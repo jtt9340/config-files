@@ -58,8 +58,8 @@
       PATH="$HOME/.local/bin:$PATH"
     fi
 
-    if [ -x "$HOME/.zshenv.local" ]; then
-      source "$HOME/.zshenv.local"
+    if [ -x "$ZDOTDIR/.zshenv.local" ]; then
+      source "$ZDOTDIR/.zshenv.local"
     fi
   '' + optionalString isDarwin ''
     if [ -z "''${path[(r)/usr/local/sbin]}" ]; then
@@ -85,15 +85,8 @@
     COMPLETION_WAITING_DOTS = true;
     DISABLE_UNTRACKED_FILES_DIRTY = true;
     HYPHEN_INSENSITIVE = true;
-    ZSH_PLUGINS_ALIAS_TIPS_TEXT = "Found existing alias: ";
-    ZSH_PLUGINS_ALIAS_TIPS_EXCLUDES = "_";
     ZSH_THEME_VIRTUALENV_PREFIX = "⟨";
     ZSH_THEME_VIRTUALENV_SUFFIX = "⟩";
-    # Tell z.lua where to store its data file    
-    _ZL_DATA = "${xdgDataHome}/z.txt";
-    # Tell z.lua which command-line fuzzy finder to use
-    _ZL_FZF = "sk";
-    _ZL_FZF_FLAG = "--no-sort";
   };
 
   # Extra commands that should be added to .zshrc before compinit
@@ -105,6 +98,14 @@
 
   # Extra commands that should be added to .zshrc
   initExtra = ''
+    export ZSH_PLUGINS_ALIAS_TIPS_TEXT='Found existing alias: '
+    export ZSH_PLUGINS_ALIAS_TIPS_EXCLUDES='_'
+    # Tell z.lua where to store its data file    
+    export _ZL_DATA="''${ZDOTDIR:-$XDG_CONFIG_HOME/zsh}/z.txt"
+    # Tell z.lua which command-line fuzzy finder to use
+    export _ZL_FZF='sk'
+    export _ZL_FZF_FLAG='--no-sort'
+
     for fn in "$ZDOTDIR/zfunc"/*; do
       autoload $fn
     done
