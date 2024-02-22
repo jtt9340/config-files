@@ -253,5 +253,4 @@ profiles:
     - f_tmux.conf
   nixos:
     dotfiles:
-    - f_org.dystroy.broot_conf.toml
     - f_joeys_avit.zsh-theme

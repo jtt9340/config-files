@@ -128,7 +128,7 @@ in lib.mkMerge [
       # Configure Zsh
       zsh = (import ./zsh.nix) {
         inherit (pkgs) zsh-nix-shell fetchFromGitHub;
-        inherit (lib) optionalAttrs optionalString;
+        inherit (lib) optionalAttrs optionalString escapeShellArg;
         inherit (pkgs.stdenv) isLinux isDarwin;
         inherit (lib.strings) removePrefix;
         inherit configFiles xdgConfigHome xdgDataHome;
@@ -161,6 +161,24 @@ in lib.mkMerge [
           batman
           prettybat
         ];
+      };
+
+      # Tree-based file manager and fuzzy finder
+      broot = {
+        enable = true;
+        enableFishIntegration = false;
+        enableNushellIntegration = false;
+        settings = {
+          default_flags = "g";
+          icon_theme = "vscode";
+          verbs = [
+            {
+              name = "bat";
+              invocation = "bat";
+              execution = "${pkgs.bat}/bin/bat {file}";
+            }
+          ];
+        };
       };
 
       # Git config
@@ -198,8 +216,6 @@ in lib.mkMerge [
 
     home.packages = with pkgs;
       [
-        # Tree-based file manager and fuzzy finder
-        broot
         # Chat app
         discord
         # Java IDE

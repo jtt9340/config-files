@@ -1,7 +1,7 @@
 { zsh-nix-shell, fetchFromGitHub # Function for cloning GitHub repositories
 , optionalAttrs # If the first argument is true return the second argument, else return {}
 , optionalString # If the first argument is true return the second argument, else return ""
-, removePrefix, isLinux, isDarwin, home # $HOME
+, escapeShellArg, removePrefix, isLinux, isDarwin, home # $HOME
 , configFiles # The path to my "config-files" repo
 , xdgConfigHome # The path to $XDG_CONFIG_HOME
 , xdgDataHome # The path to $XDG_DATA_HOME
@@ -105,6 +105,7 @@
     # Tell z.lua which command-line fuzzy finder to use
     export _ZL_FZF='sk'
     export _ZL_FZF_FLAG='--no-sort'
+    export BROOT_CONFIG_DIR=${escapeShellArg xdgConfigHome}/broot
 
     for fn in "$ZDOTDIR/zfunc"/*; do
       autoload $fn
@@ -117,7 +118,6 @@
     setopt NO_CASE_GLOB # Case-insensitive globbing
     setopt correct # Spell check
 
-    source "${xdgDataHome}/broot/launcher/bash/1"
     source "${configFiles}/net.sourceforge.Zsh/omz/bookmark.zsh"
     [ -x "$ZDOTDIR/.zshrc.local" ] && source "$ZDOTDIR/.zshrc.local"
   '';
