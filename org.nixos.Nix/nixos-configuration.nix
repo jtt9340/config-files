@@ -71,6 +71,8 @@
     hunspellDicts.en-us
     # Text editor part of the KDE ecosystem
     kate
+    # SSH alternative that allows for interrupted connections
+    mosh
     # PDF viewer part of the KDE ecosystem
     okular
     # Does what it says on the tin

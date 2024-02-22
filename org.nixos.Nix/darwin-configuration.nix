@@ -20,6 +20,8 @@
       "homebrew/cask-fonts"
     ];
     brews = [
+      # SSH alternative that allows for interrupted connections
+      "mosh"
       # SSHFS: Mount folders on remote machines as local mounts via SSH
       "gromgit/fuse/sshfs-mac"
     ];

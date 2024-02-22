@@ -42,8 +42,6 @@
           htop
           # A command line calculator with support for dimensional analysis
           nodePackages.insect
-          # SSH alternative that allows for interrupted connections
-          mosh
           # Format nix files
           nixfmt
           # Generate SHA-256 sums from Git repositories
