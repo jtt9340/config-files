@@ -64,6 +64,9 @@
     "$HOME/Library/Application Support/nix/defexpr/channels"
   ];
 
+  # Nested " to account for space
+  environment.systemPath = [ ''"$HOME/Library/Application Support/nix/profile/bin"'' ];
+
   # Auto upgrade nix package and the daemon service.
   services.nix-daemon.enable = true;
   # nix.package = pkgs.nix;
