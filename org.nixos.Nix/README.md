@@ -55,6 +55,10 @@ so that Home Manager can install this file as a package.
 This is [my zsh configuration](../net.sourceforge.Zsh/README.md) ported to the Nix expression
 language, so that Home Manager can install this file as a package.
 
+### [`joeyt/tmux.nix`](joeyt/tmux.nix)
+This is [my tmux configuration](../io.github.tmux/README.md) ported to the Nix expression
+language, so that Home Manager can install this file as a package.
+
 ### [`joeyt/home.nix`](joeyt/home.nix)
 In addition to being the file that imports the configurations for all of the above into one
 centralized file that is imported by `configuration.nix`, this also installs some packages I

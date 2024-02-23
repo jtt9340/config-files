@@ -163,6 +163,7 @@
       # 'networkmanager' allows the user to change network settings  
       # 'wireshark' is needed for wireshark to be able to collect packet captures
       extraGroups = [ "wheel" "networkmanager" "wireshark" ];
+      shell = pkgs.tmux;
     };
   };
 

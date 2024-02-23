@@ -212,6 +212,11 @@ in lib.mkMerge [
         # Everything, including Bash and Zsh, are true by default
         enableFishIntegration = false;
       };
+
+      tmux = (import ./tmux.nix) {
+        inherit (pkgs) zsh xclip;
+        inherit (pkgs.stdenv) isDarwin;
+      };
     };
 
     home.packages = with pkgs;
