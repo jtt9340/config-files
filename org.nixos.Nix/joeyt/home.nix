@@ -171,13 +171,11 @@ in lib.mkMerge [
         settings = {
           default_flags = "g";
           icon_theme = "vscode";
-          verbs = [
-            {
-              name = "bat";
-              invocation = "bat";
-              execution = "${pkgs.bat}/bin/bat {file}";
-            }
-          ];
+          verbs = [{
+            name = "bat";
+            invocation = "bat";
+            execution = "${pkgs.bat}/bin/bat {file}";
+          }];
         };
       };
 

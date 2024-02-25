@@ -45,6 +45,8 @@
       "macfuse"
       # Cloud storage client
       "onedrive"
+      # FOSS filesystem encryption on-the-fly
+      "veracrypt"
       # Keyboard configurator
       "via"
       # Remote desktop application

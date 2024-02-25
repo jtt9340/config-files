@@ -83,6 +83,8 @@
     spectacle
     # Extract ZIP archives
     unzip
+    # FOSS filesystem encryption on-the-fly
+    veracrypt
     # Advanced terminal-based text editor
     vim
     # "Tool for retrieving files using HTTP, HTTPS, and FTP"
