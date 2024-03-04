@@ -1,7 +1,9 @@
-{ fetchFromGitHub # Function for cloning GitHub repositories
+{ mkDerivation # stdenv.mkDerivation
+, fetchFromGitHub # Function for cloning GitHub repositories
 , configFiles # The path to my "config-files" repo
 , xdgConfigHome # The path to $XDG_CONFIG_HOME
 , xdgDataHome # The path to $XDG_DATA_HOME
+, python3 # The python3 package
 }:
 
 # Configuration settings for Zsh
@@ -140,7 +142,7 @@
         owner = "zsh-users";
         repo = name;
         rev = "0.7.1";
-        sha256 = "039g3n59drk818ylcyvkciv8k9mf739cv6v4vis1h9fv9whbcmwl";
+        hash = "sha256-gOG0NLlaJfotJfs+SUhGgLTNOnGLjoqnUp54V9aFJg8=";
       };
     }
 
@@ -156,11 +158,28 @@
 
     rec {
       name = "alias-tips";
-      src = fetchFromGitHub {
-        owner = "djui";
-        repo = name;
-        rev = "45e4e97ba4ec30c7e23296a75427964fc27fb029";
-        sha256 = "1br0gl5jishbgi7whq4kachlcw6gjqwrvdwgk8l39hcg6gwkh4ji";
+      src = mkDerivation {
+        inherit name;
+        src = fetchFromGitHub {
+          owner = "djui";
+          repo = name;
+          rev = "45e4e97ba4ec30c7e23296a75427964fc27fb029";
+          sha256 = "1br0gl5jishbgi7whq4kachlcw6gjqwrvdwgk8l39hcg6gwkh4ji";
+        };
+
+        prePatch = ''
+          substituteInPlace alias-tips.plugin.zsh \
+            --replace python3 ${python3}/bin/python3
+        '';
+
+        dontConfigure = true;
+
+        dontBuild = true;
+
+        installPhase = ''
+          mkdir -p $out
+          mv * $out
+        '';
       };
     }
 

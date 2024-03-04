@@ -38,7 +38,8 @@ in {
 
     # Configure Zsh
     zsh = (import ./zsh.nix) {
-      inherit (pkgs) fetchFromGitHub;
+      inherit (pkgs) fetchFromGitHub python3;
+      inherit (pkgs.stdenv) mkDerivation;
       inherit configFiles;
       inherit xdgConfigHome;
       inherit xdgDataHome;
@@ -97,49 +98,19 @@ in {
     bitwarden
     # Chat app
     discord
+    # Sync mobile device with Gnome Desktop
+    gnomeExtensions.gsconnect
     # Java IDE
     jetbrains.idea-ultimate
     # Python IDE
     jetbrains.pycharm-professional
-    # ISO image writer for KDE
-    k3b
     # Free and open-source office suite
     libreoffice
     # Makes it easier to run games/Windows-only applications on GNU/Linux
     lutris
     # Another chat app
     slack
-    # Email client
-    thunderbird
   ];
-
-  # Define systemd per-user service units
-  systemd.user.services.rclone-automount-google-drive =
-    let googleDriveDir = ''%h/"RIT Google Drive"'';
-    in {
-      Unit = {
-        Description =
-          "Automatically mount my Google Drive in my home directory at startup using rclone";
-        AssertPathIsDirectory = "%h/RIT Google Drive";
-      };
-
-      Service = {
-        Type = "simple";
-        ExecStart = with pkgs.lib.strings;
-          concatStringsSep " " [
-            "${pkgs.rclone}/bin/rclone mount --vfs-cache-mode writes"
-            "--config ${config.xdg.configHome}/rclone/rclone.conf"
-            "--drive-import-formats docx,xlsx,pptx,svg rit-google-drive:"
-            googleDriveDir
-          ];
-        ExecStop = "/run/wrappers/bin/fusermount -u ${googleDriveDir}";
-        # Restart the service whenever rclone exits with non-zero exit code
-        Restart = "on-failure";
-        RestartSec = 15;
-      };
-
-      Install = { WantedBy = [ "default.target" ]; };
-    };
 
   # How many times do I have to say that I am okay with non-free software?! I guess when
   # you specify packages with home.packages you also need to specify it here?
