@@ -119,6 +119,7 @@ in {
     vim-toml
     nerdtree
     xuyuanp-nerdtree-git-plugin
+    coc-nvim
     vim-gitgutter
     vim-nix
     coc-nvim

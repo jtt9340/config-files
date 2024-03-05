@@ -1,3 +1,4 @@
+{%@@ set minimal = 'minimal' in _dotfile_abs_src @@%}
 {%@@ if profile == 'macos' @@%}
 ##############
 # Setting PATH
@@ -45,6 +46,11 @@ export HOMEBREW_BAT_CONFIG_PATH="$BAT_CONFIG_PATH"
 {%@@ endif @@%}
 {%@@ endif @@%}
 
+{%@@ if minimal @@%}
+# Used by zpm-zsh/ignored-users
+export ZSH_CACHE_DIR="$ZDOTDIR"
+{%@@ endif @@%}
+
 # Reconfiguring programs to store their configuation/data files somewhere besides the home directory
 {#@@ Rustup @@#}
 {%@@ if exists_in_path('rustup') @@%}
@@ -52,11 +58,7 @@ export HOMEBREW_BAT_CONFIG_PATH="$BAT_CONFIG_PATH"
 {%@@ if profile == 'macos' @@%}
 export RUSTUP_HOME="$HOME/Library/Application Support/Rustup"
 {%@@ else @@%}
-if [[ -n $XDG_DATA_HOME ]]; then
-  export RUSTUP_HOME=$XDG_DATA_HOME/rustup
-elif [[ -d $HOME/.local/share ]]; then
-  export RUSTUP_HOME=$HOME/.local/share/rustup
-fi
+export RUSTUP_HOME="${XDG_DATA_HOME:-$HOME/.local/share}/rustup"
 {%@@ endif @@%}
 {%@@ endif @@%}
 
@@ -135,17 +137,8 @@ fi
 export LESSKEY="$HOME/Library/Application Support/Less/lesskey"
 export LESSHISTFILE=$HOME/Library/Caches/Less/history
 {%@@ else @@%}
-if [[ -n $XDG_CONFIG_HOME ]]; then
-  export LESSKEY=$XDG_CONFIG_HOME/less/lesskey
-else
-  export LESSKEY=$HOME/.config/less/lesskey
-fi
-
-if [[ -n $XDG_CACHE_HOME ]]; then
-  export LESSHISTFILE=$XDG_CACHE_HOME/less/history
-else
-  export LESSHISTFILE=$HOME/.cache/less/history
-fi
+export LESSKEY="${XDG_CONFIG_HOME:-$HOME/.config}/less/lesskey"
+export LESSHISTFILE="${XDG_CACHE_HOME:-$HOME/.cache}/less/history"
 {%@@ endif @@%}
 {%@@ endif @@%}
 

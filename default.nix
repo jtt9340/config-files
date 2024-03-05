@@ -4,14 +4,14 @@ with pkgs;
 
 let
   pythonEnv = let
-    dotdrop = python310.pkgs.buildPythonPackage rec {
+    dotdrop = python311.pkgs.buildPythonPackage rec {
       pname = "dotdrop";
-      version = "1.13.0";
+      version = "1.14.0";
 
-      src = python310.pkgs.fetchPypi {
+      src = python311.pkgs.fetchPypi {
         inherit pname;
         inherit version;
-        sha256 = "sha256-8v7p1n0hrCpvzWCjHcaa3ingi46R2wlwuHv6UwlhhTo=";
+        sha256 = "sha256-Z3Nhrzeu9XWs1SM946ixs9i3vPHzWHlG0InjRFA6ok0=";
       };
 
       # dotdrop is kind of hard to test -- until I can figure
@@ -21,20 +21,20 @@ let
       doCheck = false;
 
       # Runtime dependencies
-      propagatedBuildInputs = with python310.pkgs; [
+      propagatedBuildInputs = with python311.pkgs; [
         jinja2
         docopt
         ruamel_yaml
         python_magic
         packaging
         requests
-        toml
+        tomli-w
         distro
       ];
 
       pythonImportsCheck = [ "dotdrop" ];
     };
-  in python310.withPackages (ps: with ps; [ dotdrop ]);
+  in python311.withPackages (ps: with ps; [ dotdrop ]);
 in mkShell {
   name = "config-files";
 

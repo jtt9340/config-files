@@ -7,7 +7,8 @@ config:
   dotpath: .
   workdir: templated
   keepdot: false
-  link_on_import: link
+  link_on_import: absolute
+  link_dotfile_default: absolute
   template_dotfile_default: false
   cmpignore:
   - '*/.DS_Store'
@@ -33,6 +34,11 @@ variables:
       else env['XDG_CONFIG_HOME'] + '/vim' if env['XDG_CONFIG_HOME'] is string
       else '~/.config/vim' if exists('~/.config/vim')
       else '~/.vim'
+    @@}}
+  broot_config_path: >-
+    {{@@
+      '~/Library/Application Support/org.dystroy.broot/conf.toml' if profile == 'macos'
+      else '~/.config/broot/conf.toml'
     @@}}
   zdotdir: >-
     {{@@
@@ -62,11 +68,11 @@ variables:
 dynvariables:
   bat_config_path: command -v bat >/dev/null && bat --config-file || echo $HOME/.bat-not-installed
   editor_exe: command -v vim >/dev/null && which vim || which nano
-  bat_exe: which bat || echo -n
+  bat_exe: command -v bat >/dev/null && which bat || echo -n
   touch_exe: which touch
-  trash_exe: which trash || echo -n
   ql_exe: '[ "$(uname)" = Darwin ] && command -v ql || echo -n'
-  markdown_exe: which markdown || command -v glow || printf ''
+  markdown_exe: command -v markdown >/dev/null && which markdown || command -v glow
+    || printf ''
 actions:
   zshenv: ln -i -s {{@@ _dotfile_abs_dst | shellescape @@}}/.zshenv ~/.zshenv
   # The action string is first processed by Jinja and then by Python's str.format, so we need
@@ -98,11 +104,12 @@ dotfiles:
     - '*/viminfo'
     - '*/view'
     - '*/pack'
+  f_coc_settings.json:
+    src: org.vim.Vim/coc-settings.json
+    dst: ~/.config/coc/coc-settings.json
   f_org.dystroy.broot_conf.toml:
     src: org.dystroy.broot/conf.toml
-    dst: "{{@@ '~/Library/Application Support/org.dystroy.broot/conf.toml' if profile\
-      \ == 'macos' else '~/.config/broot/conf.toml' @@}}"
-    link: absolute
+    dst: '{{@@ broot_config_path @@}}'
     template: true
   f_micro_settings.json:
     src: io.github.micro-editor/settings.json
@@ -176,30 +183,24 @@ dotfiles:
   f_joeys_avit.zsh-theme:
     src: net.sourceforge.Zsh/omz/joeys-avit.zsh-theme
     dst: '{{@@ zdotdir @@}}/themes/joeys-avit.zsh-theme'
-    link: absolute
     template: true
   f_ripgreprc:
     src: com.github.burntsushi.Ripgrep/ripgreprc
     dst: '{{@@ ripgrep_config_path @@}}'
-    link: absolute
   f_bat_config:
     src: com.github.sharkdp.Bat/config
-    dst: "{{@@ '~/Library/Application Support/bat/config' if profile == 'macos' else\
-      \ bat_config_path @@}}"
-    link: absolute
+    dst: "{{@@ '~/Library/Application Support/bat/config' if profile == 'macos' else
+      bat_config_path @@}}"
   f_git_config:
     src: com.git-scm.Git/config
     dst: '{{@@ gitconfig_config_path @@}}'
-    link: absolute
     template: true
   f_virtualenv.ini:
     src: io.pypa.virtualenv/virtualenv.ini
     dst: ~/Library/Application Support/virtualenv/virtualenv.ini
-    link: absolute
   f_tmux.conf:
     src: io.github.tmux/tmux.conf
     dst: '{{@@ tmux_config_path @@}}'
-    link: absolute
     chmod: '600'
     template: true
   d_nixpkgs:
@@ -251,6 +252,7 @@ profiles:
     - f_bat_config
     - f_git_config
     - f_tmux.conf
+    - f_coc_settings.json
   nixos:
     dotfiles:
     - f_joeys_avit.zsh-theme

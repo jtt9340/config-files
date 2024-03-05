@@ -82,7 +82,9 @@
     }
 
 {%@@ if profile == 'nixos' @@%}
-  {%@@ include 'org.nixos.Nix/nixos-configuration.nix' @@%}
+  {#@@ This include does not need the org.nixos.Nix/ prefix because
+       the dotpath in config_root.yaml includes that @@#}
+  {%@@ include 'nixos-configuration.nix' @@%}
 {%@@ else @@%}
   {%@@ include 'org.nixos.Nix/darwin-configuration.nix' @@%}
 {%@@ endif @@%}

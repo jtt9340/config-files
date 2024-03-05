@@ -3,14 +3,36 @@
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 {
   # Use the GRUB 2 boot loader.
-  boot.loader.grub.enable = true;
+  # boot.loader.grub.enable = true;
   # boot.loader.grub.efiSupport = true;
   # boot.loader.grub.efiInstallAsRemovable = true;
   # boot.loader.efi.efiSysMountPoint = "/boot/efi";
   # Define on which hard drive you want to install Grub.
-  boot.loader.grub.device = "/dev/sda"; # or "nodev" for efi only
+  # boot.loader.grub.device = "/dev/sda"; # or "nodev" for efi only
+  # Use the systemd-boot EFI boot loader
+  boot.loader.systemd-boot.enable = true;
+  boot.loader.efi.canTouchEfiVariables = true;
 
-  networking.hostName = "craigscomputer"; # Define your hostname.
+  # Minimal list of modules to use the EFI system partition and the YubiKey
+  boot.initrd.kernelModules = [ "vfat" "nls_cp437" "nls_iso8859-1" "usbhid" ];
+
+  # Enable support for the YubiKey PBA
+  boot.initrd.luks.yubikeySupport = true;
+
+  # Configuration to use your Luks device
+  boot.initrd.luks.devices = {
+    "nixos-enc" = {
+      device = "/dev/disk/by-uuid/80f05700-d1e3-4b15-84f4-1dbcfd7d0635";
+      preLVM = true; # Set to false if you need to start a network service first
+      yubikey = {
+        slot = 2;
+        twoFactor = false;
+        storage.device = "/dev/disk/by-uuid/E2BC-AA8C";
+      };
+    };
+  };
+
+  networking.hostName = "nicksauce"; # Define your hostname.
   # The following does not need to be enabled, so long as a user is in the "networkmanager" group
   # and NetworkManager is enabled
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
@@ -59,8 +81,6 @@
     curl
     # Identify files by their type
     file
-    # Web browser
-    firefox
     # C/C++ compiler
     gcc
     # Distributed VCS
@@ -69,33 +89,25 @@
     gnumake
     # English dictionaries, useful for spell check in programs
     hunspellDicts.en-us
-    # Text editor part of the KDE ecosystem
-    kate
+    # Utilities for working with .heic files
+    libheif
     # SSH alternative that allows for interrupted connections
     mosh
-    # PDF viewer part of the KDE ecosystem
-    okular
-    # Does what it says on the tin
-    partition-manager
-    # Screen recorder
-    peek
-    # Screenshots
-    spectacle
     # Extract ZIP archives
     unzip
     # FOSS filesystem encryption on-the-fly
     veracrypt
-    # Advanced terminal-based text editor
-    vim
     # "Tool for retrieving files using HTTP, HTTPS, and FTP"
     wget
     # Determine where binaries are installed on your system
     which
-    # Access the clipboard from the command line
-    xclip
     # Create ZIP archives
     zip
   ];
+
+  programs.firefox.enable = true;
+
+  programs.vim.defaultEditor = true;
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
@@ -110,11 +122,16 @@
 
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
-  programs.ssh.startAgent = true;
+  programs.ssh = {
+    startAgent = true;
+    extraConfig = ''
+      AddKeysToAgent yes
+    '';
+  };
 
-  # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
+  # Open ports in the firewall. Needed for GSConnect.
+  networking.firewall.allowedTCPPorts = pkgs.lib.lists.range 1714 1764;
+  networking.firewall.allowedUDPPorts = pkgs.lib.lists.range 1714 1764;
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
 
@@ -125,21 +142,20 @@
   # Enable the X11 windowing system.
   services.xserver = {
     enable = true;
-    layout = "us";
+    xkb.layout = "us";
+    # Enable the KDE Desktop Environment.
+    # displayManager.sddm.enable = true;
+    # desktopManager.plasma5.enable = true;
+    # Enable the GNOME Desktop Environment.
+    displayManager.gdm.enable = true;
+    desktopManager.gnome.enable = true;
   };
-  # services.xserver.xkbOptions = "eurosign:e";
+  # services.xserver.xkbOptions = "eurosign:e,caps:escape";
 
   # Enable touchpad support.
   # services.xserver.libinput.enable = true;
 
-  # Enable the KDE Desktop Environment.
-  services.xserver = {
-    displayManager.sddm.enable = true;
-    desktopManager.plasma5.enable = true;
-  };
-
   # "On 64-bit systems, if you want OpenGL for 32-bit programs such as in Wine, you should also set the following"
-  # Could this be why programs fail with an error saying my version of OpenGL is too old?
   # hardware.opengl.driSupport32Bit = true;
   hardware.opengl.enable = true;
 
@@ -172,11 +188,26 @@
   # Configure the Joey T user a little bit
   home-manager.users.joeyt = (import ./joeyt/home.nix) system.stateVersion;
 
-  # This value determines the NixOS release from which the default
-  # settings for stateful data, like file locations and database versions
-  # on your system were taken. It‘s perfectly fine and recommended to leave
-  # this value at the release version of the first install of this system.
-  # Before changing this value read the documentation for this option
-  # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = "20.03"; # Did you read the comment?
+  # Copy the NixOS configuration file and link it from the resulting system
+  # (/run/current-system/configuration.nix). This is useful in case you
+  # accidentally delete configuration.nix.
+  # system.copySystemConfiguration = true;
+
+  # This option defines the first version of NixOS you have installed on this particular machine,
+  # and is used to maintain compatibility with application data (e.g. databases) created on older NixOS versions.
+  #
+  # Most users should NEVER change this value after the initial install, for any reason,
+  # even if you've upgraded your system to a new NixOS release.
+  #
+  # This value does NOT affect the Nixpkgs version your packages and OS are pulled from,
+  # so changing it will NOT upgrade your system.
+  #
+  # This value being lower than the current NixOS release does NOT mean your system is
+  # out of date, out of support, or vulnerable.
+  #
+  # Do NOT change this value unless you have manually inspected all the changes it would make to your configuration,
+  # and migrated your data accordingly.
+  #
+  # For more information, see `man configuration.nix` or https://nixos.org/manual/nixos/stable/options#opt-system.stateVersion .
+  system.stateVersion = "23.11"; # Did you read the comment?
 }

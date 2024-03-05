@@ -227,6 +227,8 @@ in lib.mkMerge [
         jetbrains.pycharm-professional
         # Rust IDE
         jetbrains.rust-rover
+        # JavaScript runtime - needed for coc.nvim
+        nodejs_18
         # Conversion between documentation formats
         pandoc
         # LaTeX
@@ -236,6 +238,8 @@ in lib.mkMerge [
       ] ++ lib.optionals stdenv.isLinux [
         # Password manager
         bitwarden
+        # Sync mobile device with Gnome Desktop
+        gnomeExtensions.gsconnect
         # ISO image writer for KDE
         k3b
         # Free and open-source office suite

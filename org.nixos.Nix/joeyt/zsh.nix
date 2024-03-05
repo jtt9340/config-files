@@ -5,6 +5,7 @@
 , configFiles # The path to my "config-files" repo
 , xdgConfigHome # The path to $XDG_CONFIG_HOME
 , xdgDataHome # The path to $XDG_DATA_HOME
+, python3 # The python3 package
 }:
 
 # Configuration settings for Zsh
@@ -126,11 +127,28 @@
   plugins = [
     rec {
       name = "alias-tips";
-      src = fetchFromGitHub {
-        owner = "djui";
-        repo = name;
-        rev = "41cb143ccc3b8cc444bf20257276cb43275f65c4";
-        hash = "sha256-ZFWrwcwwwSYP5d8k7Lr/hL3WKAZmgn51Q9hYL3bq9vE=";
+      src = mkDerivation {
+        inherit name;
+        src = fetchFromGitHub {
+          owner = "djui";
+          repo = name;
+          rev = "45e4e97ba4ec30c7e23296a75427964fc27fb029";
+          sha256 = "1br0gl5jishbgi7whq4kachlcw6gjqwrvdwgk8l39hcg6gwkh4ji";
+        };
+
+        prePatch = ''
+          substituteInPlace alias-tips.plugin.zsh \
+            --replace python3 ${python3}/bin/python3
+        '';
+
+        dontConfigure = true;
+
+        dontBuild = true;
+
+        installPhase = ''
+          mkdir -p $out
+          mv * $out
+        '';
       };
     }
 
