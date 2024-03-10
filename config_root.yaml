@@ -11,6 +11,10 @@ config:
   - '*/README.md'
   instignore:
   - '*/README.md'
+  filter_file:
+  - re.deadc0de.dotdrop/filters.py
+  import_actions:
+  - re.deadc0de.dotdrop/actions.yaml
   import_variables:
   - uservariables.yaml:optional
 dotfiles:
@@ -27,6 +31,8 @@ dotfiles:
     upignore:
     - '*/config.nix'
     - '*/*-configuration.nix'
+    actions:
+    - nixfmt
 profiles:
   nixos:
     dotfiles:
