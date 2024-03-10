@@ -12,7 +12,7 @@ let
   xdgCacheHome = config.xdg.cacheHome;
   zfunc = file: /${configFiles}/net.sourceforge.Zsh/omz/zfunc/${file};
 in {
-  home.stateVersion = "23.11";
+  home.stateVersion = "{{@@ state_version @@}}";
 
   xdg = {
     # Enable management of XDG Base Directories

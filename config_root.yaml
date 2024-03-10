@@ -17,6 +17,8 @@ config:
   - re.deadc0de.dotdrop/actions.yaml
   import_variables:
   - uservariables.yaml:optional
+variables:
+  state_version: 23.11
 dotfiles:
   d_etc_nixos:
     src: .

@@ -186,7 +186,7 @@
   };
 
   # Configure the Joey T user a little bit
-  home-manager.users.joeyt = (import ./joeyt/home.nix) config.system.stateVersion;
+  home-manager.users.joeyt = import ./joeyt/home.nix;
 
   # Copy the NixOS configuration file and link it from the resulting system
   # (/run/current-system/configuration.nix). This is useful in case you
@@ -209,5 +209,5 @@
   # and migrated your data accordingly.
   #
   # For more information, see `man configuration.nix` or https://nixos.org/manual/nixos/stable/options#opt-system.stateVersion .
-  system.stateVersion = "23.11"; # Did you read the comment?
+  system.stateVersion = "{{@@ state_version @@}}"; # Did you read the comment?
 }
