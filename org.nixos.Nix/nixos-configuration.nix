@@ -186,7 +186,7 @@
   };
 
   # Configure the Joey T user a little bit
-  home-manager.users.joeyt = (import ./joeyt/home.nix) system.stateVersion;
+  home-manager.users.joeyt = (import ./joeyt/home.nix) config.system.stateVersion;
 
   # Copy the NixOS configuration file and link it from the resulting system
   # (/run/current-system/configuration.nix). This is useful in case you
