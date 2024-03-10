@@ -211,8 +211,9 @@ in {
     };
 
     tmux = (import ./tmux.nix) {
-      inherit (pkgs) zsh xclip;
+      inherit (pkgs) zsh xsel wl-clipboard;
       inherit (pkgs.stdenv) isDarwin;
+      concatStrings = lib.strings.concatStringsSep ";";
     };
   };
 

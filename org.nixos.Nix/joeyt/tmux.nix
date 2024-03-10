@@ -1,10 +1,16 @@
-{ zsh, xclip, isDarwin }:
+{ zsh, xsel, wl-clipboard, isDarwin, concatStrings }:
 
 let
   copyCmd = if isDarwin then
     "pbcopy"
   else
-    "${xclip}/bin/xclip -in -selection clipboard";
+    concatStrings [
+      ''if [ -n "''${WAYLAND_DISPLAY:-}" ]; then''
+      "  ${wl-clipboard}/bin/wl-copy"
+      "else"
+      "  ${xsel}/bin/xsel --clipboard --input"
+      "fi"
+    ];
 in {
   enable = true;
   shell = "${zsh}/bin/zsh --login";
