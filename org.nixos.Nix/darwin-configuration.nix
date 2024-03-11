@@ -87,7 +87,7 @@
   users.users.josephterrito = {
     description = "Joseph Territo";
     home = "/Users/josephterrito";
-    shell = pkgs.tmux;
+    shell = /bin/zsh;
   };
 
   home-manager.users.josephterrito = import ./joeyt/home.nix;

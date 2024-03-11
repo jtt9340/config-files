@@ -155,6 +155,12 @@
   # Enable touchpad support.
   # services.xserver.libinput.enable = true;
 
+  # Do not include these GNOME packages by default.
+  environment.gnome.excludePackages = with pkgs.gnome; [
+    epiphany
+    geary
+  ];
+
   # "On 64-bit systems, if you want OpenGL for 32-bit programs such as in Wine, you should also set the following"
   # hardware.opengl.driSupport32Bit = true;
   hardware.opengl.enable = true;
@@ -181,7 +187,6 @@
       # 'networkmanager' allows the user to change network settings  
       # 'wireshark' is needed for wireshark to be able to collect packet captures
       extraGroups = [ "wheel" "networkmanager" "wireshark" ];
-      shell = pkgs.tmux;
     };
   };
 

@@ -126,9 +126,9 @@ in {
 
     # Configure Zsh
     zsh = (import ./zsh.nix) {
-      inherit (pkgs) zsh-nix-shell fetchFromGitHub;
+      inherit (pkgs) zsh-nix-shell fetchFromGitHub python3;
       inherit (lib) optionalAttrs optionalString escapeShellArg;
-      inherit (pkgs.stdenv) isLinux isDarwin;
+      inherit (pkgs.stdenv) mkDerivation isLinux isDarwin;
       inherit (lib.strings) removePrefix;
       inherit configFiles xdgConfigHome xdgDataHome;
       home = config.home.homeDirectory;
@@ -166,7 +166,6 @@ in {
     broot = {
       enable = true;
       enableFishIntegration = false;
-      enableNushellIntegration = false;
       settings = {
         default_flags = "g";
         icon_theme = "vscode";
@@ -240,8 +239,6 @@ in {
       bitwarden
       # Sync mobile device with Gnome Desktop
       gnomeExtensions.gsconnect
-      # ISO image writer for KDE
-      k3b
       # Free and open-source office suite
       libreoffice
       # Makes it easier to run games/Windows-only applications on GNU/Linux

@@ -1,4 +1,6 @@
-{ zsh-nix-shell, fetchFromGitHub # Function for cloning GitHub repositories
+{ zsh-nix-shell
+, mkDerivation # stdenv.mkDerivation
+, fetchFromGitHub # Function for cloning GitHub repositories
 , optionalAttrs # If the first argument is true return the second argument, else return {}
 , optionalString # If the first argument is true return the second argument, else return ""
 , escapeShellArg, removePrefix, isLinux, isDarwin, home # $HOME
@@ -154,7 +156,7 @@
 
     {
       name = "zsh-nix-shell";
-      file = "nix-shell.plugin.zsh";
+      file = "share/zsh-nix-shell/nix-shell.plugin.zsh";
       src = zsh-nix-shell;
     }
   ];

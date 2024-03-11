@@ -13,7 +13,7 @@ let
     ];
 in {
   enable = true;
-  shell = "${zsh}/bin/zsh --login";
+  shell = "${zsh}/bin/zsh";
   terminal = "tmux-256color";
   shortcut = "w";
   keyMode = "vi";
