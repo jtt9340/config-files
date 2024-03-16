@@ -22,12 +22,13 @@ in {
   newSession = true;
   secureSocket = true;
   sensibleOnTop = false;
+  historyLimit = 5000;
   extraConfig = ''
     set-option -sa terminal-overrides ",xterm*:Tc"
 
     # Graciously taken from christoomey/vim-tmux-navigator
     is_vim="ps -o state= -o comm= -t '#{pane_tty}' \
-        | grep -iqE '^[^TXZ ]+ +(\\S+\\/)?g?(view|l?n?vim?x?)(diff)?$'"
+        | grep -iqE '^[^TXZ ]+ +(\\S+\\/)?(g?(view|l?n?vim?x?)(diff)?)|vim-wrapped$'"
     bind-key   -r h if-shell "$is_vim" "send-keys C-w h" "select-pane -L"
     bind-key   -r j if-shell "$is_vim" "send-keys C-w j" "select-pane -D"
     bind-key   -r k if-shell "$is_vim" "send-keys C-w k" "select-pane -U"
@@ -51,6 +52,8 @@ in {
 
     bind-key v split-window -h -c "#{pane_current_path}"
     bind-key g split-window -v -c "#{pane_current_path}"
+    bind-key V select-layout even-horizontal
+    bind-key G select-layout even-vertical
 
     bind-key -T copy-mode-vi WheelUpPane   send-keys -N 1 -X scroll-up
     bind-key -T copy-mode-vi WheelDownPane send-keys -N 1 -X scroll-down
