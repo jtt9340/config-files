@@ -67,6 +67,7 @@ variables:
       env['XDG_CONFIG_HOME'] + '/tmux/tmux.conf' if env['XDG_CONFIG_HOME'] is string
       else '~/.tmux.conf'
     @@}}
+  state_version: 23.11
 dynvariables:
   bat_config_path: command -v bat >/dev/null && bat --config-file || echo $HOME/.bat-not-installed
   editor_exe: command -v vim >/dev/null && which vim || which nano
@@ -206,6 +207,7 @@ dotfiles:
     src: org.nixos.Nix
     dst: "{{@@ env['XDG_CONFIG_HOME'] @@}}/nix"
     template: true
+    link: link_children
     instignore:
     - '*/config.nix'
     - '*/*-configuration.nix'
