@@ -1,4 +1,5 @@
 # Joey's AVIT ZSH Theme
+{%@@ set is_nix = "nix" is in profile @@%}
 
 # settings
 typeset +H _current_dir="%{$fg_bold[cyan]%}%~%{$reset_color%} "
@@ -7,7 +8,7 @@ typeset +H _hist_no="%{$fg[grey]%}%h%{$reset_color%}"
 
 PROMPT='
 $(_user_host)${_current_dir} $(git_prompt_info) $(virtualenv_prompt_info)
-{%@@ if profile == "nixos" @@%}
+{%@@ if is_nix @@%}
 $(prompt_nix_shell)%{%(!.%F{red}.%F{white})%}▶%{$resetcolor%} '
 {%@@ else @@%}
 %{%(!.%F{red}.%F{white})%}▶%{$resetcolor%} ' 
@@ -17,7 +18,7 @@ PROMPT2='%{%(!.%F{red}.%F{white})%}%_ ◀%{$reset_color%} '
 
 RPROMPT='$(vi_mode_prompt_info)%{$(echotc UP 1)%}$(date +"%r")$(_git_time_since_commit) $(git_prompt_status) ${_return_status}%{$(echotc DO 1)%}'
 
-{%@@ if profile == "nixos" @@%}
+{%@@ if is_nix @@%}
 # Graciously taken from this custom agnoster theme: https://gist.github.com/chisui/0d12bd51a5fd8e6bb52e6e6a43d31d5e
 function prompt_nix_shell() {
   if [[ -n "$IN_NIX_SHELL" ]]; then
