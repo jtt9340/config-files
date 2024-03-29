@@ -1,5 +1,9 @@
-{ mkDerivation # stdenv.mkDerivation
+{ zsh-nix-shell
+, mkDerivation # stdenv.mkDerivation
 , fetchFromGitHub # Function for cloning GitHub repositories
+, optionalAttrs # If the first argument is true return the second argument, else return {}
+, optionalString # If the first argument is true return the second argument, else return ""
+, escapeShellArg, removePrefix, isLinux, isDarwin, home # $HOME
 , configFiles # The path to my "config-files" repo
 , xdgConfigHome # The path to $XDG_CONFIG_HOME
 , xdgDataHome # The path to $XDG_DATA_HOME
@@ -8,7 +12,6 @@
 
 # Configuration settings for Zsh
 {
-  # I guess I have to tell Home Manager again to enable Zsh?
   enable = true;
 
   # Automatically enter into a directory if typed directly into the shell
@@ -17,60 +20,34 @@
   # Fish-like autosuggestions
   enableAutosuggestions = true;
 
-  # Enable completions is set at the global level when you do programs.zsh.enable, so we
-  # need to diable it on a per-user level to prevent slow shell startup
-  # (See this GitHub issue: https://github.com/rycee/home-manager/issues/108)
-  enableCompletion = false;
+  historySubstringSearch.enable = true;
+
+  syntaxHighlighting.enable = true;
 
   # Where Zsh's dotfiles shall be located, relative to $HOME
-  dotDir = ".config/zsh";
+  dotDir = removePrefix home "${xdgConfigHome}/zsh";
 
   # Where the .zsh_history file is saved
   history.path = "${xdgDataHome}/zsh/zsh_history";
 
   # Environment variables that will be set for Zsh session
   sessionVariables = {
-    EDITOR = "vim";
-
-    SPROMPT = ''
-      Correct $fg[red]%R$reset_color to $fg[green]%r$reset_color?
-      	[Yes, No, Abort, Edit] '';
-
-    ZSH_PLUGINS_ALIAS_TIPS_TEXT = "Found existing alias: ";
-    ZSH_PLUGINS_ALIAS_TIPS_EXCLUDES = "_";
-
-    # Specify GnuPG's configuration file despite the fact that I have not yet
-    # installed GnuPG on NixOS
-    GNUPGHOME = "${xdgDataHome}/gnupg";
-
-    # Tell z.lua where to store its data file    
-    _ZL_DATA = "${xdgDataHome}/z.txt";
-
-    # Tell z.lua which command-line fuzzy finder to use
-    _ZL_FZF = "sk";
-    _ZL_FZF_FLAG = "--no-sort";
-
-    # I'm confused why there's a ~/.gtkrc-2.0 and a ~/.config/gtkrc-2.0
-    GTK2_RC_FILES = "${xdgConfigHome}/gtk-2.0/gtkrc";
-
     # Move less' history file
     LESSKEY = "${xdgConfigHome}/less/lesskey";
     LESSHISTFILE = "${xdgDataHome}/less/history";
-
     # Tell Cargo where its files are
     CARGO_HOME = "${xdgDataHome}/cargo";
-
     # This is where ripgrep's configuration file is
-    RIPGREP_CONFIG_PATH = "${xdgConfigHome}/ripgreprc";
-  };
-
-  # Extra local variables defined at the top of .zshrc
-  localVariables = {
-    COMPLETION_WAITING_DOTS = true;
-    DISABLE_UNTRACKED_FILES_DIRTY = true;
-    HYPHEN_INSENSITIVE = true;
-    ZSH_THEME_VIRTUALENV_PREFIX = "⟨";
-    ZSH_THEME_VIRTUALENV_SUFFIX = "⟩";
+    RIPGREP_CONFIG_PATH = "${xdgConfigHome}/ripgrep/ripgreprc";
+    # Tell npm where it should place files
+    NPM_CONFIG_USERCONFIG = "${xdgConfigHome}/npm/npmrc";
+    NODE_REPL_HISTORY = "${xdgDataHome}/npm/node_repl_history";
+    # Specify GnuPG's configuration file despite the fact that I have not yet
+    # installed GnuPG on NixOS
+    GNUPGHOME = "${xdgDataHome}/gnupg";
+  } // optionalAttrs isLinux {
+    # I'm confused why there's a ~/.gtkrc-2.0 and a ~/.config/gtkrc-2.0
+    GTK2_RC_FILES = "${xdgConfigHome}/gtk-2.0/gtkrc";
   };
 
   # Extra commands that should be added to .zshenv
@@ -83,45 +60,59 @@
     if [ -d "$HOME/.local/bin" ]; then
       PATH="$HOME/.local/bin:$PATH"
     fi
+
+    if [ -x "$ZDOTDIR/.zshenv.local" ]; then
+      source "$ZDOTDIR/.zshenv.local"
+    fi
+  '' + optionalString isDarwin ''
+    if [ -z "''${path[(r)/usr/local/sbin]}" ]; then
+      path+=/usr/local/sbin
+    fi
+  '';
+
+  # Extra commands that should be added to .zprofile
+  profileExtra = ''
+    [ -x "$ZDOTDIR/.zprofile.local" ] && source "$ZDOTDIR/.zprofile.local"
+  '' + optionalString isDarwin ''
+    whence brew &>/dev/null && eval "''${(@M)''${(f)"$(brew shellenv 2> /dev/null)"}:#export HOMEBREW*}"
+    export HOMEBREW_NO_ENV_HINTS=1
+    export HOMEBREW_BAT=1
+    export HOMEBREW_BAT_CONFIG_PATH="$BAT_CONFIG_PATH"
+  '';
+
+  # Extra local variables defined at the top of .zshrc
+  localVariables = {
+    SPROMPT = ''
+      Correct $fg[red]%R$reset_color to $fg[green]%r$reset_color?
+      	[Yes, No, Abort, Edit] '';
+    COMPLETION_WAITING_DOTS = true;
+    DISABLE_UNTRACKED_FILES_DIRTY = true;
+    HYPHEN_INSENSITIVE = true;
+    ZSH_THEME_VIRTUALENV_PREFIX = "⟨";
+    ZSH_THEME_VIRTUALENV_SUFFIX = "⟩";
+  };
+
+  # Extra commands that should be added to .zshrc before compinit
+  initExtraBeforeCompInit = ''
+    fpath+="$ZDOTDIR/zfunc"
+  '' + optionalString isDarwin ''
+    whence brew &>/dev/null && fpath+=$(brew --prefix)/share/zsh/site-functions
   '';
 
   # Extra commands that should be added to .zshrc
   initExtra = ''
-    # Autoload functions
-    fpath+=$ZDOTDIR/zfunc
+    export ZSH_PLUGINS_ALIAS_TIPS_TEXT='Found existing alias: '
+    export ZSH_PLUGINS_ALIAS_TIPS_EXCLUDES='_'
+    # Tell z.lua where to store its data file    
+    export _ZL_DATA="''${ZDOTDIR:-$XDG_CONFIG_HOME/zsh}/z.txt"
+    # Tell z.lua which command-line fuzzy finder to use
+    export _ZL_FZF='sk'
+    export _ZL_FZF_FLAG='--no-sort'
+    export BROOT_CONFIG_DIR=${escapeShellArg xdgConfigHome}/broot
 
-    # I cannot just write a "for fn in `ls $ZDOTDIR/zfunc`" loop here like I
-    # normally can on other systems since those systems expect the functions
-    # defined in $ZDOTDIR/zfunc to have already had the templates processed,
-    # since zfunc is a symlink. On NixOS, zfunc is not a symlink but the entires
-    # inside of it are, and those functions have not been templated. So I can
-    # only manually autoload the function definitions that do not rely on Jinja
-    # templating.
-    autoload _python-workon-cwd
-    autoload j
-    autoload mkcd
-    autoload print_array
-    autoload rmmetadata
-
-    # A function that allows ripgrep-all (rga) with skim (sk)
-    function rga-sk {
-      RG_PREFIX='rga --files-with-matches' 
-    	local file
-    	file="$(
-        SKIM_DEFAULT_COMMAND="$RG_PREFIX '$1'" \
-          sk --preview="[[ ! -z {} ]] && rga --pretty --context 5 {q} {}" \
-            -q "$1" \
-            --bind "change:reload:$RG_PREFIX {q}" \
-            --preview-window="70%:wrap"
-      )" &&
-      echo "opening $file" &&
-      xdg-open "$file"
-    }
-
-    # Cannot use lsGF defined in $ZDOTDIR/zfunc since that uses Jinja templating
-    function lsGF {
-      command ls --color --classify
-    }
+    for fn in "$ZDOTDIR/zfunc"/*; do
+      autoload $fn
+    done
 
     autoload -Uz add-zsh-hook
     add-zsh-hook chpwd _python-workon-cwd
@@ -130,32 +121,12 @@
     setopt NO_CASE_GLOB # Case-insensitive globbing
     setopt correct # Spell check
 
-    source ${xdgDataHome}/broot/launcher/bash/1
-    source ${configFiles}/net.sourceforge.Zsh/omz/bookmark.zsh
+    source "${configFiles}/net.sourceforge.Zsh/omz/bookmark.zsh"
+    [ -x "$ZDOTDIR/.zshrc.local" ] && source "$ZDOTDIR/.zshrc.local"
   '';
 
   # Plugins not available in Oh-My-Zsh
   plugins = [
-    rec {
-      name = "zsh-syntax-highlighting";
-      src = fetchFromGitHub {
-        owner = "zsh-users";
-        repo = name;
-        rev = "0.7.1";
-        hash = "sha256-gOG0NLlaJfotJfs+SUhGgLTNOnGLjoqnUp54V9aFJg8=";
-      };
-    }
-
-    rec {
-      name = "zsh-history-substring-search";
-      src = fetchFromGitHub {
-        owner = "zsh-users";
-        repo = name;
-        rev = "v1.0.2";
-        sha256 = "0y8va5kc2ram38hbk2cibkk64ffrabfv1sh4xm7pjspsba9n5p1y";
-      };
-    }
-
     rec {
       name = "alias-tips";
       src = mkDerivation {
@@ -183,19 +154,18 @@
       };
     }
 
-    rec {
+    {
       name = "zsh-nix-shell";
-      file = "nix-shell.plugin.zsh";
-      src = fetchFromGitHub {
-        owner = "chisui";
-        repo = name;
-        rev = "v0.4.0";
-        sha256 = "037wz9fqmx0ngcwl9az55fgkipb745rymznxnssr3rx9irb6apzg";
-      };
+      file = "share/zsh-nix-shell/nix-shell.plugin.zsh";
+      src = zsh-nix-shell;
     }
   ];
 
   shellAliases = {
+    # Git aliases
+    grm = "git rm";
+    gmv = "git mv";
+
     # ls aliases
     lsdl = "lsd -lF --date relative";
     lsda = "lsd -aF";
@@ -206,16 +176,27 @@
     ldot = "ls -ld .*";
     lab = "ls -AbFG";
 
-    # For quickly editing configuration files
-    nixconfig = "sudo nixos-rebuild edit";
-    brootconfig = "\${EDITOR:-vim} ${xdgConfigHome}/broot/conf.toml";
-
     # Make some commands more verbose
-    diff = "diff --color --report-identical-files";
     rm = "rm -v";
     mv = "mv -v";
     cp = "cp -v";
-  };
+  } // optionalAttrs isLinux { diff = "diff --color --report-identical-files"; }
+    // optionalAttrs isDarwin {
+      diff = "diff -s";
+      brewc = "brew cleanup";
+      brewi = "brew install";
+      brewL = "brew leaves";
+      brewl = "brew list";
+      brewo = "brew outdated";
+      brews = "brew search";
+      brewu = "brew upgrade";
+      brewx = "brew uninstall";
+      caski = "brew install --cask";
+      caskl = "brew list --cask";
+      casko = "brew outdated --cask";
+      casks = "brew search --cask";
+      caskx = "brew uninstall --cask";
+    };
 
   shellGlobalAliases = {
     C = "| wc -l";

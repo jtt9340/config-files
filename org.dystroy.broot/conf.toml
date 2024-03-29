@@ -74,11 +74,7 @@ default_flags = "g"
 invocation = "edit"
 key = "F2"
 shortcut = "e"
-{%@@ if profile == "nixos" @@%}
-execution = "$EDITOR {file}"
-{%@@ else @@%}
 execution = "{{@@ editor_exe @@}} {file}"
-{%@@ endif @@%}
 
 [[verbs]]
 internal = ":toggle_stage"
@@ -90,13 +86,9 @@ execution = ":quit"
 
 [[verbs]]
 invocation = "create {subpath}"
-{%@@ if profile == "nixos" @@%}
-execution = "$EDITOR {directory}/{subpath}"
-{%@@ else @@%}
 # $EDITOR isn't set :(
 # execution = "$EDITOR {directory}/{subpath}"
 execution = "{{@@ editor_exe @@}} {directory}/{subpath}"
-{%@@ endif @@%}
 
 {%@@ if exists_in_path('git') @@%}
 [[verbs]]
@@ -127,7 +119,6 @@ invocation = "touch {item}"
 execution = "{{@@ touch_exe @@}} {item}"
 leave_broot = false
 
-{%@@ if profile != "nixos" @@%}
 [[verbs]]
 invocation = "zshconfig"
 description = "Edit .zshrc"
@@ -139,7 +130,6 @@ invocation = "vimconfig"
 description = "Edit .vimrc"
 execution = "vimconfig"
 from_shell = true
-{%@@ endif @@%}
 
 [[verbs]]
 invocation = "brootconfig"
