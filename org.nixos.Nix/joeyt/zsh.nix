@@ -1,5 +1,4 @@
-{ zsh-nix-shell
-, mkDerivation # stdenv.mkDerivation
+{ zsh-nix-shell, mkDerivation # stdenv.mkDerivation
 , fetchFromGitHub # Function for cloning GitHub repositories
 , optionalAttrs # If the first argument is true return the second argument, else return {}
 , optionalString # If the first argument is true return the second argument, else return ""

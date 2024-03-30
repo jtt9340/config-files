@@ -32,6 +32,56 @@
     };
   };
 
+  boot.initrd.postDeviceCommands = lib.mkAfter ''
+    mkdir /mnt
+    mount -t btrfs /dev/mapper/nixos-enc /mnt
+    if [[ -e /mnt/root ]]; then
+      mkdir -p /mnt/persist/old_roots
+      timestamp=$(date --date="@$(stat -c %Y /mnt/root)" "+%Y-%m-%-d_%H:%M:%S")
+      mv /mnt/root "/mnt/persist/old_roots/$timestamp"
+    fi
+
+    delete_subvolume_recursively() {
+      IFS=$'\n'
+      for i in $(btrfs subvolume list -o "$1" | cut -f 9- -d ' '); do
+        delete_subvolume_recursively "/mnt/$i"
+      done
+      btrfs subvolume delete "$1"
+    }
+
+    for i in $(find /mnt/persist/old_roots -maxdepth 1 -mtime +30); do
+      delete_subvolume_recursively "$i"
+    done
+
+    btrfs subvolume snapshot /mnt/root-blank /mnt/root
+    umount /mnt
+  '';
+
+  environment.persistence."/persist" = {
+    hideMounts = true;
+    directories = [
+      "/var/lib/bluetooth"
+      "/var/lib/nixos"
+      "/var/lib/systemd/coredump"
+      "/etc/NetworkManager/system-connections"
+      {
+        directory = "/var/lib/colord";
+        user = "colord";
+        group = "colord";
+        mode = "u=rwx,g=rx,o=";
+      }
+    ];
+    files = [
+      "/etc/machine-id"
+      "/etc/joeyt"
+      "/etc/root"
+      "/etc/ssh/ssh_host_ed25519_key"
+      "/etc/ssh/ssh_host_ed25519_key.pub"
+      "/etc/ssh/ssh_host_rsa_key"
+      "/etc/ssh/ssh_host_rsa_key.pub"
+    ];
+  };
+
   networking.hostName = "nicksauce"; # Define your hostname.
   # The following does not need to be enabled, so long as a user is in the "networkmanager" group
   # and NetworkManager is enabled
@@ -175,18 +225,27 @@
   nix.gc.dates =
     "*-*-1,15 3:15"; # 3:15 AM (local time) on the 1st and 15th of every month (man systemd.time)
 
-  # Define a user account. Don't forget to set a password with ‘passwd’.
+  # Define user accounts.
   users = {
+    # Users cannot be created imperatively, only declaratively
+    mutableUsers = false;
+
     # Zsh is the default shell for everyone...mwah ha ha!
     defaultUserShell = pkgs.zsh;
 
-    users.joeyt = {
-      description = "Joey T";
-      isNormalUser = true;
-      # 'wheel' enables ‘sudo’ for the user;
-      # 'networkmanager' allows the user to change network settings  
-      # 'wireshark' is needed for wireshark to be able to collect packet captures
-      extraGroups = [ "wheel" "networkmanager" "wireshark" ];
+    users = {
+      # Other options are already set for root by default, we only want to override the password.
+      root.hashedPasswordFile = "/persist/etc/root";
+
+      joeyt = {
+        description = "Joey T";
+        isNormalUser = true;
+        hashedPasswordFile = "/persist/etc/joeyt";
+        # 'wheel' enables ‘sudo’ for the user;
+        # 'networkmanager' allows the user to change network settings  
+        # 'wireshark' is needed for wireshark to be able to collect packet captures
+        extraGroups = [ "wheel" "networkmanager" "wireshark" ];
+      };
     };
   };
 

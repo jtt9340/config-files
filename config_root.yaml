@@ -3,7 +3,6 @@ uservariables:
 config:
   backup: true
   banner: false
-  create: false
   dotpath: org.nixos.Nix
   link_dotfile_default: nolink
   template_dotfile_default: false
@@ -27,12 +26,15 @@ dotfiles:
     instignore:
     - '*/config.nix'
     - '*/*-configuration.nix'
+    - '!*/hardware-configuration.nix'
     cmpignore:
     - '*/config.nix'
     - '*/*-configuration.nix'
+    - '!*/hardware-configuration.nix'
     upignore:
     - '*/config.nix'
     - '*/*-configuration.nix'
+    - '!*/hardware-configuration.nix'
     actions:
     - nixfmt
 profiles:

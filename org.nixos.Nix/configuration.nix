@@ -1,5 +1,10 @@
 { lib, pkgs, config, ... }:
 
+{%@@ if profile == 'nixos' @@%}
+let
+  impermanence = builtins.fetchTarball "https://github.com/nix-community/impermanence/archive/master.tar.gz";
+in
+{%@@ endif @@%}
 {
   imports =
 {%@@ if profile == 'nixos' @@%}
@@ -8,6 +13,8 @@
       ./hardware-configuration.nix
       # Introduce a new NixOS option called home-manager.users
       <home-manager/nixos>
+      # Introduce a new NixOS option called environment.persistence
+      "${impermanence}/nixos.nix"
     ]
 {%@@ else @@%}
     [
