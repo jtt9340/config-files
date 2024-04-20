@@ -122,6 +122,11 @@
     package = pkgs.wireshark;
   };
 
+  virtualisation = {
+    containers.enable = true;
+    podman.enable = true;
+  };
+
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   # These are packages that are automatically available to all users, and are
