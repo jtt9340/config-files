@@ -156,6 +156,8 @@
     wget
     # Determine where binaries are installed on your system
     which
+    # Copy to and paste from the system clipboard from the command line
+    wl-clipboard
     # Create ZIP archives
     zip
   ];
