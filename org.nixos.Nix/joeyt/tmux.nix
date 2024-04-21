@@ -2,15 +2,9 @@
 
 let
   copyCmd = if isDarwin then
-    "pbcopy"
+    "send-keys -X copy-pipe-and-cancel pbcopy"
   else
-    concatStrings [
-      ''if [ -n "''${WAYLAND_DISPLAY:-}" ]; then''
-      "  ${wl-clipboard}/bin/wl-copy"
-      "else"
-      "  ${xsel}/bin/xsel --clipboard --input"
-      "fi"
-    ];
+    "if-shell \"[ -n \\\"\\\${WAYLAND_DISPLAY:-}\\\" ]\" \"send-keys -X copy-pipe-and-cancel ${wl-clipboard}/bin/wl-copy\" \"send-keys -X copy-pipe-and-cancel ${xsel}/bin/xsel --clipboard --input\"";
 in {
   enable = true;
   shell = "${zsh}/bin/zsh";
@@ -42,8 +36,8 @@ in {
 
     bind-key -T copy-mode-vi v send-keys -X begin-selection
     bind-key -T copy-mode-vi V send-keys -X select-line
-    bind-key -T copy-mode-vi y send-keys -X copy-pipe-and-cancel '${copyCmd}'
-    bind-key -T copy-mode-vi MouseDragEnd1Pane send-keys -X copy-pipe-and-cancel '${copyCmd}'
+    bind-key -T copy-mode-vi y ${copyCmd}
+    bind-key -T copy-mode-vi MouseDragEnd1Pane ${copyCmd}
 
     unbind-key c
     bind-key   c new-window -c "#{pane_current_path}"
