@@ -55,6 +55,14 @@ colors
 autoload -Uz promptinit && promptinit
 prompt redhat
 
+autoload -Uz vcs_info
+precmd_vcs_info() { vcs_info }
+precmd_functions+=( precmd_vcs_info )
+setopt prompt_subst
+RPROMPT=\$vcs_info_msg_0_
+zstyle ':vcs_info:git:*' formats '%F{240}(%b)%r%f'
+zstyle ':vcs_info:*' enable git
+
 # Make ctrl-left and ctrl-right go left and right by words
 bindkey '^[[1;5D' backward-word
 bindkey '^[[1;5C' forward-word
