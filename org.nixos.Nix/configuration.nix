@@ -86,6 +86,10 @@ in
         useGlobalPkgs = true;
         useUserPackages = true;
       };
+
+      networking.hosts = {
+        "10.0.0.6" = [ "raspberrypi" ];
+      };
     }
 
 {%@@ if profile == 'nixos' @@%}

@@ -75,8 +75,13 @@
   services.nix-daemon.enable = true;
   # nix.package = pkgs.nix;
 
-  # "The user-friendly name for the system"
-  networking.computerName = "Joey’s MacBook Pro";
+  networking = {
+    # "The user-friendly name for the system"
+    computerName = "Joey’s MacBook Pro";
+    hosts = {
+      "10.0.0.5" = [ "nicksauce" ];
+    };
+  };
 
   # Use TouchID to authenticate with sudo
   security.pam.enableSudoTouchIdAuth = true;
