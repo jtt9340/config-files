@@ -210,10 +210,8 @@ in {
       enableFishIntegration = false;
     };
 
-    tmux = (import ./tmux.nix) {
-      inherit (pkgs) zsh xsel wl-clipboard;
-      inherit (pkgs.stdenv) isDarwin;
-      concatStrings = lib.strings.concatStringsSep ";";
+    wezterm = (import ./wezterm.nix) {
+      inherit (pkgs) wezterm;
     };
   };
 

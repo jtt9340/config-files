@@ -27,14 +27,17 @@ dotfiles:
     - '*/config.nix'
     - '*/*-configuration.nix'
     - '!*/hardware-configuration.nix'
+    - '*/joeyt/tmux.nix'
     cmpignore:
     - '*/config.nix'
     - '*/*-configuration.nix'
     - '!*/hardware-configuration.nix'
+    - '*/joeyt/tmux.nix'
     upignore:
     - '*/config.nix'
     - '*/*-configuration.nix'
     - '!*/hardware-configuration.nix'
+    - '*/joeyt/tmux.nix'
     actions:
     - nixfmt
 profiles:
