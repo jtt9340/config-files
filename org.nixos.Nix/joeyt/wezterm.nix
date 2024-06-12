@@ -206,6 +206,11 @@ in
 
     config.default_domain = 'unix'
 
+    config.mux_env_remove = {
+      'SSH_CLIENT',
+      'SSH_CONNECTION'
+    }
+
     return config
   '';
 }
