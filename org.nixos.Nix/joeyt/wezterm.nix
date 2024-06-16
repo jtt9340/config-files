@@ -8,8 +8,7 @@ let
       runHook postPatch
     '';
   };
-in
-{
+in {
   enable = true;
   package = patchedWezterm;
   extraConfig = ''
@@ -71,7 +70,7 @@ in
         if is_vim[prog] then
           window:perform_action(
             wezterm.action.Multiple {
-              weztern.action.SendKey {
+              wezterm.action.SendKey {
                 key = 'w',
                 mods = 'CTRL'
               },

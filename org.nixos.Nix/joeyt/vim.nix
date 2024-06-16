@@ -98,12 +98,49 @@ in {
     let g:NERDTreeGitStatusUseNerdFonts = 1
     let g:NERDTreeGitStatusConcealBrackets = 1
 
-    let g:tmux_navigator_no_mappings = 1
+    " The following code was heavily adapted from the christoomey/vim-tmux-navigator plugin
+    if $TERM_PROGRAM == 'WezTerm'
+      command! WeztermNavigateLeft call s:WeztermNavigate('h')
+      command! WeztermNavigateDown call s:WeztermNavigate('j')
+      command! WeztermNavigateUp call s:WeztermNavigate('k')
+      command! WeztermNavigateRight call s:WeztermNavigate('l')
 
-    noremap <silent> <C-w>h :<C-U>TmuxNavigateLeft<cr>
-    noremap <silent> <C-w>j :<C-U>TmuxNavigateDown<cr>
-    noremap <silent> <C-w>k :<C-U>TmuxNavigateUp<cr>
-    noremap <silent> <C-w>l :<C-U>TmuxNavigateRight<cr>
+      let s:vim_to_wezterm_direction = {
+        \ 'h': 'left',
+        \ 'j': 'down',
+        \ 'k': 'up',
+        \ 'l': 'right'
+        \ }
+
+      function! s:WeztermCommand(args)
+        let cmd = 'wezterm cli ' . a:args
+        let l:x = &shellcmdflag
+        let &shellcmdflag = '-c'
+        let ret = system(cmd)
+        let &shellcmdflag = l:x
+        return ret
+      endfunction
+
+      function! s:WeztermVimPaneIsZoomed()
+        let pane_info = json_decode(s:WeztermCommand('list --format=json'))
+        let active_pane_idx = pane_info->indexof({_, pane -> pane.is_active})
+        let active_pane = pane_info[active_pane_idx]
+        return active_pane.is_zoomed
+      endfunction
+
+      function! s:WeztermNavigate(direction)
+        let nr = winnr()
+        execute 'wincmd ' . a:direction
+        let at_tab_page_edge = (nr == winnr())
+        if s:WeztermVimPaneIsZoomed() || !at_tab_page_edge | return | endif
+        silent call s:WeztermCommand('activate-pane-direction ' . s:vim_to_wezterm_direction[a:direction])
+      endfunction
+
+      noremap <silent> <C-w>h :WeztermNavigateLeft<cr>
+      noremap <silent> <C-w>j :WeztermNavigateDown<cr>
+      noremap <silent> <C-w>k :WeztermNavigateUp<cr>
+      noremap <silent> <C-w>l :WeztermNavigateRight<cr>
+    endif
 
     set updatetime=300
     highlight! link SignColumn LineNr
@@ -123,6 +160,5 @@ in {
     vim-gitgutter
     vim-nix
     coc-nvim
-    vim-tmux-navigator
   ];
 }
