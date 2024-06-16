@@ -153,6 +153,7 @@ in {
           "*.zsh-theme:Bourne Again Shell (bash)"
           "*.csproj:XML"
         ];
+        pager = "less --mouse -RF";
       };
       extraPackages = with pkgs.bat-extras; [
         batdiff
