@@ -169,7 +169,7 @@ in {
       enableFishIntegration = false;
       settings = {
         default_flags = "g";
-        icon_theme = "vscode";
+        icon_theme = "nerdfont";
         verbs = [{
           name = "bat";
           invocation = "bat";
