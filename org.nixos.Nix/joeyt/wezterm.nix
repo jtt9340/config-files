@@ -21,6 +21,7 @@ in {
     -- Appearance
     local one_dark = wezterm.color.get_builtin_schemes()['One Dark (Gogh)']
     one_dark.foreground = 'lightgray'
+    one_dark.scrollbar_thumb = '#ABB2BF'
 
     config.color_schemes = {
       ["Joey's One Dark"] = one_dark
