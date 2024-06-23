@@ -71,7 +71,8 @@ in {
 
     for _, key in ipairs(keys) do
       wezterm.on('select-pane-' .. key.direction, function(window, pane)
-        local prog = pane:get_user_vars()['WEZTERM_PROG']
+        local cmdline = pane:get_user_vars()['WEZTERM_PROG']
+        local prog = string.match(cmdline, '[^%s]+')
         if is_vim[prog] then
           window:perform_action(
             wezterm.action.Multiple {
