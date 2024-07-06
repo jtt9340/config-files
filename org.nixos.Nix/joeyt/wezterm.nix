@@ -30,6 +30,7 @@ in {
     config.color_scheme = "Joey's One Dark"
     config.font = wezterm.font {
       family = 'JetBrains Mono',
+      -- Disable ligatures
       harfbuzz_features = { 'calt=0', 'clig=0', 'liga=0' }
     }
     config.font_size = 11
@@ -203,9 +204,9 @@ in {
 
     config.ssh_domains = {
       {
-        name = 'rit',
-        remote_address = 'pinkfloyd.cs.rit.edu',
-        username = 'jtt9340'
+        name = 'raspberrypi',
+        remote_address = 'raspberrypi',
+        username = 'pi'
       }
     }
 
