@@ -224,8 +224,9 @@
   # Do not include these GNOME packages by default.
   environment.gnome.excludePackages = with pkgs; [
     gnome.epiphany # Replaced by firefox
-    gnome.geary # Replaced by thuderbird
+    gnome.geary # Replaced by thunderbird
     gnome-connections # Replaced by realvnc-vnc-viewer
+    gnome-console # Replaced by wezterm
   ];
 
   # "On 64-bit systems, if you want OpenGL for 32-bit programs such as in Wine, you should also set the following"
