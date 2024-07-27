@@ -60,6 +60,12 @@
     options = [ "subvol=swap" ];
   };
 
+  fileSystems."/btrpool" = {
+    device = "/dev/disk/by-uuid/80544e36-a9e0-4351-b0be-303f1445fef6";
+    fsType = "btrfs";
+    options = [ "subvolid=5" ];
+  };
+
   swapDevices = [{ device = "/swap/swapfile"; }];
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking

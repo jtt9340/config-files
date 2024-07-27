@@ -79,7 +79,33 @@
       "/etc/ssh/ssh_host_ed25519_key.pub"
       "/etc/ssh/ssh_host_rsa_key"
       "/etc/ssh/ssh_host_rsa_key.pub"
+      "/etc/ssh/btrbk_key"
+      "/etc/ssh/btrbk_key.pub"
     ];
+  };
+
+  services.btrbk = let btrbkKey = "/etc/ssh/btrbk_key";
+  in {
+    sshAccess = [{
+      key = "${btrbkKey}.pub";
+      roles = [ "source" "target" "info" ];
+    }];
+    instances.btrbk = {
+      onCalendar = "*-*-1,15 2:15";
+      settings = {
+        ssh_identity = btrbkKey;
+        ssh_user = "btrbk";
+        stream_compress = "lz4";
+        volume."/btrpool" = {
+          subvolume = {
+            home = { };
+            persist = { };
+            log = { };
+          };
+          target = "ssh://raspberrypi/srv/btrbk";
+        };
+      };
+    };
   };
 
   networking.hostName = "nicksauce"; # Define your hostname.
@@ -151,6 +177,8 @@
     hunspellDicts.en-us
     # Utilities for working with .heic files
     libheif
+    # Compression algorithm used by btrbk
+    lz4
     # SSH alternative that allows for interrupted connections
     mosh
     # Remote desktop client

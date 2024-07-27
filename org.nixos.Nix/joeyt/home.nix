@@ -210,9 +210,7 @@ in {
       enableFishIntegration = false;
     };
 
-    wezterm = (import ./wezterm.nix) {
-      inherit (pkgs) wezterm;
-    };
+    wezterm = (import ./wezterm.nix) { inherit (pkgs) wezterm; };
   };
 
   home.packages = with pkgs;
