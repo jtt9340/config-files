@@ -101,12 +101,10 @@
   # networking.proxy.default = "http://user:password@proxy:port/";
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
-  networking.interfaces.enp5s0.ipv4.addresses = [
-    {
-      address = "10.0.0.5";
-      prefixLength = 24;
-    }
-  ];
+  networking.interfaces.enp5s0.ipv4.addresses = [{
+    address = "10.0.0.5";
+    prefixLength = 24;
+  }];
 
   # Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";

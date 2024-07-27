@@ -50,7 +50,7 @@ in
           # A command line calculator with support for dimensional analysis
           nodePackages.insect
           # Format nix files
-          nixfmt
+          nixfmt-classic
           # Generate SHA-256 sums from Git repositories
           nix-prefetch-git
           # Generate SHA-256 sums from GitHub repositories

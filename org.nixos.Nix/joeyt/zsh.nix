@@ -17,7 +17,7 @@
   autocd = true;
 
   # Fish-like autosuggestions
-  enableAutosuggestions = true;
+  autosuggestion.enable = true;
 
   historySubstringSearch.enable = true;
 
