@@ -47,14 +47,14 @@ in
           fd
           # Terminal-based system monitor
           htop
-          # A command line calculator with support for dimensional analysis
-          nodePackages.insect
           # Format nix files
           nixfmt-classic
           # Generate SHA-256 sums from Git repositories
           nix-prefetch-git
           # Generate SHA-256 sums from GitHub repositories
           nix-prefetch-github
+          # A command line calculator with support for dimensional analysis
+          numbat
           # Integrate ripgrep (grep alternative) with additional document formats like PDFs and Word documents
           ripgrep-all
           # Linter for shell scripts
