@@ -271,12 +271,6 @@ in {
     ] ++ lib.optionals stdenv.isDarwin [
       # Application uninstaller
       appcleaner
-      # Graphically shows disk usage within a filesystem
-      grandperspective
-      # Move and resize windows using keyboard shortcuts or snap areas
-      rectangle
-      # X11 for macOS: to be able to enable X forwarding when SSH-ing into Linux boxes
-      xquartz
     ];
 
   systemd.user.services = {
