@@ -86,6 +86,8 @@
   # Pin Nix to the latest version that still supports spaces in NIX_PATH
   nix.package = pkgs.nixVersions.nix_2_23;
 
+  nixpkgs.hostPlatform = "x86_64-darwin";
+
   # "The user-friendly name for the system"
   networking.computerName = "Joey’s MacBook Pro";
 
