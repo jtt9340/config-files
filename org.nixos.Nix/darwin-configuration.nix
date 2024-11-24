@@ -41,16 +41,25 @@
       "font-sf-mono-nerd-font"
       # Client for the Google Drive storage services
       "google-drive"
+      # Graphically shows disk usage within a filesystem
+      # This is in nixpkgs but it can't build: https://github.com/NixOS/nixpkgs/issues/347868
+      "grandperspective"
       # I think this is needed for SSHFS to work?
       "macfuse"
       # Cloud storage client
       "onedrive"
+      # Move and resize windows using keyboard shortcuts or snap areas
+      # This is in nixpkgs but it can't build: https://github.com/NixOS/nixpkgs/issues/347868
+      "rectangle"
       # FOSS filesystem encryption on-the-fly
       "veracrypt"
       # Keyboard configurator
       "via"
       # Remote desktop application
       "vnc-viewer"
+      # X11 for macOS: to be able to enable X forwarding when SSH-ing into Linux boxes
+      # This is in nixpkgs but it can't build: https://github.com/NixOS/nixpkgs/issues/319189
+      "xquartz"
     ];
   };
 
