@@ -88,11 +88,8 @@
   # nix.package = pkgs.nix;
   nixpkgs.hostPlatform = system;
 
-  networking = {
-    # "The user-friendly name for the system"
-    computerName = "Joey’s MacBook Pro";
-    hosts = { "192.168.1.5" = [ "nicksauce" ]; };
-  };
+  # "The user-friendly name for the system"
+  networking.computerName = "Joey’s MacBook Pro";
 
   # Use TouchID to authenticate with sudo
   security.pam.enableSudoTouchIdAuth = true;
