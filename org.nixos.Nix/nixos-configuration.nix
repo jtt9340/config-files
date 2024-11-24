@@ -132,6 +132,10 @@
     prefixLength = 24;
   }];
 
+  networking.hosts = {
+    "10.0.0.6" = [ "raspberrypi" ];
+  };
+
   # Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";
   # These are the defaults so I guess they don't need to be uncommented
