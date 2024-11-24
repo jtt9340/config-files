@@ -82,7 +82,9 @@
 
   # Auto upgrade nix package and the daemon service.
   services.nix-daemon.enable = true;
-  # nix.package = pkgs.nix;
+
+  # Pin Nix to the latest version that still supports spaces in NIX_PATH
+  nix.package = pkgs.nixVersions.nix_2_23;
 
   # "The user-friendly name for the system"
   networking.computerName = "Joey’s MacBook Pro";
