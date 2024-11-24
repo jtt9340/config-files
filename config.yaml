@@ -215,7 +215,7 @@ dotfiles:
     template: true
   d_nixpkgs:
     src: org.nixos.Nix
-    dst: "{{@@ env['XDG_CONFIG_HOME'] @@}}/nix"
+    dst: "{{@@ env.get('XDG_CONFIG_HOME', '~/Library/Application Support') @@}}/nix"
     template: true
     link: link_children
     instignore:
