@@ -88,6 +88,8 @@
   # nix.package = pkgs.nix;
   nixpkgs.hostPlatform = system;
 
+  nixpkgs.hostPlatform = "x86_64-darwin";
+
   # "The user-friendly name for the system"
   networking.computerName = "Joey’s MacBook Pro";
 
