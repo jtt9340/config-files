@@ -116,6 +116,11 @@ add-zsh-hook chpwd lsGF
 source $ZDOTDIR/aliases.zsh   # Shell aliases
 source $ZDOTDIR/bookmark.zsh  # Bookmark mechanism
 
+{%@@ if exists_in_path('asdf') @@%}
+# asdf
+asdf plugin list | grep -q direnv && source "${XDG_CONFIG_HOME:-$HOME/.config}/asdf-direnv/zshrc"
+{%@@ endif @@%}
+
 {%@@ if exists_in_path('broot') @@%}
 # Broot
 {%@@ if profile == 'macos' @@%}
