@@ -1,0 +1,4 @@
+# This is Git's global .gitignore file.
+# Files in ANY repository that match ANY of these patterns will be ignored!
+# Vim *.swp files
+**/*.swp

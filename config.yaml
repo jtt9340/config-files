@@ -62,6 +62,12 @@ variables:
       else env['XDG_CONFIG_HOME'] + '/git/config' if env['XDG_CONFIG_HOME'] is string
       else '~/.config/git/config'
     @@}}
+  gitignore_config_path: >-
+    {{@@
+      '~/.gitignore' if profile == 'macos'
+      else env['XDG_CONFIG_HOME'] + '/git/ignore' if env['XDG_CONFIG_HOME'] is string
+      else '~/.config/git/ignore'
+    @@}}
   tmux_config_path: >-
     {{@@
       env['XDG_CONFIG_HOME'] + '/tmux/tmux.conf' if env['XDG_CONFIG_HOME'] is string
@@ -195,6 +201,10 @@ dotfiles:
     src: com.git-scm.Git/config
     dst: '{{@@ gitconfig_config_path @@}}'
     template: true
+  f_git_ignore:
+    src: com.git-scm.Git/ignore
+    dst: '{{@@ gitignore_config_path @@}}'
+    template: true
   f_virtualenv.ini:
     src: io.pypa.virtualenv/virtualenv.ini
     dst: ~/Library/Application Support/virtualenv/virtualenv.ini
@@ -239,6 +249,7 @@ profiles:
     - f_ripgreprc
     - f_bat_config
     - f_git_config
+    - f_git_ignore
     - f_virtualenv.ini
   nix-darwin:
     dotfiles:
@@ -252,6 +263,7 @@ profiles:
     - d_zdotdir_minimal
     - f_bat_config
     - f_git_config
+    - f_git_ignore
     - f_tmux.conf
     - f_coc_settings.json
   nixos:

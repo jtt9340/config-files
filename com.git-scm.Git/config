@@ -9,8 +9,9 @@
 	lineNumber = true
 	# Allow git grep to work outside of repositories
 	fallbackToNoIndex = true
-{%@@ if exists_in_path('bat') and exists_in_path('delta') @@%}
 [core]
+	excludesFile = {{@@ gitignore_config_path @@}}
+{%@@ if exists_in_path('bat') and exists_in_path('delta') @@%}
 	# Use dandavison/delta to view Git diffs
 	pager = BAT_PAGER='less -R' delta
 {%@@ endif @@%}
