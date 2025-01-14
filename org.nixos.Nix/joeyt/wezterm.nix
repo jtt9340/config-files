@@ -1,13 +1,29 @@
 { wezterm }:
 
 let
-  patchedWezterm = wezterm.overrideAttrs {
+  patchedWezterm = wezterm.overrideAttrs (finalAttrs: previousAttrs: {
     patchPhase = ''
       runHook prePatch
       sed -i 's/^Exec=/Exec=env XCURSOR_THEME=Adwaita /' assets/wezterm.desktop
       runHook postPatch
     '';
-  };
+
+    postPatch = ''
+      echo ${previousAttrs.version} > .tag
+
+      # tests are failing with: Unable to exchange encryption keys
+      rm -r wezterm-ssh/tests
+
+      # hash does not work well with NixOS
+      # upstream uses command type -P which does not work well with zsh
+      # so we use which instead which is cross-shell
+      substituteInPlace assets/shell-integration/wezterm.sh \
+        --replace-fail 'hash wezterm 2>/dev/null' 'which wezterm &>/dev/null' \
+        --replace-fail 'hash base64 2>/dev/null' 'which base64 &>/dev/null' \
+        --replace-fail 'hash hostname 2>/dev/null' 'which hostname &>/dev/null' \
+        --replace-fail 'hash hostnamectl 2>/dev/null' 'which hostnamectl &>/dev/null'
+    '';
+  });
 in {
   enable = true;
   package = patchedWezterm;
@@ -17,6 +33,9 @@ in {
     function capitalize(s)
       return string.upper(string.sub(s, 0, 1)) .. string.sub(s, 2)
     end
+
+    -- Regression in Wayland support: https://github.com/wez/wezterm/issues/6341
+    config.enable_wayland = false
 
     -- Appearance
     local one_dark = wezterm.color.get_builtin_schemes()['One Dark (Gogh)']

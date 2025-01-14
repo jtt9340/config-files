@@ -227,10 +227,6 @@
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
 
-  # Enable sound.
-  sound.enable = true;
-  hardware.pulseaudio.enable = true;
-
   # Enable the X11 windowing system.
   services.xserver = {
     enable = true;
@@ -249,8 +245,8 @@
 
   # Do not include these GNOME packages by default.
   environment.gnome.excludePackages = with pkgs; [
-    gnome.epiphany # Replaced by firefox
-    gnome.geary # Replaced by thunderbird
+    epiphany # Replaced by firefox
+    geary # Replaced by thunderbird
     gnome-connections # Replaced by realvnc-vnc-viewer
     gnome-console # Replaced by wezterm
   ];
