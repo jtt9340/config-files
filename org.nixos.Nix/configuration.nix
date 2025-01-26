@@ -88,7 +88,7 @@ in
       };
 
       networking.hosts = {
-        "10.0.0.6" = [ "raspberrypi" ];
+        "192.168.1.6" = [ "raspberrypi" ];
       };
     }
 

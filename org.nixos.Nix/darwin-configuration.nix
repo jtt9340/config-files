@@ -79,7 +79,7 @@
     # "The user-friendly name for the system"
     computerName = "Joey’s MacBook Pro";
     hosts = {
-      "10.0.0.5" = [ "nicksauce" ];
+      "192.168.1.5" = [ "nicksauce" ];
     };
   };
 

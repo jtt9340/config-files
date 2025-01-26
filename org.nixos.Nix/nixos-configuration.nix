@@ -128,7 +128,7 @@
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
   networking.interfaces.enp5s0.ipv4.addresses = [{
-    address = "10.0.0.5";
+    address = "192.168.1.5";
     prefixLength = 24;
   }];
 
