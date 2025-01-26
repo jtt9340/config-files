@@ -177,6 +177,8 @@
     hunspellDicts.en-us
     # Utilities for working with .heic files
     libheif
+    # Talk to iOS devices
+    libimobiledevice
     # Compression algorithm used by btrbk
     lz4
     # SSH alternative that allows for interrupted connections
@@ -242,6 +244,9 @@
 
   # Enable touchpad support.
   # services.xserver.libinput.enable = true;
+
+  # Talk to iOS devices
+  services.usbmuxd.enable = true;
 
   # Do not include these GNOME packages by default.
   environment.gnome.excludePackages = with pkgs; [
