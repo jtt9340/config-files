@@ -210,7 +210,11 @@ in {
       enableFishIntegration = false;
     };
 
-    wezterm = (import ./wezterm.nix) { inherit (pkgs) wezterm; };
+    wezterm = (import ./wezterm.nix) {
+      inherit (pkgs) wezterm;
+      inherit (pkgs.stdenv) isDarwin;
+      inherit (lib) optionalString;
+    };
   };
 
   home.packages = with pkgs;
@@ -224,7 +228,7 @@ in {
       # Rust IDE
       jetbrains.rust-rover
       # JavaScript runtime - needed for coc.nvim
-      nodejs_18
+      nodejs_22
       # Conversion between documentation formats
       pandoc
       # LaTeX
@@ -251,12 +255,6 @@ in {
     ] ++ lib.optionals stdenv.isDarwin [
       # Application uninstaller
       appcleaner
-      # Graphically shows disk usage within a filesystem
-      grandperspective
-      # Move and resize windows using keyboard shortcuts or snap areas
-      rectangle
-      # X11 for macOS: to be able to enable X forwarding when SSH-ing into Linux boxes
-      xquartz
     ];
 
   # How many times do I have to say that I am okay with non-free software?! I guess when

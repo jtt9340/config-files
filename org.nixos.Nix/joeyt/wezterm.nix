@@ -1,4 +1,4 @@
-{ wezterm }:
+{ wezterm, isDarwin, optionalString }:
 
 let
   patchedWezterm = wezterm.overrideAttrs {
@@ -37,6 +37,12 @@ in {
     config.warn_about_missing_glyphs = false
 
     config.enable_scroll_bar = true
+      ${
+        optionalString isDarwin ''
+          config.front_end = 'WebGpu'
+          config.webgpu_power_preference = 'HighPerformance'
+        ''
+      }
 
     -- Keybindings
     local is_vim = {
