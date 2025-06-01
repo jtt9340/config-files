@@ -1,5 +1,3 @@
-{ system, ... }:
-
 {
   # List packages installed in system profile. To search by name, run:
   # $ nix-env -qaP | grep wget
@@ -8,6 +6,10 @@
       # List USB devices
       darwin.lsusb
     ];
+
+  # Needs to be set to the user that runs `darwin-rebuild`.
+  # Supposedly at some point in the future this will no longer be needed.
+  system.primaryUser = "josephterrito";
 
   # Even though we will try to manage as many packages as possible with Nix, we still use Homebrew
   # for some macOS-specific things
@@ -83,18 +85,13 @@
   environment.systemPath =
     [ ''"$HOME/Library/Application Support/nix/profile/bin"'' ];
 
-  # Auto upgrade nix package and the daemon service.
-  services.nix-daemon.enable = true;
-  # nix.package = pkgs.nix;
-  nixpkgs.hostPlatform = system;
-
   nixpkgs.hostPlatform = "x86_64-darwin";
 
   # "The user-friendly name for the system"
   networking.computerName = "Joey’s MacBook Pro";
 
   # Use TouchID to authenticate with sudo
-  security.pam.enableSudoTouchIdAuth = true;
+  security.pam.services.sudo_local.touchIdAuth = true;
 
   # How often to clean out the Nix store
   nix.gc.interval.Day = 15; # on the 15th of every month (man launchd.plist)
