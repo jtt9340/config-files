@@ -6,6 +6,10 @@
     darwin.lsusb
   ];
 
+  # Needs to be set to the user that runs `darwin-rebuild`.
+  # Supposedly at some point in the future this will no longer be needed.
+  system.primaryUser = "{{@@ whoami @@}}";
+
   # Even though we will try to manage as many packages as possible with Nix, we still use Homebrew
   # for some macOS-specific things
   homebrew = {
@@ -80,19 +84,13 @@
   # Nested " to account for space
   environment.systemPath = [ ''"$HOME/Library/Application Support/nix/profile/bin"'' ];
 
-  # Auto upgrade nix package and the daemon service.
-  services.nix-daemon.enable = true;
-
-  # Pin Nix to the latest version that still supports spaces in NIX_PATH
-  nix.package = pkgs.nixVersions.nix_2_23;
-
   nixpkgs.hostPlatform = "x86_64-darwin";
 
   # "The user-friendly name for the system"
   networking.computerName = "Joey’s MacBook Pro";
 
   # Use TouchID to authenticate with sudo
-  security.pam.enableSudoTouchIdAuth = true;
+  security.pam.services.sudo_local.touchIdAuth = true;
 
   # How often to clean out the Nix store
   nix.gc.interval.Day = 15; # on the 15th of every month (man launchd.plist)

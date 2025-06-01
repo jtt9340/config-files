@@ -82,6 +82,7 @@ dynvariables:
   ql_exe: '[ "$(uname)" = Darwin ] && command -v ql || echo -n'
   markdown_exe: command -v markdown >/dev/null && which markdown || command -v glow
     || printf ''
+  whoami: id -un
 actions:
   zshenv: ln -i -s {{@@ _dotfile_abs_dst | shellescape @@}}/.zshenv ~/.zshenv
 dotfiles:
@@ -217,7 +218,7 @@ dotfiles:
     src: org.nixos.Nix
     dst: "{{@@ env.get('XDG_CONFIG_HOME', '~/Library/Application Support') @@}}/nix"
     template: true
-    link: link_children
+    link: nolink
     instignore:
     - '*/config.nix'
     - '*/*-configuration.nix'

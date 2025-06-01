@@ -6,23 +6,16 @@ let
 in
 {%@@ endif @@%}
 {
-  imports =
 {%@@ if profile == 'nixos' @@%}
-    [
-      # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-      # Introduce a new NixOS option called home-manager.users
-      <home-manager/nixos>
-      # Introduce a new NixOS option called environment.persistence
-      "${impermanence}/nixos.nix"
-    ]
-{%@@ else @@%}
-    [
-      # Introduce a new nix-darwin option called home-manager.users
-      <home-manager/nix-darwin>
-    ]
+  imports = [
+    # Include the results of the hardware scan.
+    ./hardware-configuration.nix
+    # Introduce a new NixOS option called home-manager.users
+    <home-manager/nixos>
+    # Introduce a new NixOS option called environment.persistence
+    "${impermanence}/nixos.nix"
+  ];
 {%@@ endif @@%}
-    ;
 
   config = lib.mkMerge [
     {

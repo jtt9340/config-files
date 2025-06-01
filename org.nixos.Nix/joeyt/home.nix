@@ -228,7 +228,7 @@ in {
       # Rust IDE
       jetbrains.rust-rover
       # JavaScript runtime - needed for coc.nvim
-      nodejs_18
+      nodejs_22
       # Conversion between documentation formats
       pandoc
       # LaTeX
