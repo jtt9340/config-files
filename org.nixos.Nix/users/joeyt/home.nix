@@ -1,18 +1,25 @@
-{ lib, pkgs, config, ... }:
+{ lib, pkgs, config, flakeInputs, ... }:
 
 let
-  # Path to my repository for storing config/dot files
-  configFiles = "${config.home.homeDirectory}/Projects/config-files";
-  # nixos-unstable (for more recent version of some packages, need to subscribe to nixpkgs-unstable first)
-  # pkgsUnstable = import <nixpkgs-unstable> {
-  #   config = { allowUnfree = true; };
-  # };
   xdgConfigHome = config.xdg.configHome;
   xdgDataHome = config.xdg.dataHome;
   xdgCacheHome = config.xdg.cacheHome;
-  zfunc = file: /${configFiles}/net.sourceforge.Zsh/omz/zfunc/${file};
+  zfunc = file: ../../../net.sourceforge.Zsh/omz/zfunc/${file};
 in {
-  home.stateVersion = "{{@@ state_version @@}}";
+  imports = [ flakeInputs.lollypops.homeModules.default ];
+
+  home.stateVersion = "23.11";
+
+  lollypops.secrets = {
+    default-dir = "${xdgDataHome}/lollypops";
+    files."git_email" = {
+      cmd =
+        "${pkgs.age}/bin/age -d -i ${config.home.homeDirectory}/.ssh/id_ed25519 ${
+          ../../secrets/git_email.age
+        }";
+      mode = "0644";
+    };
+  };
 
   xdg = {
     # Enable management of XDG Base Directories
@@ -20,12 +27,13 @@ in {
 
     # Home manager will manage these dotfiles
     configFile = {
-      "nixpkgs/config.nix".source = /${configFiles}/org.nixos.Nix/config.nix;
-      "npm/npmrc".source = /${configFiles}/com.npmjs.Npm/npmrc;
+      "nixpkgs/config.nix".source = ./config.nix;
+      "npm/npmrc".source = ../../../com.npmjs.Npm/npmrc;
       "ripgrep/ripgreprc".source =
-        /${configFiles}/com.github.burntsushi.Ripgrep/ripgreprc;
+        ../../../com.github.burntsushi.Ripgrep/ripgreprc;
       "coc/coc-settings.json".source =
         (import ./coc-settings.nix) (pkgs.formats.json { }).generate;
+      "zsh/bookmark.zsh".source = ../../../net.sourceforge.Zsh/omz/bookmark.zsh;
       # Instead of just symlinking the entire zsh/zfunc directory we have to do it file
       # by file since some files expect a Jinja template engine to be run first
       "zsh/zfunc/_python-workon-cwd".source = zfunc "_python-workon-cwd";
@@ -112,12 +120,14 @@ in {
     };
   } // lib.optionalAttrs pkgs.stdenv.isDarwin
     ( # Janky syntax since apparently path literals don't support spaces
-      let applicationSupport = ~/Library + "/Application Support";
+      let
+        applicationSupport =
+          "${config.home.homeDirectory}/Library/Application Support";
       in {
         configHome = applicationSupport;
         dataHome = applicationSupport;
         stateHome = applicationSupport;
-        cacheHome = ~/Library/Caches;
+        cacheHome = "${config.home.homeDirectory}/Library/Caches";
       });
 
   programs = {
@@ -127,11 +137,12 @@ in {
     # Configure Zsh
     zsh = (import ./zsh.nix) {
       inherit (pkgs) zsh-nix-shell fetchFromGitHub python3;
-      inherit (lib) optionalAttrs optionalString escapeShellArg;
+      inherit (lib) optionalAttrs optionalString;
       inherit (pkgs.stdenv) mkDerivation isLinux isDarwin;
       inherit (lib.strings) removePrefix;
-      inherit configFiles xdgConfigHome xdgDataHome;
+      inherit xdgConfigHome xdgDataHome;
       home = config.home.homeDirectory;
+      gitEmailPath = config.lollypops.secrets.files."git_email".path;
     };
 
     # Use z-lua, a program that remembers your most frequently cd-ed to directories to make

@@ -1,10 +1,13 @@
+{ system, ... }:
+
 {
   # List packages installed in system profile. To search by name, run:
   # $ nix-env -qaP | grep wget
-  environment.systemPackages = with pkgs; [
-    # List USB devices
-    darwin.lsusb
-  ];
+  environment.systemPackages = with pkgs;
+    [
+      # List USB devices
+      darwin.lsusb
+    ];
 
   # Even though we will try to manage as many packages as possible with Nix, we still use Homebrew
   # for some macOS-specific things
@@ -61,26 +64,25 @@
   # environment.darwinConfig = "$XDG_CONFIG_HOME/nix/configuration.nix";
   nix.nixPath = [
     {
-      darwin-config =
-        "$HOME/Library/Application Support/nix/configuration.nix";
+      darwin-config = "$HOME/Library/Application Support/nix/configuration.nix";
     }
     "/nix/var/nix/profiles/per-user/root/channels"
     "$HOME/Library/Application Support/nix/defexpr/channels"
   ];
 
   # Nested " to account for space
-  environment.systemPath = [ ''"$HOME/Library/Application Support/nix/profile/bin"'' ];
+  environment.systemPath =
+    [ ''"$HOME/Library/Application Support/nix/profile/bin"'' ];
 
   # Auto upgrade nix package and the daemon service.
   services.nix-daemon.enable = true;
   # nix.package = pkgs.nix;
+  nixpkgs.hostPlatform = system;
 
   networking = {
     # "The user-friendly name for the system"
     computerName = "Joey’s MacBook Pro";
-    hosts = {
-      "192.168.1.5" = [ "nicksauce" ];
-    };
+    hosts = { "192.168.1.5" = [ "nicksauce" ]; };
   };
 
   # Use TouchID to authenticate with sudo
@@ -94,8 +96,6 @@
     home = "/Users/josephterrito";
     shell = /bin/zsh;
   };
-
-  home-manager.users.josephterrito = import ./joeyt/home.nix;
 
   # Used for backwards compatibility, please read the changelog before changing.
   # $ darwin-rebuild changelog

@@ -4,7 +4,8 @@ let
   copyCmd = if isDarwin then
     "send-keys -X copy-pipe-and-cancel pbcopy"
   else
-    "if-shell \"[ -n \\\"\\\${WAYLAND_DISPLAY:-}\\\" ]\" \"send-keys -X copy-pipe-and-cancel ${wl-clipboard}/bin/wl-copy\" \"send-keys -X copy-pipe-and-cancel ${xsel}/bin/xsel --clipboard --input\"";
+    ''
+      if-shell "[ -n \"\''${WAYLAND_DISPLAY:-}\" ]" "send-keys -X copy-pipe-and-cancel ${wl-clipboard}/bin/wl-copy" "send-keys -X copy-pipe-and-cancel ${xsel}/bin/xsel --clipboard --input"'';
 in {
   enable = true;
   shell = "${zsh}/bin/zsh";

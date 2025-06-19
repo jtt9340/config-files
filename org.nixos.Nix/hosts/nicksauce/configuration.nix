@@ -1,7 +1,31 @@
+{ lib, config, pkgs, ... }:
+
 # Edit this configuration file to define what should be installed on
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 {
+  imports = [
+    # Include the results of the hardware scan.
+    ./hardware-configuration.nix
+  ];
+
+  lollypops = {
+    deployment.ssh.user = "joeyt";
+    tasks = [ "check-vars" "deploy-secrets" "rebuild" ];
+    # rebuild needs to depend on deploy-secrets
+    # in order for the secret paths to be written
+    extraTasks = {
+      rebuild = {
+        deps = [ "deploy-secrets" ];
+        desc = "Rebuild configuration of: ${config.networking.hostName}";
+        cmds = [''
+          sudo nixos-rebuild {{.REBUILD_ACTION}} \
+            --flake '.#{{.HOSTNAME}}'
+        ''];
+      };
+    };
+  };
+
   # Use the GRUB 2 boot loader.
   # boot.loader.grub.enable = true;
   # boot.loader.grub.efiSupport = true;
@@ -181,8 +205,6 @@
     libimobiledevice
     # Compression algorithm used by btrbk
     lz4
-    # SSH alternative that allows for interrupted connections
-    mosh
     # Remote desktop client
     realvnc-vnc-viewer
     # Extract ZIP archives
@@ -294,9 +316,6 @@
     };
   };
 
-  # Configure the Joey T user a little bit
-  home-manager.users.joeyt = import ./joeyt/home.nix;
-
   # Copy the NixOS configuration file and link it from the resulting system
   # (/run/current-system/configuration.nix). This is useful in case you
   # accidentally delete configuration.nix.
@@ -318,5 +337,5 @@
   # and migrated your data accordingly.
   #
   # For more information, see `man configuration.nix` or https://nixos.org/manual/nixos/stable/options#opt-system.stateVersion .
-  system.stateVersion = "{{@@ state_version @@}}"; # Did you read the comment?
+  system.stateVersion = "23.11"; # Did you read the comment?
 }

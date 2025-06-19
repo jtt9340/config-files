@@ -2,11 +2,11 @@
 , fetchFromGitHub # Function for cloning GitHub repositories
 , optionalAttrs # If the first argument is true return the second argument, else return {}
 , optionalString # If the first argument is true return the second argument, else return ""
-, escapeShellArg, removePrefix, isLinux, isDarwin, home # $HOME
-, configFiles # The path to my "config-files" repo
+, removePrefix, isLinux, isDarwin, home # $HOME
 , xdgConfigHome # The path to $XDG_CONFIG_HOME
 , xdgDataHome # The path to $XDG_DATA_HOME
 , python3 # The python3 package
+, gitEmailPath # Path to a file containing email address to use for Git
 }:
 
 # Configuration settings for Zsh
@@ -31,6 +31,10 @@
 
   # Environment variables that will be set for Zsh session
   sessionVariables = {
+    # Configure Git email
+    # (this can't be in the Git config file because it requires reading a secret.
+    #  it is not so easy to template a file with a secret after it has been generated with Nix.)
+    EMAIL = "$(cat ${gitEmailPath})";
     # Move less' history file
     LESSKEY = "${xdgConfigHome}/less/lesskey";
     LESSHISTFILE = "${xdgDataHome}/less/history";
@@ -107,7 +111,7 @@
     # Tell z.lua which command-line fuzzy finder to use
     export _ZL_FZF='sk'
     export _ZL_FZF_FLAG='--no-sort'
-    export BROOT_CONFIG_DIR=${escapeShellArg xdgConfigHome}/broot
+    export BROOT_CONFIG_DIR="$XDG_CONFIG_HOME/broot"
 
     for fn in "$ZDOTDIR/zfunc"/*; do
       autoload $fn
@@ -120,7 +124,7 @@
     setopt NO_CASE_GLOB # Case-insensitive globbing
     setopt correct # Spell check
 
-    source "${configFiles}/net.sourceforge.Zsh/omz/bookmark.zsh"
+    source "$ZDOTDIR/bookmark.zsh"
     [ -x "$ZDOTDIR/.zshrc.local" ] && source "$ZDOTDIR/.zshrc.local"
   '';
 

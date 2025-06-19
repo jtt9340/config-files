@@ -7,7 +7,6 @@
   # Git config
   enable = true;
   userName = "Joey Territo";
-  userEmail = "{{@@ git_email @@}}";
   extraConfig = {
     grep = {
       lineNumber = true;
