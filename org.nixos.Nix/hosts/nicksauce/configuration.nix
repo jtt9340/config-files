@@ -20,7 +20,7 @@
         desc = "Rebuild configuration of: ${config.networking.hostName}";
         cmds = [''
           sudo nixos-rebuild {{.REBUILD_ACTION}} \
-            --flake '.#{{.HOSTNAME}}'
+            --flake '{{.LOCAL_FLAKE_SOURCE}}#{{.HOSTNAME}}'
         ''];
       };
     };
@@ -201,16 +201,12 @@
     hunspellDicts.en-us
     # Utilities for working with .heic files
     libheif
-    # Talk to iOS devices
-    libimobiledevice
     # Compression algorithm used by btrbk
     lz4
     # Remote desktop client
     realvnc-vnc-viewer
     # Extract ZIP archives
     unzip
-    # FOSS filesystem encryption on-the-fly
-    veracrypt
     # "Tool for retrieving files using HTTP, HTTPS, and FTP"
     wget
     # Determine where binaries are installed on your system
@@ -223,7 +219,10 @@
 
   programs.firefox.enable = true;
 
-  programs.vim.defaultEditor = true;
+  programs.vim = {
+    enable = true;
+    defaultEditor = true;
+  };
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
@@ -280,12 +279,13 @@
 
   # "On 64-bit systems, if you want OpenGL for 32-bit programs such as in Wine, you should also set the following"
   # hardware.opengl.driSupport32Bit = true;
-  hardware.opengl.enable = true;
+  hardware.graphics.enable = true;
 
   # Automatically keep NixOS up-to-date, but don't automatically reboot
   system.autoUpgrade = {
     enable = true;
     allowReboot = false;
+    flake = "github:jtt9340/config-files?dir=org.nixos.Nix";
   };
 
   # How often to clean out the Nix store

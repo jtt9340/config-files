@@ -137,7 +137,7 @@ in {
     # Configure Zsh
     zsh = (import ./zsh.nix) {
       inherit (pkgs) zsh-nix-shell fetchFromGitHub python3;
-      inherit (lib) optionalAttrs optionalString;
+      inherit (lib) optionalAttrs optionalString mkMerge mkOrder;
       inherit (pkgs.stdenv) mkDerivation isLinux isDarwin;
       inherit (lib.strings) removePrefix;
       inherit xdgConfigHome xdgDataHome;
@@ -163,6 +163,7 @@ in {
           "*.sh:Bourne Again Shell (bash)"
           "*.zsh-theme:Bourne Again Shell (bash)"
           "*.csproj:XML"
+          "flake.lock:JSON"
         ];
         pager = "less --mouse -RF";
       };
@@ -228,14 +229,16 @@ in {
     [
       # Chat app
       discord
-      # Java IDE
-      jetbrains.idea-ultimate
+      # Plaintext accounting software
+      hledger
+      # Web UI for Hlegder
+      hledger-web
       # Python IDE
-      jetbrains.pycharm-professional
+      jetbrains.pycharm-community-bin
       # Rust IDE
       jetbrains.rust-rover
       # JavaScript runtime - needed for coc.nvim
-      nodejs_18
+      nodejs_22
       # Conversion between documentation formats
       pandoc
       # LaTeX
@@ -247,6 +250,10 @@ in {
       bitwarden
       # Sync mobile device with Gnome Desktop
       gnomeExtensions.gsconnect
+      # Install new firmware on iOS devices
+      idevicerestore
+      # Talk to iOS devices
+      libimobiledevice
       # Free and open-source office suite
       libreoffice
       # Makes it easier to run games/Windows-only applications on GNU/Linux
@@ -257,6 +264,8 @@ in {
       sshfs
       # Email client
       thunderbird
+      # FOSS filesystem encryption on-the-fly
+      veracrypt
       # Keyboard configurator
       via
     ] ++ lib.optionals stdenv.isDarwin [
@@ -269,10 +278,4 @@ in {
       # X11 for macOS: to be able to enable X forwarding when SSH-ing into Linux boxes
       xquartz
     ];
-
-  # How many times do I have to say that I am okay with non-free software?! I guess when
-  # you specify packages with home.packages you also need to specify it here?
-  # (Me from the future: yes that is the case - the following line applies only to packages
-  # listed above)
-  nixpkgs.config.allowUnfree = true;
 }

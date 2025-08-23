@@ -83,6 +83,9 @@ dynvariables:
   markdown_exe: command -v markdown >/dev/null && which markdown || command -v glow
     || printf ''
 actions:
+  # The action string is first processed by Jinja and then by Python's str.format, so we need
+  # to escape the {} passed to find
+  nixfmt: find {{@@ _dotfile_abs_dst | shellescape @@}} -name \*.nix -execdir nixfmt {{}} +
   zshenv: ln -i -s {{@@ _dotfile_abs_dst | shellescape @@}}/.zshenv ~/.zshenv
 dotfiles:
   d_vim:

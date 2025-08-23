@@ -21,6 +21,8 @@
       dos2unix
       # More user-friendly alternative to find
       fd
+      # Render markdown files in the terminal
+      glow
       # Terminal-based system monitor
       htop
       # Format nix files

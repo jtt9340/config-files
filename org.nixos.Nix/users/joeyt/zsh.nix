@@ -2,6 +2,8 @@
 , fetchFromGitHub # Function for cloning GitHub repositories
 , optionalAttrs # If the first argument is true return the second argument, else return {}
 , optionalString # If the first argument is true return the second argument, else return ""
+, mkMerge # function that recursively merges several sets or lists into a single set or list
+, mkOrder # According to the AI overlords, "mkOrder is a function in Nix that helps control the order of items in a merged list, allowing you to specify which items should come first or last. It is often used in conjunction with other functions to manage configurations effectively."
 , removePrefix, isLinux, isDarwin, home # $HOME
 , xdgConfigHome # The path to $XDG_CONFIG_HOME
 , xdgDataHome # The path to $XDG_DATA_HOME
@@ -95,38 +97,40 @@
     ZSH_THEME_VIRTUALENV_SUFFIX = "⟩";
   };
 
-  # Extra commands that should be added to .zshrc before compinit
-  initExtraBeforeCompInit = ''
-    fpath+="$ZDOTDIR/zfunc"
-  '' + optionalString isDarwin ''
-    whence brew &>/dev/null && fpath+=$(brew --prefix)/share/zsh/site-functions
-  '';
+  initContent =
+    let
+      # Extra commands that should be added to .zshrc before compinit
+      initExtraBeforeCompinit = mkOrder 550 (''
+        fpath+="$ZDOTDIR/zfunc"
+      '' + optionalString isDarwin ''
+        whence brew &>/dev/null && fpath+=$(brew --prefix)/share/zsh/site-functions
+      '');
+      # Extra commands that should be added to .zshrc
+      initExtra = mkOrder 1000 ''
+        export ZSH_PLUGINS_ALIAS_TIPS_TEXT='Found existing alias: '
+        export ZSH_PLUGINS_ALIAS_TIPS_EXCLUDES='_'
+        # Tell z.lua where to store its data file    
+        export _ZL_DATA="''${ZDOTDIR:-$XDG_CONFIG_HOME/zsh}/z.txt"
+        # Tell z.lua which command-line fuzzy finder to use
+        export _ZL_FZF='sk'
+        export _ZL_FZF_FLAG='--no-sort'
+        export BROOT_CONFIG_DIR="$XDG_CONFIG_HOME/broot"
 
-  # Extra commands that should be added to .zshrc
-  initExtra = ''
-    export ZSH_PLUGINS_ALIAS_TIPS_TEXT='Found existing alias: '
-    export ZSH_PLUGINS_ALIAS_TIPS_EXCLUDES='_'
-    # Tell z.lua where to store its data file    
-    export _ZL_DATA="''${ZDOTDIR:-$XDG_CONFIG_HOME/zsh}/z.txt"
-    # Tell z.lua which command-line fuzzy finder to use
-    export _ZL_FZF='sk'
-    export _ZL_FZF_FLAG='--no-sort'
-    export BROOT_CONFIG_DIR="$XDG_CONFIG_HOME/broot"
+        for fn in "$ZDOTDIR/zfunc"/*; do
+          autoload $fn
+        done
 
-    for fn in "$ZDOTDIR/zfunc"/*; do
-      autoload $fn
-    done
+        autoload -Uz add-zsh-hook
+        add-zsh-hook chpwd _python-workon-cwd
+        add-zsh-hook chpwd lsGF
 
-    autoload -Uz add-zsh-hook
-    add-zsh-hook chpwd _python-workon-cwd
-    add-zsh-hook chpwd lsGF
+        setopt NO_CASE_GLOB # Case-insensitive globbing
+        setopt correct # Spell check
 
-    setopt NO_CASE_GLOB # Case-insensitive globbing
-    setopt correct # Spell check
-
-    source "$ZDOTDIR/bookmark.zsh"
-    [ -x "$ZDOTDIR/.zshrc.local" ] && source "$ZDOTDIR/.zshrc.local"
-  '';
+        source "$ZDOTDIR/bookmark.zsh"
+        [ -x "$ZDOTDIR/.zshrc.local" ] && source "$ZDOTDIR/.zshrc.local"
+      '';
+    in mkMerge [ initExtraBeforeCompinit initExtra ];
 
   # Plugins not available in Oh-My-Zsh
   plugins = [
@@ -137,8 +141,8 @@
         src = fetchFromGitHub {
           owner = "djui";
           repo = name;
-          rev = "45e4e97ba4ec30c7e23296a75427964fc27fb029";
-          sha256 = "1br0gl5jishbgi7whq4kachlcw6gjqwrvdwgk8l39hcg6gwkh4ji";
+          rev = "41cb143ccc3b8cc444bf20257276cb43275f65c4";
+          hash = "sha256-ZFWrwcwwwSYP5d8k7Lr/hL3WKAZmgn51Q9hYL3bq9vE=";
         };
 
         prePatch = ''

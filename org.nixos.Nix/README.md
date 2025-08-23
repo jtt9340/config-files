@@ -1,68 +1,131 @@
 # [Nix(OS)](https://nixos.org/)
-The files in this directory are the reason I named this repository "config files" instead of
-"dotfiles." They are the files that configure the state and settings of my NixOS setup.
 
-The unique thing that I like about NixOS is that it aims to be as "stateless" as possible,
-meaning your OS is a function of the configuration you give it, nothing else. Of course,
-stateful things like Documents, Photos, etc. make it so that this is not 100% possible,
-but you can get pretty close in these config files by specifying which packages you want
-installed, any patches/settings for them, systemd services, UNIX users, etc. By making as much of
-your OS's state a function of these config files as possible, I can get a streamlined, consistent
-experience on any machine running NixOS by deploying these files to that machine and running
-`sudo nixos-rebuild switch`. Of course, I can back up the aforementioned Documents and Photos
-to a cloud provider, and now I have a completely reproducible environment for any machine running
-NixOS! This is very similar to the value proposition of a ChromeBook.
+The files in this directory are the reason I named this repository "config files" instead of "dotfiles."
+They are the files that configure the state and settings of my NixOS setup.
 
-## [`config.nix`](config.nix)
-This lives in the home directory for each user. Nix by default disallows unfree software, which
-is good, except I'm not as steadfast on purely using free software and use Slack and Discord. This
-file just tells Nix to allow non-free software when installing software at the command line with
-`nix-env`.
+The unique thing that I like about NixOS is that it aims to be as "stateless" as possible, meaning your OS is a function of the configuration you give it, nothing else.
+Of course, stateful things like documents, photos, etc. make it so that this is not 100% possible, but you can get pretty close in these config files by specifying which packages you want installed, any patches/settings for them, systemd services, UNIX users, etc.
+By making as much of your OS's state a function of these config files as possible, I can get a streamlined, consistent experience on any machine running NixOS by deploying these files to that machine and running `sudo nixos-rebuild switch`.
+Of course, I can back up the aforementioned Documents and Photos to a cloud provider, and now I have a completely reproducible environment for any machine running NixOS!
+This is very similar to the value proposition of a ChromeBook.
+
+## [`flake.nix`](flake.nix)
+
+This is the "entrypoint" of my Nix configuration.
+It uses [lollypops][lollypops] to specify which configuration file to use for a particular host/platform.
+You deploy Nix configuration by running `nix run '.#lollypops' -- TARGET_NAME` where `TARGET_NAME` is one of the targets listed by `nix run '.#lollypops' -- --list-all`.
+
+For each host you should see 4 targets: 
+1. **check-vars:** This just does some prelimary checks to ensure everything is set up correctly.
+2. **deploy-flake:** This copies the configuration to the host-to-be-configured using SSH.
+3. **deploy-secrets:** This decrypts the secrets in this repo (see below) and copied them to the host-to-be-configured using SSH.
+4. **rebuild:** This calls `nixos-rebuild` to actually build the configuration copied over in the **deploy-flake** target.
+
+You will usually want to run all 4 targets, in which case you can use the hostname of the host-to-be-configured as the target name.
+For example: `nix run '.#lollypops' -- nicksauce`.
+
+If you want to configure all hosts at once, use target `all`.
 
 ## [`configuration.nix`](configuration.nix)
-Don't let the similar name confuse you &#x2014; this is the system-wide configuration file for
-Nix. This
-- configures Grub
-- sets the hostname for the computer
-- configures networking
-- sets other basic options like locale and time zone
-- lists system-level packages to be installed
-- enables OpenSSH
-- configures the X server
 
-## [`joeyt/`](joeyt)
-Nix becomes even more powerful when you integrate
-[Home Manager](https://rycee.gitlab.io/home-manager/) &#x2014;
-it allows Nix to manage your config files for you. As outlined in the linked manual,
-there are several ways to set it up; I've opted to install it as a NixOS module, which extends
-the above `configuration.nix` to also configure users and their config files. For organizational
-purposes, I have included all my user-specific configurations in their own directory to be
-imported by the main `configuration.nix`, broken down by program.
+This is the system-wide configuration file for Nix.
+In particular, this is the configuration common to all hosts I have running Nix(OS).
+Becuase of this, it is very minimal and only
+- installs Zsh
+- installs some packages common to all hosts
+- configures some static hostname assignments
 
-### [`joeyt/git.nix`](joeyt/git.nix)
-This is [my git config](../com.git-scm.Git/README.md) ported to the Nix expression language, so
-that Home Manager can install this file as a package.
+## [`hosts/`](hosts)
 
-### [`joeyt/vim.nix`](joeyt/vim.nix)
-This is [my vim configuration](../org.vim.Vim/README.md) ported to the Nix expression language,
-so that Home Manager can install this file as a package.
+Host-specific configuration lives in this directory.
+Each host inherits the base configuration in [`configuration.nix`](configuration.nix) plus its own configuration.
 
-### [`joeyt/coc-settings.nix`](joeyt/coc-settings.nix)
-This is the settings for [the CoC Vim extension][coc.nvim] ported to the Nix expression language,
-so that Home Manager can install this file as a package.
+### [`hosts/nicksauce/`](hosts/nicksauce)
 
-### [`joeyt/zsh.nix`](joeyt/zsh.nix)
-This is [my zsh configuration](../net.sourceforge.Zsh/README.md) ported to the Nix expression
-language, so that Home Manager can install this file as a package.
+This is for my main desktop, `nicksauce`.
 
-### [`joeyt/tmux.nix`](joeyt/tmux.nix)
-This is [my tmux configuration](../io.github.tmux/README.md) ported to the Nix expression
-language, so that Home Manager can install this file as a package.
+#### [`hosts/nicksauce/configuration.nix`](hosts/nicksauce/configuration.nix)
 
-### [`joeyt/home.nix`](joeyt/home.nix)
-In addition to being the file that imports the configurations for all of the above into one
-centralized file that is imported by `configuration.nix`, this also installs some packages I
-didn't feel belonged in the system-wide configuration file, since I may stop using them at some
-point.
+This file configures
+- the bootloader
+- [impermanence][impermanence] so that only the files in `/persist` and `/home` are preserved across reboots.
+  This is to prevent configuration drift.
+- [btrbk][btrbk] so that my files are backed up.
+- system hostname, networking, and locale
+- some packages specific to my desktop.
 
+#### [`hosts/nicksauce/hardware-configuration.nix`](hosts/nicksauce/hardware-configuration.nix)
+
+This file configures my filesystems and is auto-generated by `nixos-generate-config`.
+
+### [`hosts/Joeys-MacBook-Pro-2/`](hosts/Joeys-MacBook-Pro-2)
+
+This is for configuring Nix on my MacBook Pro.
+I don't use MacBooks anymore, but I keep this configuration around in case I were to ever start using a MacBook again and want to put Nix on it.
+
+#### [`hosts/Joeys-MacBook-Pro-2/configuration.nix`](hosts/Joeys-MacBook-Pro-2/configuration.nix)
+
+This file
+- installs some packages specific to my MacBook (including Homebrew and can even manage packages in Homebrew's respoitories but not Nix's)
+- configures some static hostname assignments
+
+## [`users/`](users)
+
+Nix becomes even more powerful when you integrate [Home Manager][home-manager] &#x2014; it allows Nix to manage your config files for you.
+As outlined in the linked manual, there are several ways to set it up; I've opted to install it as a NixOS module, so that user-specific configuration can live alongside host-wide configuration.
+For organizational purposes, I have included all my user-specific configurations in their own directory to be imported by the main `configuration.nix`, broken down by program.
+
+### [`users/joeyt/`](users/joeyt)
+
+This directory contains all configuration for the `joeyt` user.
+
+#### [`users/joeyt/config.nix`](users/joeyt/config.nix)
+
+This lives in the home directory for each user.
+Nix by default disallows unfree software, which is good, except I'm not as steadfast on purely using free software and use Slack and Discord.
+This file just tells Nix to allow non-free software when installing software at the command line with `nix-env`.
+
+#### [`users/joeyt/git.nix`](users/joeyt/git.nix)
+
+This is [my git config](../com.git-scm.Git/README.md) ported to the Nix expression language, so that Home Manager can install this file as a package.
+
+#### [`users/joeyt/vim.nix`](users/joeyt/vim.nix)
+
+This is [my vim configuration](../org.vim.Vim/README.md) ported to the Nix expression language, so that Home Manager can install this file as a package.
+
+#### [`users/joeyt/coc-settings.nix`](users/joeyt/coc-settings.nix)
+
+This is the settings for [the CoC Vim extension][coc.nvim] ported to the Nix expression language, so that Home Manager can install this file as a package.
+
+#### [`users/joeyt/zsh.nix`](users/joeyt/zsh.nix)
+
+This is [my zsh configuration](../net.sourceforge.Zsh/README.md) ported to the Nix expression language, so that Home Manager can install this file as a package.
+
+#### [`users/joeyt/tmux.nix`](users/joeyt/tmux.nix)
+
+This is [my tmux configuration](../io.github.tmux/README.md) ported to the Nix expression language, so that Home Manager can install this file as a package.
+
+#### [`users/joeyt/wezterm.nix`](users/joeyt/wezterm.nix)
+
+This is my [Wezterm][wezterm] configuration ported to the Nix expression language, so that Home Manager an install this file as a package.
+
+#### [`users/joeyt/home.nix`](users/joeyt/home.nix)
+
+In addition to being the file that imports the configurations for all of the above into one centralized file that is imported by `configuration.nix`, this also installs some packages I didn't feel belonged in the system-wide configuration file, since I may stop using them at some point.
+
+## [`secrets/`](secrets)
+
+This directory contains secrets I don't want stored in plaintext in this repo.
+They are encrypted with [age][age], a tool that lets you encrypt and decrypt files with the SSH keys you already use.
+The reason they need to be stored in this repo at all is that, when using its "flakes" feature, Nix enforces reproducibility by only accessing files that are checked into your Git repo.
+By enforcing that, you cannot have special files that your configuration is dependent on that you cannot reproduce on another machine.
+This rule, however, makes secrets management a little tricky since, like I said, you don't want to store these in plaintext in your repo.
+Luckily, [lollypops][lollypops] has support for secret management, so I can store secrets in my repo and have it decrypt them upon deploying to a host!
+
+[lollypops]: https://github.com/pinpox/lollypops
+[impermanence]: https://github.com/nix-community/impermanence
+[btrbk]: https://github.com/digint/btrbk
+[home-manager]: https://rycee.gitlab.io/home-manager/
 [coc.nvim]: https://github.com/neoclide/coc.nvim
+[wezterm]: https://wezterm.org/
+[age]: https://age-encryption.org/
