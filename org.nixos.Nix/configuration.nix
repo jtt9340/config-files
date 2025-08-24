@@ -25,6 +25,8 @@
       glow
       # Terminal-based system monitor
       htop
+      # Command-line tool for working with JSON
+      jq
       # Format nix files
       nixfmt-classic
       # Generate SHA-256 sums from Git repositories
