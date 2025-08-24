@@ -278,4 +278,24 @@ in {
       # X11 for macOS: to be able to enable X forwarding when SSH-ing into Linux boxes
       xquartz
     ];
+
+  systemd.user.services = {
+    # Highly adapted from https://github.com/NixOS/nixpkgs/blob/nixos-25.05/nixos/modules/services/web-apps/hledger-web.nix#L130
+    hledger-web = {
+      Unit = {
+        Description = "hledger-web";
+        Documentation =
+          [ "man:hledger-web(1)" "https://hledger.org/hledger-web.html" ];
+      };
+
+      Service = {
+        ExecStart = "${pkgs.hledger}/bin/hledger web -- --serve";
+        Restart = "always";
+        PrivateTmp = true;
+        KillSignal = "SIGINT";
+      };
+
+      Install = { WantedBy = [ "default.target" ]; };
+    };
+  };
 }

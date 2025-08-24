@@ -52,7 +52,7 @@ in {
       -- Disable ligatures
       harfbuzz_features = { 'calt=0', 'clig=0', 'liga=0' }
     }
-    config.font_size = 11
+    config.font_size = 10.4
     config.warn_about_missing_glyphs = false
 
     config.enable_scroll_bar = true

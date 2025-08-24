@@ -97,40 +97,39 @@
     ZSH_THEME_VIRTUALENV_SUFFIX = "⟩";
   };
 
-  initContent =
-    let
-      # Extra commands that should be added to .zshrc before compinit
-      initExtraBeforeCompinit = mkOrder 550 (''
-        fpath+="$ZDOTDIR/zfunc"
-      '' + optionalString isDarwin ''
-        whence brew &>/dev/null && fpath+=$(brew --prefix)/share/zsh/site-functions
-      '');
-      # Extra commands that should be added to .zshrc
-      initExtra = mkOrder 1000 ''
-        export ZSH_PLUGINS_ALIAS_TIPS_TEXT='Found existing alias: '
-        export ZSH_PLUGINS_ALIAS_TIPS_EXCLUDES='_'
-        # Tell z.lua where to store its data file    
-        export _ZL_DATA="''${ZDOTDIR:-$XDG_CONFIG_HOME/zsh}/z.txt"
-        # Tell z.lua which command-line fuzzy finder to use
-        export _ZL_FZF='sk'
-        export _ZL_FZF_FLAG='--no-sort'
-        export BROOT_CONFIG_DIR="$XDG_CONFIG_HOME/broot"
+  initContent = let
+    # Extra commands that should be added to .zshrc before compinit
+    initExtraBeforeCompinit = mkOrder 550 (''
+      fpath+="$ZDOTDIR/zfunc"
+    '' + optionalString isDarwin ''
+      whence brew &>/dev/null && fpath+=$(brew --prefix)/share/zsh/site-functions
+    '');
+    # Extra commands that should be added to .zshrc
+    initExtra = mkOrder 1000 ''
+      export ZSH_PLUGINS_ALIAS_TIPS_TEXT='Found existing alias: '
+      export ZSH_PLUGINS_ALIAS_TIPS_EXCLUDES='_'
+      # Tell z.lua where to store its data file    
+      export _ZL_DATA="''${ZDOTDIR:-$XDG_CONFIG_HOME/zsh}/z.txt"
+      # Tell z.lua which command-line fuzzy finder to use
+      export _ZL_FZF='sk'
+      export _ZL_FZF_FLAG='--no-sort'
+      export BROOT_CONFIG_DIR="$XDG_CONFIG_HOME/broot"
 
-        for fn in "$ZDOTDIR/zfunc"/*; do
-          autoload $fn
-        done
+      for fn in "$ZDOTDIR/zfunc"/*; do
+        autoload $fn
+      done
 
-        autoload -Uz add-zsh-hook
-        add-zsh-hook chpwd _python-workon-cwd
-        add-zsh-hook chpwd lsGF
+      autoload -Uz add-zsh-hook
+      add-zsh-hook chpwd _python-workon-cwd
+      add-zsh-hook chpwd lsGF
 
-        setopt NO_CASE_GLOB # Case-insensitive globbing
-        setopt correct # Spell check
+      setopt NO_CASE_GLOB # Case-insensitive globbing
+      setopt correct # Spell check
 
-        source "$ZDOTDIR/bookmark.zsh"
-        [ -x "$ZDOTDIR/.zshrc.local" ] && source "$ZDOTDIR/.zshrc.local"
-      '';
-    in mkMerge [ initExtraBeforeCompinit initExtra ];
+      source "$ZDOTDIR/bookmark.zsh"
+      [ -x "$ZDOTDIR/.zshrc.local" ] && source "$ZDOTDIR/.zshrc.local"
+    '';
+  in mkMerge [ initExtraBeforeCompinit initExtra ];
 
   # Plugins not available in Oh-My-Zsh
   plugins = [

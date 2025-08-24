@@ -311,7 +311,8 @@
         # 'wheel' enables ‘sudo’ for the user;
         # 'networkmanager' allows the user to change network settings  
         # 'wireshark' is needed for wireshark to be able to collect packet captures
-        extraGroups = [ "wheel" "networkmanager" "wireshark" ];
+        # 'usbmux' allows access to certain USB devices
+        extraGroups = [ "wheel" "networkmanager" "wireshark" "usbmux" ];
       };
     };
   };
