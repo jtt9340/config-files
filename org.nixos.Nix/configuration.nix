@@ -61,6 +61,4 @@
       options = "--delete-older-than 365d";
     };
   };
-
-  networking.hosts = { "192.168.13.2" = [ "raspberrypi" ]; };
 }

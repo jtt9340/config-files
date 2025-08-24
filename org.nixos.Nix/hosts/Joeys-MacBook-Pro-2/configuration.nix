@@ -1,5 +1,3 @@
-{ system, ... }:
-
 {
   # List packages installed in system profile. To search by name, run:
   # $ nix-env -qaP | grep wget
@@ -8,6 +6,10 @@
       # List USB devices
       darwin.lsusb
     ];
+
+  # Needs to be set to the user that runs `darwin-rebuild`.
+  # Supposedly at some point in the future this will no longer be needed.
+  system.primaryUser = "josephterrito";
 
   # Even though we will try to manage as many packages as possible with Nix, we still use Homebrew
   # for some macOS-specific things
@@ -44,16 +46,25 @@
       "font-sf-mono-nerd-font"
       # Client for the Google Drive storage services
       "google-drive"
+      # Graphically shows disk usage within a filesystem
+      # This is in nixpkgs but it can't build: https://github.com/NixOS/nixpkgs/issues/347868
+      "grandperspective"
       # I think this is needed for SSHFS to work?
       "macfuse"
       # Cloud storage client
       "onedrive"
+      # Move and resize windows using keyboard shortcuts or snap areas
+      # This is in nixpkgs but it can't build: https://github.com/NixOS/nixpkgs/issues/347868
+      "rectangle"
       # FOSS filesystem encryption on-the-fly
       "veracrypt"
       # Keyboard configurator
       "via"
       # Remote desktop application
       "vnc-viewer"
+      # X11 for macOS: to be able to enable X forwarding when SSH-ing into Linux boxes
+      # This is in nixpkgs but it can't build: https://github.com/NixOS/nixpkgs/issues/319189
+      "xquartz"
     ];
   };
 
@@ -74,19 +85,13 @@
   environment.systemPath =
     [ ''"$HOME/Library/Application Support/nix/profile/bin"'' ];
 
-  # Auto upgrade nix package and the daemon service.
-  services.nix-daemon.enable = true;
-  # nix.package = pkgs.nix;
-  nixpkgs.hostPlatform = system;
+  nixpkgs.hostPlatform = "x86_64-darwin";
 
-  networking = {
-    # "The user-friendly name for the system"
-    computerName = "Joey’s MacBook Pro";
-    hosts = { "192.168.1.5" = [ "nicksauce" ]; };
-  };
+  # "The user-friendly name for the system"
+  networking.computerName = "Joey’s MacBook Pro";
 
   # Use TouchID to authenticate with sudo
-  security.pam.enableSudoTouchIdAuth = true;
+  security.pam.services.sudo_local.touchIdAuth = true;
 
   # How often to clean out the Nix store
   nix.gc.interval.Day = 15; # on the 15th of every month (man launchd.plist)
