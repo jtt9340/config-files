@@ -156,9 +156,7 @@
     prefixLength = 24;
   }];
 
-  networking.hosts = {
-    "192.168.13.2" = [ "raspberrypi" ];
-  };
+  networking.hosts = { "192.168.13.2" = [ "raspberrypi" ]; };
 
   # Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";
