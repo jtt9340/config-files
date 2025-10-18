@@ -173,14 +173,9 @@
     gmv = "git mv";
 
     # ls aliases
-    lsdl = "lsd -lF --date relative";
-    lsda = "lsd -aF";
-    lsdla = "lsd -laF --date relative";
     lbr = "br -sdp";
     tree = "br --cmd :pt";
-    ltree = "lsd --tree";
     ldot = "ls -ld .*";
-    lab = "ls -AbFG";
 
     # Make some commands more verbose
     rm = "rm -v";

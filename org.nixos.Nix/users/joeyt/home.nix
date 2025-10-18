@@ -205,7 +205,14 @@ in {
     };
 
     # Use lsd, an ls clone with more colors and icons
-    lsd.enable = true;
+    lsd = {
+      enable = true;
+      settings = {
+        date = "relative";
+        # Add indicator characters to certain listed files
+        indicators = true;
+      };
+    };
 
     # Use Vim with custom configuration and plugins
     vim = (import ./vim.nix) {
