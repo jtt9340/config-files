@@ -1,6 +1,7 @@
 { batman # the batman program as part of the bat-extras package
 , isLinux # Function that accepts a list and returns it if we are on Linux, an empty list otherwise
 , isDarwin # Function that accepts a list and returns it if we are on Linux, an empty list otherwise
+, home # Path to home directory
 }:
 
 {
@@ -209,5 +210,10 @@
       line-numbers-right-style = "cyan";
       hunk-header-decoration-style = "cyan box";
     };
+  };
+  signing = {
+    format = "ssh";
+    key = "${home}/.ssh/id_ed25519.pub";
+    signByDefault = true;
   };
 }

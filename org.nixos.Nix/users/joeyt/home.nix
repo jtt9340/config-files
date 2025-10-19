@@ -195,6 +195,7 @@ in {
       inherit (pkgs.bat-extras) batman;
       isLinux = lib.optionals pkgs.stdenv.isLinux;
       isDarwin = lib.optionals pkgs.stdenv.isDarwin;
+      home = config.home.homeDirectory;
     };
 
     # Use skim, a command-line fuzzy finder written in Rust
