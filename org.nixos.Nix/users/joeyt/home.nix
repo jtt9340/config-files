@@ -110,6 +110,22 @@ in {
       home = config.home.homeDirectory;
     };
 
+    # Use Delta, a diff tool that makes diffs look like they do on GitHub
+    delta = {
+      enable = true;
+      enableGitIntegration = true;
+      options = {
+        syntax-theme = "OneHalfDark";
+        whitespace-error-style = "22 reverse";
+        file-style = "bold cyan ul";
+        file-decoration-style = "cyan ul";
+        line-numbers = true;
+        line-numbers-left-style = "cyan";
+        line-numbers-right-style = "cyan";
+        hunk-header-decoration-style = "cyan box";
+      };
+    };
+
     # Use lsd, an ls clone with more colors and icons
     lsd = {
       enable = true;
@@ -150,10 +166,6 @@ in {
       hledger
       # Web UI for Hlegder
       hledger-web
-      # Python IDE
-      jetbrains.pycharm-community-bin
-      # Rust IDE
-      jetbrains.rust-rover
       # JavaScript runtime - needed for coc.nvim
       nodejs_22
       # Conversion between documentation formats
@@ -164,7 +176,7 @@ in {
       zoom-us
     ] ++ lib.optionals stdenv.isLinux [
       # Password manager
-      bitwarden
+      bitwarden-desktop
       # Sync mobile device with Gnome Desktop
       gnomeExtensions.gsconnect
       # Install new firmware on iOS devices

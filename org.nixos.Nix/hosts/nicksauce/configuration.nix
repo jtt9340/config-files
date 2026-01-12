@@ -236,14 +236,9 @@
   # };
 
   # List services that you want to enable:
-
-  # Enable the OpenSSH daemon.
-  services.openssh.enable = true;
-  programs.ssh = {
-    startAgent = true;
-    extraConfig = ''
-      AddKeysToAgent yes
-    '';
+  services = {
+    desktopManager.gnome.enable = true;
+    displayManager.gdm.enable = true;
   };
 
   # Open ports in the firewall. Needed for GSConnect.
@@ -251,22 +246,6 @@
   networking.firewall.allowedUDPPorts = pkgs.lib.lists.range 1714 1764;
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
-
-  # Enable the X11 windowing system.
-  services.xserver = {
-    enable = true;
-    xkb.layout = "us";
-    # Enable the KDE Desktop Environment.
-    # displayManager.sddm.enable = true;
-    # desktopManager.plasma5.enable = true;
-    # Enable the GNOME Desktop Environment.
-    displayManager.gdm.enable = true;
-    desktopManager.gnome.enable = true;
-  };
-  # services.xserver.xkbOptions = "eurosign:e,caps:escape";
-
-  # Enable touchpad support.
-  # services.xserver.libinput.enable = true;
 
   # Talk to iOS devices
   services.usbmuxd.enable = true;

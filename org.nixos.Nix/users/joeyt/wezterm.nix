@@ -34,9 +34,6 @@ in {
       return string.upper(string.sub(s, 0, 1)) .. string.sub(s, 2)
     end
 
-    -- Regression in Wayland support: https://github.com/wez/wezterm/issues/6341
-    config.enable_wayland = false
-
     -- Appearance
     local one_dark = wezterm.color.get_builtin_schemes()['One Dark (Gogh)']
     one_dark.foreground = 'lightgray'
@@ -52,8 +49,9 @@ in {
       -- Disable ligatures
       harfbuzz_features = { 'calt=0', 'clig=0', 'liga=0' }
     }
-    config.font_size = 10.4
+    config.font_size = 12.0
     config.warn_about_missing_glyphs = false
+    config.window_decorations = 'RESIZE|INTEGRATED_BUTTONS'
 
     config.enable_scroll_bar = true
       ${
