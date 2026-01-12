@@ -4,50 +4,37 @@
 It has lots of features that let you do all sorts of crazy things.
 Most people aren't intimately familiar with the inner workings of Zsh.
 However, some Zsh wizards have leveraged Zsh's features to add syntax highlighting at the command line, interactive fuzzy search in history, autosuggestions for commands, and more.
-This is what everyone uses when they use Zsh, and it's gotten so out of control Zsh users started writing programs to download and install Zsh scripts that add this functionality for you and call them "plugin managers".
-Then we started writing more plugin managers because the already existing ones weren't sufficient, and now [there is a whole discussion on Reddit](https://www.reddit.com/r/zsh/comments/ak0vgi/a_comparison_of_all_the_zsh_plugin_mangers_i_used) about which plugin manager to use: which is the easiest, which is the most featureful, which is the fastest, etc.
+This is what everyone uses when they use Zsh.
+It wasn't always easy, though, to distribute self-contained snippets of code that people could just plop into Zsh's configuration directory to get functionality they wanted without really understanding how those snippets worked.
+Over time people started writing scripts that allowed you to manage these snippets of code, known more formally as "plugins", by declaring which scripts you wanted downloaded from GitHub.
+Such tools are known as "plugin managers", and there are now so many of them that [there is a whole discussion on Reddit][reddit] about which plugin manager to use: which is the easiest, which is the most featureful, which is the fastest, etc.
 
 Zsh is definitely the C++ of UNIX shells: complicated to get started with, but once you get used to it and leverage its features, it becomes very powerful.
 
-## Decisions, decisions
+Zsh has several files it sources at start-up.
+They are sourced in a particular order and most are only sourced conditionally, for example if the shell is interactive and if it is a login shell.
+Here are descriptions of all the files, when they are sourced, and a high-level description of what my versions of these files do.
 
-For a long time I used [Oh My Zsh][omz], a framework that makes it easy to get started with.
-Oh My Zsh comes with its own suite of plugins that you can choose from, but installing plugins not included in Oh My Zsh is a little tricky if you want a reproducible, declarative Zsh configuration.
-This is because installing such plugins involves cloning the repos of the plugins into a custom plugins directory.
-Thus, if you want to make your Zsh configuration easily deployable to new machines, you either have to add the repos you clone as Git submodules or write a script that will clone them for you...which sounds a lot like what a plugin manager does!
-So I switched to Zgen which has now become [Zgenom][zgenom] since it still included support for Oh My Zsh but also made it easy to delcare plugins external to Oh My Zsh.
-It takes care of the cloning and updating for you -- all you have to do is specify what plugins you want installed.
-
-There have been some complaints that Oh My Zsh is "bloated": it slows down your shell initialization time and hides Zsh's internals behind a bunch of abstractions.
-It's easier to know what options are enabled and what gets sourced when you roll your own configuration, so for a while I have been trying to move to my own, minimal, configuration.
-I'm still in the transitionary phase and so both versions of my Zsh configuration here.
-I still use Zgenom for both.
-Look in the [omz](omz) directory for my Oh My Zsh configuration and in the [minimal](minimal) directory for my Zsh confguration that does __not__ use Oh My Zsh.
-
-What follows in this README is a description of each file common to both versions of the Zsh configuration.
-Look in the READMEs in the subdirectories for what's specific to each one.
-
-## [`.zshenv`](omz/.zshenv)
+## [`.zshenv`](.zshenv)
 
 This file is always sourced, so it is best to keep it minimal.
 Mine just sets some environment variables.
 
-## [`.zprofile`](omz/.zprofile)
+## [`.zprofile`](.zprofile)
 
 This file is sourced when Zsh is started as a login shell.
 Mine just sets some more environment variables that I felt didn't need to be set in `.zshenv`.
 
-## [`.zshrc`](omz/.zprofile)
+## [`.zshrc`](.zprofile)
 
 This is the meat and potatoes of my Zsh configuration.
 `.zshrc` is sourced on every interactive shell.
-See the READMEs in the subdirectories for more detail on what exactly this file does.
 
-## [`aliases.zsh`](omz/aliases.zsh)
+## [`aliases.zsh`](liases.zsh)
 
 Shell aliases go here, to keep them all organized into a single file.
 
-## [`bookmark.zsh`](omz/bookmark.zsh)
+## [`bookmark.zsh`](bookmark.zsh)
 
 This file is sourced by `.zshrc` and adds a directory bookmark mechanism. When in a directory you want to bookmark, run
 
@@ -75,9 +62,9 @@ Then, to go to it I simply type
 
 and hit enter.
 
-### [`zfunc`](omz/zfunc)
+## [`zfunc`](zfunc)
 
-Zsh has the notion of [autoloaded functions](https://zsh.sourceforge.io/Doc/Release/Functions.html#Autoloading-Functions).
+Zsh has the notion of [autoloaded functions][autoload].
 Instead of defining a function directly in, say, your `.zshrc`, you place your function in a file in a directory listed in the `$fpath` variable (note that you can add directories to this variable with the `$fpath+=` syntax).
 The name of the file is the name of the function you are defining with no extension.
 Then, in your `.zshrc` add
@@ -89,13 +76,56 @@ autoload <function-name>
 The benefit to autoloading functions rather than defining them directly in your `.zshrc` is that they are lazy loaded &#x2014; the function code will not be read and compiled to bytecode until the first time you call it.
 The only downside to this method is that you cannot see the source code of a function with the `functions` command until after you call it at least once.
 
-The [`zfunc`](omz/zfunc) directory contains many functions I autoload that I find useful.
+The [`zfunc`](zfunc) directory contains many functions I autoload that I find useful.
 I think the most important one to point out is `_python-workon-cwd`.
 In addition to lazy loading, Zsh uses function autoloading for command completions and shell hooks &#x2014; functions that are invoked on a certain event.
 One such event is when the current directory changes.
 This function looks for a `.venv` file and, if present, activates the Python virtual environment named in that file.
 The virtual environment is automatically deactivated upon leaving the directory.
 
-[zsh]: https://zsh.sourceforge.io/
+## Plugins Used
+
+My plugin manager of choice is [Zgenom][zgenom].
+
+- [**zpm-zsh/ls**][zpm-zsh-ls]: Use common `ls` aliases (can optionally use [exa] or [lsd])
+- [**zpm-zsh/colorize**][zpm-zsh-colorize]: Try to add color to many common commands (can optionally use [grc])
+- [**zpm-zsh/ssh**][zpm-zsh-ssh]: SSH-related completions
+- [**zpm-zsh/ignored-users**][zpm-zsh-ignored-users]: Don't suggest completions for users with a UID between 0 (exclusive) and 1000 (exclusive), or greater than 10,000
+- [**zpm-zsh/dot**][zpm-zsh-dot]: Dot rationalization: every two `..`s becomes a `/..`
+- [**zsh-users/zsh-completions**][zsh-completions]: Auto-completions for many popular commands and CLI tools.
+- [**djui/alias-tips**][alias-tips]: Reminds you if you have an alias for a command you just used.
+- [**agkozak/zsh-z**][zsh-z]: Defines a shell function `z` that keeps track of your most commonly `cd`-ed to directories.
+  Then, you can type a substring of one of these directories and it will `cd` to the directory for you.
+  For example, if you `cd` to a directory named `llvm-interpreter` a lot, then after a while typing `z llvm` will `cd` you to `llvm-interpreter`.
+  I've defined my own function `j` which uses `cd` as a fallback if `z` can't find a directory with the given substring in its name.
+- [**zpm-zsh/clipboard**][zpm-zsh-clipboard]: Standardizes macOS' `pbcopy` and `pbpaste` commands to work as expected regardless of whether you are on Linux or macOS (Linux dependences: `xdg-open`, `xclip`)
+- [**zdharma-continuum/fast-syntax-highlighting**][fast-syntax-highlighting]: Syntax highlighting at the command line, also inspired by Fish.
+- [**zsh-users/zsh-history-substring-search**][zsh-history-substring-search]: At first, I didn't understand what this plugin did, because what it does is very subtle.
+  When you start typing a command, if you hit the up arrow, it will cycle through all the commands in your shell history that start with what you've already typed.
+  This is so intuitive you don't even think this was something that had to be added by a plugin.
+- [**zsh-users/zsh-autosuggestions**][zsh-autosuggestions]: Inspired by a similar feature built into the Fish shell, this will show suggestions for common commands you type as you type them.
+  Then, just hit the right arrow key to fill in the rest of the command.
+  This is sort of like the predictive keyboards on smartphones, however `zsh-users/zsh-autosuggestions` has found a way to make this feature way less annoying.
+- [**zdharma-continuum/history-search-multi-word**][history-search-multi-word]: More interactive ctrl-R reverse history search
+
+[alias-tips]: https://github.com/djui/alias-tips
+[autoload]: https://zsh.sourceforge.io/Doc/Release/Functions.html#Autoloading-Functions
+[exa]: https://the.exa.website/
+[fast-syntax-highlighting]: https://github.com/zdharma-continuum/fast-syntax-highlighting
+[grc]: https://kassiopeia.juls.savba.sk/~garabik/software/grc.html
+[history-search-multi-word]: https://github.com/zdharma-continuum/history-search-multi-word
+[lsd]: https://github.com/Peltoche/lsd
 [omz]: https://ohmyz.sh
+[reddit]: https://www.reddit.com/r/zsh/comments/ak0vgi/a_comparison_of_all_the_zsh_plugin_mangers_i_used
 [zgenom]: https://github.com/jandamm/zgenom
+[zpm-zsh-clipboard]: https://github.com/zpm-zsh/clipboard
+[zpm-zsh-colorize]: https://github.com/zpm-zsh/colorize
+[zpm-zsh-dot]: https://github.com/zpm-zsh/dot
+[zpm-zsh-ignored-users]: https://github.com/zpm-zsh/ignored-users
+[zpm-zsh-ls]: https://github.com/zpm-zsh/ls
+[zpm-zsh-ssh]: https://github.com/zpm-zsh/ssh
+[zsh]: https://zsh.sourceforge.io/
+[zsh-autosuggestions]: https://github.com/zsh-users/zsh-autosuggestions
+[zsh-completions]: https://github.com/zsh-users/zsh-completions
+[zsh-history-substring-search]: https://github.com/zsh-users/zsh-history-substring-search
+[zsh-z]: https://github.com/agkozak/zsh-z

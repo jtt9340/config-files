@@ -30,13 +30,9 @@ alias gitconfig="${EDITOR:-vim} {{@@ gitconfig_config_path @@}}"
 alias tmuxconfig="${EDITOR:-vim} {{@@ tmux_config_path @@}}"
 {%@@ endif @@%}
 
-# git aliases
-alias grm='git rm'
-alias gmv='git mv'
-
 # ls aliases
 alias ldot='ls -d .*'
-alias lab='ls -AbFG'
+alias lab='command ls -AbFG'
 {%@@ if exists(env['HOME'] + '/Library/Application Support/org.dystroy.broot/launcher/bash/1') or
         exists(env.get('XDG_DATA_HOME', default='') + '/broot/launcher/bash/1') or
         exists(env['HOME'] + '/.local/share/broot/launcher/bash/1') @@%}
@@ -45,13 +41,40 @@ alias lbr='br -sdp'
 alias tree='br --cmd :pt'
 {%@@ endif @@%}
 {%@@ endif @@%}
-
 {%@@ if exists_in_path('lsd') @@%}
-alias lsdl='lsd -lF --date relative'
-alias lsda='lsd -aF'
-alias lsdla='lsd -laF --date relative'
 alias ltree='lsd --tree'
 {%@@ endif @@%}
+
+# Create cd aliases
+alias 1='cd -'
+for (( i = 2; i <= 9; i++ ))
+  alias "$i"="cd -$i"
+unset i
+
+alias g=git
+alias grm='git rm'
+alias gmv='git mv'
+# Convert Git aliases into shell aliases
+git config --global --get-regex alias | while IFS=$'\n' read -r galias; do
+  local i=$galias[(i)[[:space:]]]
+  # Start at index 7 to exclude the "alias."
+  local galias_key=$galias[7,$i-1]
+  local galias_value=$galias[$i+1,-1]
+  if [[ $galias_key = i ]]; then
+    # Treat this alias specially because it's defined weird
+    function gi {
+      curl -sL https://www.toptal.com/developers/gitignore/api/$@
+    }
+  elif [[ $galias_value == \!* ]]; then
+    eval """
+    function g$galias_key {
+      $galias_value[2,-1]
+    }
+    """
+  else
+    alias "g$galias_key"="git $galias_value"
+  fi
+done
 
 {%@@ if exists_in_path('brew') @@%}
 # These aliases are graciously taken from the Prezto Homebrew plugin; I have decided not to add the plugin
@@ -90,6 +113,6 @@ alias mv='mv -v'
 alias diff='diff -s'
 {%@@ else @@%}
 alias diff='diff -s --color=always'
+alias grep='grep -n --color=always'
 {%@@ endif @@%}
 alias cp='cp -v'
-

@@ -1,5 +1,6 @@
 -n
 --colors=match:fg:yellow
+--colors=match:bg:black
 --glob=!bzr/*
 --glob=!CVS/*
 --glob=!git/*

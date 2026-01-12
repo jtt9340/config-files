@@ -129,38 +129,7 @@ dotfiles:
     template: true
     link: absolute
   d_zdotdir:
-    src: net.sourceforge.Zsh/omz
-    dst: '{{@@ zdotdir @@}}'
-    link: link_children
-    template: true
-    cmpignore:
-    - .zcompdump*
-    - .zsh_history
-    - .zsh_sessions
-    - .zshdb_hist
-    - ignored-users.zsh*
-    # See comments in .gitignore regarding these next two ignore patterns
-    - zfunc/_*
-    - '!zfunc/_python-workon-cwd'
-    - bookmarks
-    - zgen*
-    - z.txt
-    upignore:
-    - .zcompdump*
-    - .zsh_history
-    - .zsh_sessions
-    - .zshdb_hist
-    - ignored-users.zsh*
-    - bookmarks
-    - zgen*
-    - z.txt
-    instignore:
-    - '*/zfunc/_*'
-    - '!*/zfunc/_python-workon-cwd'
-    actions:
-    - zshenv
-  d_zdotdir_minimal:
-    src: net.sourceforge.Zsh/minimal
+    src: net.sourceforge.Zsh
     dst: '{{@@ zdotdir @@}}'
     link: link_children
     template: true
@@ -189,10 +158,6 @@ dotfiles:
     - '!*/zfunc/_python-workon-cwd'
     actions:
     - zshenv
-  f_joeys_avit.zsh-theme:
-    src: net.sourceforge.Zsh/omz/joeys-avit.zsh-theme
-    dst: '{{@@ zdotdir @@}}/themes/joeys-avit.zsh-theme'
-    template: true
   f_ripgreprc:
     src: com.github.burntsushi.Ripgrep/ripgreprc
     dst: '{{@@ ripgrep_config_path @@}}'
@@ -257,18 +222,14 @@ profiles:
   nix-darwin:
     dotfiles:
     - d_nixpkgs
-    - f_joeys_avit.zsh-theme
   linux:
     dotfiles:
     - d_vim
     - f_ripgreprc
     - f_org.dystroy.broot_conf.toml
-    - d_zdotdir_minimal
+    - d_zdotdir
     - f_bat_config
     - f_git_config
     - f_git_ignore
     - f_tmux.conf
     - f_coc_settings.json
-  nixos:
-    dotfiles:
-    - f_joeys_avit.zsh-theme

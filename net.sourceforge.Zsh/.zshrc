@@ -34,22 +34,18 @@ zstyle ':completion:*:approximate:*' max-errors 'reply=($((($#PREFIX+$#SUFFIX)/3
 zstyle '*' single-ignored show
 zstyle ':completion:*:*:*:*:*' menu select  # Use an interactive menu when there are multiple completions
 bindkey '^[[Z' reverse-menu-complete        # Shift+Tab goes backward in the completion menu
-zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'\
+zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
 zstyle ':completion:*:messages' format '%d'
 zstyle ':completion:*:functions' ignored-patterns '_*'
 zstyle ':completion:*:*:zcompile:*' ignored-patterns '(*~|*.zwc)'
-zstyle ':completion:*:warnings' format "%{${c[red]}${c[bold]}%}No matches for:%{${c[yellow]}${c[bold]}%} %d"
+zstyle ':completion:*:warnings' format "No matches for: %d"
 zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=36=31'
 zstyle ':completion:*' accept-exact '*(N)'
 zstyle ':completion::complete:*' use-cache 1  # Enable a cache for shell completions
-zstyle ':completion::complete:*' cache-path "${TMPDIR:-/tmp}/zsh-${UID}"
+zstyle ':completion::complete:*' cache-path "${ZSH_CACHE_DIR}"
 
 # From zpm-zsh/core-config: Load completion listing extensions
 zmodload zsh/complist
-
-# Enable colors
-autoload -U colors
-colors
 
 # Shell prompt
 autoload -Uz promptinit && promptinit
@@ -71,7 +67,7 @@ bindkey '^[[1;5C' forward-word
 # Shell Options
 ###############
 setopt CORRECT                  # Spell check
-export SPROMPT="Correct $fg[red]%R$reset_color to $fg[green]%r$reset_color?
+SPROMPT="Correct %R to %r?
 	[Yes, No, Abort, Edit] "
 
 setopt NO_CASE_GLOB             # Case-insensitive globbing
@@ -173,6 +169,7 @@ zgenom load zsh-users/zsh-completions src --completion
   order, so do not rearrange the last few, whatever you do. @@#}
 zgenom loadall <<EOPLUGINS
   zpm-zsh/ls
+  zpm-zsh/colors
   zpm-zsh/colorize
   zpm-zsh/ssh
   zpm-zsh/ignored-users
@@ -189,3 +186,7 @@ EOPLUGINS
 
 zgenom save
 zgenom compile "$ZDOTDIR"
+
+zstyle ':completion:*:warnings' format "%{${c[red]}${c[bold]}%}No matches for:%{${c[yellow]}${c[bold]}%} %d"
+SPROMPT="Correct ${c[red]}%R${c[reset]} to ${c[green]}%r${c[reset]}?
+	[Yes, No, Abort, Edit] "
