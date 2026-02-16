@@ -187,6 +187,8 @@ in {
       libreoffice
       # Makes it easier to run games/Windows-only applications on GNU/Linux
       lutris
+      # Merge or split pdf documents and rotate, crop and rearrange their pages using a graphical interface
+      pdfarranger
       # Another chat app
       slack
       # Allows you to mount remote drives via ssh
