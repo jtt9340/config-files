@@ -1,0 +1,12 @@
+cpv() {
+  rsync                                   \
+    --perms                               \
+    --owner                               \
+    --group                               \
+    --backup                              \
+    --backup-dir="/tmp/rsync-${USERNAME}" \
+    --recursive                           \
+    -hhh                                  \
+    --progress                            \
+    "$@"
+}

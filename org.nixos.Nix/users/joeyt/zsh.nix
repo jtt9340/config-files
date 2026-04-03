@@ -229,6 +229,10 @@
       builtins.readFile ../../../net.sourceforge.Zsh/zfunc/print_array;
     rmmetadata =
       builtins.readFile ../../../net.sourceforge.Zsh/zfunc/rmmetadata;
+    d =
+      builtins.readFile ../../../net.sourceforge.Zsh/zfunc/d;
+    cpv =
+      builtins.readFile ../../../net.sourceforge.Zsh/zfunc/cpv;
     env = ''${pkgs.grc}/bin/grc --colour=auto env "$@"'';
     as = ''${pkgs.grc}/bin/grc --colour=auto as "$@"'';
     gcc = ''${pkgs.grc}/bin/grc --colour=auto gcc "$@"'';
