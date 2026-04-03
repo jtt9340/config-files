@@ -9,10 +9,12 @@
     # TODO Replace with upstream main branch once this PR has been merged
     lollypops.url = "github:pinpox/lollypops?ref=pull/56/head";
     lollypops.inputs.nixpkgs.follows = "nixpkgs";
+    disko.url = "github:nix-community/disko/latest";
+    disko.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs = inputs@{ self, nixpkgs, nix-darwin, impermanence, home-manager
-    , lollypops, ... }: {
+    , lollypops, disko, ... }: {
       nixosConfigurations.nicksauce = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         modules = [
@@ -26,6 +28,18 @@
             home-manager.extraSpecialArgs = { flakeInputs = inputs; };
           }
           impermanence.nixosModules.impermanence
+          lollypops.nixosModules.default
+        ];
+      };
+
+      nixosConfigurations.alpha = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        modules = [
+          ./configuration.nix
+          ./hosts/alpha/configuration.nix
+          impermanence.nixosModules.impermanence
+          disko.nixosModules.disko
+          ./hosts/alpha/disko-config.nix
           lollypops.nixosModules.default
         ];
       };
