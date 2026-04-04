@@ -230,6 +230,11 @@ in {
         name = 'raspberrypi',
         remote_address = 'raspberrypi',
         username = 'pi'
+      },
+      {
+        name = 'alpha',
+        remote_address = 'alpha',
+        username = 'nixos'
       }
     }
 
