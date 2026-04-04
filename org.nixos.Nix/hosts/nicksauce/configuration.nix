@@ -10,7 +10,7 @@
   ];
 
   lollypops = {
-    deployment.ssh.user = "joeyt";
+    deployment.ssh.user = config.users.users.joeyt.name;
     tasks = [ "check-vars" "deploy-secrets" "rebuild" ];
     # rebuild needs to depend on deploy-secrets
     # in order for the secret paths to be written
@@ -156,7 +156,10 @@
     prefixLength = 24;
   }];
 
-  networking.hosts = { "192.168.13.2" = [ "raspberrypi" ]; };
+  networking.hosts = {
+    "192.168.13.2" = [ "raspberrypi" ];
+    "192.168.13.3" = [ "alpha" ];
+  };
 
   # Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";
@@ -266,7 +269,7 @@
   system.autoUpgrade = {
     enable = true;
     allowReboot = false;
-    flake = "github:jtt9340/config-files?dir=org.nixos.Nix";
+    flake = "github:jtt9340/config-files?dir=org.nixos.Nix#nicksauce";
   };
 
   # How often to clean out the Nix store

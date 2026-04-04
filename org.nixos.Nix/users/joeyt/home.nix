@@ -65,28 +65,6 @@ in {
       enableAliases = true;
     };
 
-    bat = {
-      enable = true;
-      config = {
-        theme = "OneHalfDark";
-        map-syntax = [
-          "*.plugin.zsh:Bourne Again Shell (bash)"
-          "*.zsh:Bourne Again Shell (bash)"
-          "*.sh:Bourne Again Shell (bash)"
-          "*.zsh-theme:Bourne Again Shell (bash)"
-          "*.csproj:XML"
-          "flake.lock:JSON"
-        ];
-        pager = "less --mouse -RF";
-      };
-      extraPackages = with pkgs.bat-extras; [
-        batdiff
-        batgrep
-        batman
-        prettybat
-      ];
-    };
-
     # Tree-based file manager and fuzzy finder
     broot = {
       enable = true;

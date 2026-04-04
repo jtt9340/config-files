@@ -6,6 +6,12 @@
     ./hardware-configuration.nix
   ];
 
+  lollypops.deployment = {
+    group = "servers";
+    ssh.user = config.users.users.nixos.name;
+    sudo.enable = true;
+  };
+
   # Needed for ZFS
   networking.hostId = "f1e68ca3";
 
@@ -92,6 +98,8 @@
       enable = true;
       settings = {
         PermitRootLogin = "no";
+        # Needed by Wezterm
+        AcceptEnv = "COLORTERM TERM TERM_PROGRAM TERM_PROGRAM_VERSION WEZTERM_REMOTE_PANE";
       };
     };
 

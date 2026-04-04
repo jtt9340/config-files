@@ -15,8 +15,6 @@
     systemPackages = with pkgs; [
       # Print a list of paths as a tree of paths
       as-tree
-      # A cat/less alternative with syntax highlighting
-      bat
       # Convert between \n and \r\n line endings
       dos2unix
       # More user-friendly alternative to find
@@ -47,6 +45,31 @@
 
     # Shell completion for system packages
     pathsToLink = [ "/share/zsh" ];
+  };
+
+  # A cat/less alternative with syntax highlighting
+  programs = {
+    bat = {
+      enable = true;
+      settings = {
+        theme = "OneHalfDark";
+        map-syntax = [
+          "*.plugin.zsh:'Bourne Again Shell (bash)'"
+          "*.zsh:'Bourne Again Shell (bash)'"
+          "*.sh:'Bourne Again Shell (bash)'"
+          "*.zsh-theme:'Bourne Again Shell (bash)'"
+          "*.csproj:XML"
+          "flake.lock:JSON"
+        ];
+        pager = "'less --RAW-CONTROL-CHARS --quit-if-one-screen --mouse'";
+      };
+      extraPackages = with pkgs.bat-extras; [
+        batdiff
+        batgrep
+        batman
+        prettybat
+      ];
+    };
   };
 
   nix = {
