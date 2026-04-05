@@ -95,6 +95,13 @@
     defaultEditor = true;
   };
 
+  # Automatically keep NixOS up-to-date, but don't automatically reboot
+  system.autoUpgrade = {
+    enable = true;
+    allowReboot = false;
+    flake = "github:jtt9340/config-files?dir=org.nixos.Nix#alpha";
+  };
+
   # How often to clean out the Nix store
   nix.gc.dates =
     "*-*-1,15 3:15"; # 3:15 AM (local time) on the 1st and 15th of every month (man systemd.time)
