@@ -13,8 +13,18 @@
     disko.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs = inputs@{ self, nixpkgs, nix-darwin, impermanence, home-manager
-    , lollypops, disko, ... }: {
+  outputs =
+    inputs@{
+      self,
+      nixpkgs,
+      nix-darwin,
+      impermanence,
+      home-manager,
+      lollypops,
+      disko,
+      ...
+    }:
+    {
       nixosConfigurations.nicksauce = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         modules = [
@@ -25,7 +35,9 @@
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
             home-manager.users.joeyt = ./users/joeyt/home.nix;
-            home-manager.extraSpecialArgs = { flakeInputs = inputs; };
+            home-manager.extraSpecialArgs = {
+              flakeInputs = inputs;
+            };
           }
           impermanence.nixosModules.impermanence
           lollypops.nixosModules.default
@@ -53,12 +65,11 @@
         ];
       };
 
-      packages."x86_64-linux".lollypops =
-        lollypops.packages."x86_64-linux".default.override {
-          configFlake = self;
-        };
+      packages."x86_64-linux".lollypops = lollypops.packages."x86_64-linux".default.override {
+        configFlake = self;
+      };
 
-      formatter."x86_64-linux" = nixpkgs.legacyPackages."x86_64-linux".nixfmt;
-      formatter."x86_64-darwin" = nixpkgs.legacyPackages."x64_64-darwin".nixfmt;
+      formatter."x86_64-linux" = nixpkgs.legacyPackages."x86_64-linux".nixfmt-tree;
+      formatter."x86_64-darwin" = nixpkgs.legacyPackages."x64_64-darwin".nixfmt-tree;
     };
 }

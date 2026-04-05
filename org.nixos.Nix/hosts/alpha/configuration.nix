@@ -1,4 +1,9 @@
-{ lib, config, pkgs, ... }:
+{
+  lib,
+  config,
+  pkgs,
+  ...
+}:
 
 {
   imports = [
@@ -17,12 +22,15 @@
 
   environment = {
     systemPackages = with pkgs; [
-      wezterm.headless 
+      wezterm.headless
     ];
 
     persistence."/persist" = {
       hideMounts = true;
-      directories = [ "/var/lib/nixos" "/var/lib/systemd/coredump" ];
+      directories = [
+        "/var/lib/nixos"
+        "/var/lib/systemd/coredump"
+      ];
       files = [
         "/etc/machine-id"
         "/etc/ssh/ssh_host_ed25519_key"
@@ -42,10 +50,12 @@
       zfsSupport = true;
       efiSupport = true;
       efiInstallAsRemovable = true;
-      mirroredBoots = [{
-        devices = [ "nodev" ];
-        path = "/boot";
-      }];
+      mirroredBoots = [
+        {
+          devices = [ "nodev" ];
+          path = "/boot";
+        }
+      ];
     };
 
     initrd = {
@@ -69,13 +79,16 @@
   systemd.network = {
     enable = true;
     networks = {
-      eno1 = let gateway = "192.168.13.1";
-      in {
-        name = "eno1";
-        address = [ "192.168.13.3/24" ];
-        gateway = [ gateway ];
-        dns = [ gateway ];
-      };
+      eno1 =
+        let
+          gateway = "192.168.13.1";
+        in
+        {
+          name = "eno1";
+          address = [ "192.168.13.3/24" ];
+          gateway = [ gateway ];
+          dns = [ gateway ];
+        };
     };
   };
 
@@ -103,8 +116,7 @@
   };
 
   # How often to clean out the Nix store
-  nix.gc.dates =
-    "*-*-1,15 3:15"; # 3:15 AM (local time) on the 1st and 15th of every month (man systemd.time)
+  nix.gc.dates = "*-*-1,15 3:15"; # 3:15 AM (local time) on the 1st and 15th of every month (man systemd.time)
 
   services = {
     openssh = {

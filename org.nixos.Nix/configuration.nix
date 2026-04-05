@@ -76,7 +76,10 @@
     settings = {
       show-trace = true;
       use-xdg-base-directories = true;
-      experimental-features = [ "nix-command" "flakes" ];
+      experimental-features = [
+        "nix-command"
+        "flakes"
+      ];
     };
     # Periodically clean out the Nix store
     gc = {

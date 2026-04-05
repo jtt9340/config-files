@@ -1,10 +1,17 @@
-{ lib, pkgs, config, flakeInputs, ... }:
+{
+  lib,
+  pkgs,
+  config,
+  flakeInputs,
+  ...
+}:
 
 let
   xdgConfigHome = config.xdg.configHome;
   xdgDataHome = config.xdg.dataHome;
   xdgCacheHome = config.xdg.cacheHome;
-in {
+in
+{
   imports = [ flakeInputs.lollypops.homeModules.default ];
 
   home.stateVersion = "23.11";
@@ -12,10 +19,7 @@ in {
   lollypops.secrets = {
     default-dir = "${xdgDataHome}/lollypops";
     files."git_email" = {
-      cmd =
-        "${pkgs.age}/bin/age -d -i ${config.home.homeDirectory}/.ssh/id_ed25519 ${
-          ../../secrets/git_email.age
-        }";
+      cmd = "${pkgs.age}/bin/age -d -i ${config.home.homeDirectory}/.ssh/id_ed25519 ${../../secrets/git_email.age}";
       mode = "0644";
     };
   };
@@ -28,23 +32,23 @@ in {
     configFile = {
       "nixpkgs/config.nix".source = ./config.nix;
       "npm/npmrc".source = ../../../com.npmjs.Npm/npmrc;
-      "ripgrep/ripgreprc".source =
-        ../../../com.github.burntsushi.Ripgrep/ripgreprc;
-      "coc/coc-settings.json".source =
-        (import ./coc-settings.nix) (pkgs.formats.json { }).generate;
+      "ripgrep/ripgreprc".source = ../../../com.github.burntsushi.Ripgrep/ripgreprc;
+      "coc/coc-settings.json".source = (import ./coc-settings.nix) (pkgs.formats.json { }).generate;
       "zsh/bookmark.zsh".source = ../../../net.sourceforge.Zsh/bookmark.zsh;
     };
-  } // lib.optionalAttrs pkgs.stdenv.isDarwin
-    ( # Janky syntax since apparently path literals don't support spaces
-      let
-        applicationSupport =
-          "${config.home.homeDirectory}/Library/Application Support";
-      in {
-        configHome = applicationSupport;
-        dataHome = applicationSupport;
-        stateHome = applicationSupport;
-        cacheHome = "${config.home.homeDirectory}/Library/Caches";
-      });
+  }
+  // lib.optionalAttrs pkgs.stdenv.isDarwin (
+    # Janky syntax since apparently path literals don't support spaces
+    let
+      applicationSupport = "${config.home.homeDirectory}/Library/Application Support";
+    in
+    {
+      configHome = applicationSupport;
+      dataHome = applicationSupport;
+      stateHome = applicationSupport;
+      cacheHome = "${config.home.homeDirectory}/Library/Caches";
+    }
+  );
 
   programs = {
     # Let Home Manager install and manage things
@@ -52,7 +56,12 @@ in {
 
     # Configure Zsh
     zsh = (import ./zsh.nix) {
-      inherit pkgs lib xdgConfigHome xdgDataHome;
+      inherit
+        pkgs
+        lib
+        xdgConfigHome
+        xdgDataHome
+        ;
       home = config.home.homeDirectory;
       gitEmailPath = config.lollypops.secrets.files."git_email".path;
     };
@@ -72,11 +81,13 @@ in {
       settings = {
         default_flags = "g";
         icon_theme = "nerdfont";
-        verbs = [{
-          name = "bat";
-          invocation = "bat";
-          execution = "${pkgs.bat}/bin/bat {file}";
-        }];
+        verbs = [
+          {
+            name = "bat";
+            invocation = "bat";
+            execution = "${pkgs.bat}/bin/bat {file}";
+          }
+        ];
       };
     };
 
@@ -136,7 +147,8 @@ in {
     };
   };
 
-  home.packages = with pkgs;
+  home.packages =
+    with pkgs;
     [
       # Chat app
       discord
@@ -152,7 +164,8 @@ in {
       texliveSmall
       # We really do live in a society
       zoom-us
-    ] ++ lib.optionals stdenv.isLinux [
+    ]
+    ++ lib.optionals stdenv.isLinux [
       # Password manager
       bitwarden-desktop
       # Sync mobile device with Gnome Desktop
@@ -177,7 +190,8 @@ in {
       veracrypt
       # Keyboard configurator
       via
-    ] ++ lib.optionals stdenv.isDarwin [
+    ]
+    ++ lib.optionals stdenv.isDarwin [
       # Application uninstaller
       appcleaner
     ];
@@ -187,8 +201,10 @@ in {
     hledger-web = {
       Unit = {
         Description = "hledger-web";
-        Documentation =
-          [ "man:hledger-web(1)" "https://hledger.org/hledger-web.html" ];
+        Documentation = [
+          "man:hledger-web(1)"
+          "https://hledger.org/hledger-web.html"
+        ];
       };
 
       Service = {
@@ -198,7 +214,9 @@ in {
         KillSignal = "SIGINT";
       };
 
-      Install = { WantedBy = [ "default.target" ]; };
+      Install = {
+        WantedBy = [ "default.target" ];
+      };
     };
   };
 }

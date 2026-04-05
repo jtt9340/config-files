@@ -6,9 +6,17 @@ generateJson "coc-settings.json" {
     haskell = {
       command = "haskell-language-server-wrapper";
       args = [ "--lsp" ];
-      rootPatterns =
-        [ "*.cabal" "stack.yaml" "cabal.project" "package.yaml" "hie.yaml" ];
-      filetypes = [ "haskell" "lhaskell" ];
+      rootPatterns = [
+        "*.cabal"
+        "stack.yaml"
+        "cabal.project"
+        "package.yaml"
+        "hie.yaml"
+      ];
+      filetypes = [
+        "haskell"
+        "lhaskell"
+      ];
       settings.haskell.formattingProvider = "ormolu";
     };
   };

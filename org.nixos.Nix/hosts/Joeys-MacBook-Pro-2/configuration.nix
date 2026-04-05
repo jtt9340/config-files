@@ -1,11 +1,10 @@
 {
   # List packages installed in system profile. To search by name, run:
   # $ nix-env -qaP | grep wget
-  environment.systemPackages = with pkgs;
-    [
-      # List USB devices
-      darwin.lsusb
-    ];
+  environment.systemPackages = with pkgs; [
+    # List USB devices
+    darwin.lsusb
+  ];
 
   # Needs to be set to the user that runs `darwin-rebuild`.
   # Supposedly at some point in the future this will no longer be needed.
@@ -82,8 +81,7 @@
   ];
 
   # Nested " to account for space
-  environment.systemPath =
-    [ ''"$HOME/Library/Application Support/nix/profile/bin"'' ];
+  environment.systemPath = [ ''"$HOME/Library/Application Support/nix/profile/bin"'' ];
 
   nixpkgs.hostPlatform = "x86_64-darwin";
 

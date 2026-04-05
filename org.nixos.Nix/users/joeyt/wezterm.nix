@@ -1,30 +1,37 @@
-{ wezterm, isDarwin, optionalString }:
+{
+  wezterm,
+  isDarwin,
+  optionalString,
+}:
 
 let
-  patchedWezterm = wezterm.overrideAttrs (finalAttrs: previousAttrs: {
-    patchPhase = ''
-      runHook prePatch
-      sed -i 's/^Exec=/Exec=env XCURSOR_THEME=Adwaita /' assets/wezterm.desktop
-      runHook postPatch
-    '';
+  patchedWezterm = wezterm.overrideAttrs (
+    finalAttrs: previousAttrs: {
+      patchPhase = ''
+        runHook prePatch
+        sed -i 's/^Exec=/Exec=env XCURSOR_THEME=Adwaita /' assets/wezterm.desktop
+        runHook postPatch
+      '';
 
-    postPatch = ''
-      echo ${previousAttrs.version} > .tag
+      postPatch = ''
+        echo ${previousAttrs.version} > .tag
 
-      # tests are failing with: Unable to exchange encryption keys
-      rm -r wezterm-ssh/tests
+        # tests are failing with: Unable to exchange encryption keys
+        rm -r wezterm-ssh/tests
 
-      # hash does not work well with NixOS
-      # upstream uses command type -P which does not work well with zsh
-      # so we use which instead which is cross-shell
-      substituteInPlace assets/shell-integration/wezterm.sh \
-        --replace-fail 'hash wezterm 2>/dev/null' 'which wezterm &>/dev/null' \
-        --replace-fail 'hash base64 2>/dev/null' 'which base64 &>/dev/null' \
-        --replace-fail 'hash hostname 2>/dev/null' 'which hostname &>/dev/null' \
-        --replace-fail 'hash hostnamectl 2>/dev/null' 'which hostnamectl &>/dev/null'
-    '';
-  });
-in {
+        # hash does not work well with NixOS
+        # upstream uses command type -P which does not work well with zsh
+        # so we use which instead which is cross-shell
+        substituteInPlace assets/shell-integration/wezterm.sh \
+          --replace-fail 'hash wezterm 2>/dev/null' 'which wezterm &>/dev/null' \
+          --replace-fail 'hash base64 2>/dev/null' 'which base64 &>/dev/null' \
+          --replace-fail 'hash hostname 2>/dev/null' 'which hostname &>/dev/null' \
+          --replace-fail 'hash hostnamectl 2>/dev/null' 'which hostnamectl &>/dev/null'
+      '';
+    }
+  );
+in
+{
   enable = true;
   package = patchedWezterm;
   extraConfig = ''
@@ -54,12 +61,10 @@ in {
     config.window_decorations = 'RESIZE|INTEGRATED_BUTTONS'
 
     config.enable_scroll_bar = true
-      ${
-        optionalString isDarwin ''
-          config.front_end = 'WebGpu'
-          config.webgpu_power_preference = 'HighPerformance'
-        ''
-      }
+      ${optionalString isDarwin ''
+        config.front_end = 'WebGpu'
+        config.webgpu_power_preference = 'HighPerformance'
+      ''}
 
     -- Keybindings
     local is_vim = {

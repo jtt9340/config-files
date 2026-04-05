@@ -1,6 +1,13 @@
 # Configuation settings for Vim
-{ vimPlugins, buildVimPlugin, fetchFromGitHub, stringAsChars, xdgConfigHome
-, xdgDataHome, xdgCacheHome }:
+{
+  vimPlugins,
+  buildVimPlugin,
+  fetchFromGitHub,
+  stringAsChars,
+  xdgConfigHome,
+  xdgDataHome,
+  xdgCacheHome,
+}:
 
 let
   xuyuanp-nerdtree-git-plugin = buildVimPlugin rec {
@@ -15,7 +22,8 @@ let
     meta.homepage = "https://github.com/Xuyuanp/nerdtree-git-plugin/";
   };
   escapePath = stringAsChars (c: if c == " " then "\\ " else c);
-in {
+in
+{
   enable = true;
   defaultEditor = true;
 

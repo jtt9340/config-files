@@ -1,4 +1,9 @@
-{ lib, config, pkgs, ... }:
+{
+  lib,
+  config,
+  pkgs,
+  ...
+}:
 
 # Edit this configuration file to define what should be installed on
 # your system.  Help is available in the configuration.nix(5) man page
@@ -11,17 +16,23 @@
 
   lollypops = {
     deployment.ssh.user = config.users.users.joeyt.name;
-    tasks = [ "check-vars" "deploy-secrets" "rebuild" ];
+    tasks = [
+      "check-vars"
+      "deploy-secrets"
+      "rebuild"
+    ];
     # rebuild needs to depend on deploy-secrets
     # in order for the secret paths to be written
     extraTasks = {
       rebuild = {
         deps = [ "deploy-secrets" ];
         desc = "Rebuild configuration of: ${config.networking.hostName}";
-        cmds = [''
-          sudo nixos-rebuild {{.REBUILD_ACTION}} \
-            --flake '{{.LOCAL_FLAKE_SOURCE}}#{{.HOSTNAME}}'
-        ''];
+        cmds = [
+          ''
+            sudo nixos-rebuild {{.REBUILD_ACTION}} \
+              --flake '{{.LOCAL_FLAKE_SOURCE}}#{{.HOSTNAME}}'
+          ''
+        ];
       };
     };
   };
@@ -38,7 +49,12 @@
   boot.loader.efi.canTouchEfiVariables = true;
 
   # Minimal list of modules to use the EFI system partition and the YubiKey
-  boot.initrd.kernelModules = [ "vfat" "nls_cp437" "nls_iso8859-1" "usbhid" ];
+  boot.initrd.kernelModules = [
+    "vfat"
+    "nls_cp437"
+    "nls_iso8859-1"
+    "usbhid"
+  ];
 
   # Enable support for the YubiKey PBA
   boot.initrd.luks.yubikeySupport = true;
@@ -108,29 +124,38 @@
     ];
   };
 
-  services.btrbk = let btrbkKey = "/etc/ssh/btrbk_key";
-  in {
-    sshAccess = [{
-      key = "${btrbkKey}.pub";
-      roles = [ "source" "target" "info" ];
-    }];
-    instances.btrbk = {
-      onCalendar = "*-*-1,15 2:15";
-      settings = {
-        ssh_identity = btrbkKey;
-        ssh_user = "btrbk";
-        stream_compress = "lz4";
-        volume."/btrpool" = {
-          subvolume = {
-            home = { };
-            persist = { };
-            log = { };
+  services.btrbk =
+    let
+      btrbkKey = "/etc/ssh/btrbk_key";
+    in
+    {
+      sshAccess = [
+        {
+          key = "${btrbkKey}.pub";
+          roles = [
+            "source"
+            "target"
+            "info"
+          ];
+        }
+      ];
+      instances.btrbk = {
+        onCalendar = "*-*-1,15 2:15";
+        settings = {
+          ssh_identity = btrbkKey;
+          ssh_user = "btrbk";
+          stream_compress = "lz4";
+          volume."/btrpool" = {
+            subvolume = {
+              home = { };
+              persist = { };
+              log = { };
+            };
+            target = "ssh://raspberrypi/srv/btrbk";
           };
-          target = "ssh://raspberrypi/srv/btrbk";
         };
       };
     };
-  };
 
   networking.hostName = "nicksauce"; # Define your hostname.
   # The following does not need to be enabled, so long as a user is in the "networkmanager" group
@@ -151,10 +176,12 @@
   # networking.proxy.default = "http://user:password@proxy:port/";
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
-  networking.interfaces.enp5s0.ipv4.addresses = [{
-    address = "192.168.1.5";
-    prefixLength = 24;
-  }];
+  networking.interfaces.enp5s0.ipv4.addresses = [
+    {
+      address = "192.168.1.5";
+      prefixLength = 24;
+    }
+  ];
 
   networking.hosts = {
     "192.168.13.2" = [ "raspberrypi" ];
@@ -273,8 +300,7 @@
   };
 
   # How often to clean out the Nix store
-  nix.gc.dates =
-    "*-*-1,15 3:15"; # 3:15 AM (local time) on the 1st and 15th of every month (man systemd.time)
+  nix.gc.dates = "*-*-1,15 3:15"; # 3:15 AM (local time) on the 1st and 15th of every month (man systemd.time)
 
   # Define user accounts.
   users = {
@@ -293,10 +319,15 @@
         isNormalUser = true;
         hashedPasswordFile = "/persist/etc/joeyt";
         # 'wheel' enables ‘sudo’ for the user;
-        # 'networkmanager' allows the user to change network settings  
+        # 'networkmanager' allows the user to change network settings
         # 'wireshark' is needed for wireshark to be able to collect packet captures
         # 'usbmux' allows access to certain USB devices
-        extraGroups = [ "wheel" "networkmanager" "wireshark" "usbmux" ];
+        extraGroups = [
+          "wheel"
+          "networkmanager"
+          "wireshark"
+          "usbmux"
+        ];
       };
     };
   };
