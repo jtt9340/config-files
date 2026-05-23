@@ -54,26 +54,6 @@ in
     # Let Home Manager install and manage things
     home-manager.enable = true;
 
-    # Configure Zsh
-    zsh = (import ./zsh.nix) {
-      inherit
-        pkgs
-        lib
-        xdgConfigHome
-        xdgDataHome
-        ;
-      home = config.home.homeDirectory;
-      gitEmailPath = config.lollypops.secrets.files."git_email".path;
-    };
-
-    # Use z-lua, a program that remembers your most frequently cd-ed to directories to make
-    # it easier to cd to them
-    z-lua = {
-      enable = true;
-      enableFishIntegration = false;
-      enableAliases = true;
-    };
-
     # Tree-based file manager and fuzzy finder
     broot = {
       enable = true;
@@ -89,14 +69,6 @@ in
           }
         ];
       };
-    };
-
-    # Git config
-    git = (import ./git.nix) {
-      inherit (pkgs.bat-extras) batman;
-      isLinux = lib.optionals pkgs.stdenv.isLinux;
-      isDarwin = lib.optionals pkgs.stdenv.isDarwin;
-      home = config.home.homeDirectory;
     };
 
     # Use Delta, a diff tool that makes diffs look like they do on GitHub
@@ -115,6 +87,14 @@ in
       };
     };
 
+    # Git config
+    git = (import ./git.nix) {
+      inherit (pkgs.bat-extras) batman;
+      isLinux = lib.optionals pkgs.stdenv.isLinux;
+      isDarwin = lib.optionals pkgs.stdenv.isDarwin;
+      home = config.home.homeDirectory;
+    };
+
     # Use lsd, an ls clone with more colors and icons
     lsd = {
       enable = true;
@@ -122,6 +102,23 @@ in
         date = "relative";
         # Add indicator characters to certain listed files
         indicators = true;
+      };
+    };
+
+    # Use nix-index, a files database for nixpkgs
+    nix-index = {
+      enable = true;
+      # Everything, including Bash and Zsh, are true by default
+      enableFishIntegration = false;
+    };
+
+    ssh = {
+      enable = true;
+      matchBlocks = {
+        alpha = {
+          user = "nixos";
+          forwardAgent = true;
+        };
       };
     };
 
@@ -133,17 +130,30 @@ in
       inherit xdgConfigHome xdgDataHome xdgCacheHome;
     };
 
-    # Use nix-index, a files database for nixpkgs
-    nix-index = {
-      enable = true;
-      # Everything, including Bash and Zsh, are true by default
-      enableFishIntegration = false;
-    };
-
     wezterm = (import ./wezterm.nix) {
       inherit (pkgs) wezterm;
       inherit (pkgs.stdenv) isDarwin;
       inherit (lib) optionalString;
+    };
+
+    # Use z-lua, a program that remembers your most frequently cd-ed to directories to make
+    # it easier to cd to them
+    z-lua = {
+      enable = true;
+      enableFishIntegration = false;
+      enableAliases = true;
+    };
+
+    # Configure Zsh
+    zsh = (import ./zsh.nix) {
+      inherit
+        pkgs
+        lib
+        xdgConfigHome
+        xdgDataHome
+        ;
+      home = config.home.homeDirectory;
+      gitEmailPath = config.lollypops.secrets.files."git_email".path;
     };
   };
 

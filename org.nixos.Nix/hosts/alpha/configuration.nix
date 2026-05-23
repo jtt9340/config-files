@@ -108,6 +108,10 @@
     defaultEditor = true;
   };
 
+  # Add PAM module for using SSH keys forwarded by SSH agent to authenticate with sudo.
+  security.pam.rssh.enable = true;
+  security.pam.services.sudo.rssh = true;
+
   # Automatically keep NixOS up-to-date, but don't automatically reboot
   system.autoUpgrade = {
     enable = true;
@@ -152,6 +156,11 @@
         hashedPasswordFile = "/persist/etc/nixos";
         # 'wheel' enables ‘sudo’ for the user;
         extraGroups = [ "wheel" ];
+
+        openssh.authorizedKeys.keys = [
+          "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCw4ddmw3cQUr+/PDD/ezWUf0JvVAfBj/BUSx9XkTMEMG8O0yxybA0F4o3wjePL9bIdmkjoZc/kQBKxqECcoaT3Z7c98WJAGllE41XlKPJO+s00xMWbAHVTewDwPdkB3Wntf9BpMDqESA7MrKQxhS6dFmgXaqJHNKnBUkmkxPspkRsBVibMT52C3uRFkfGKLX1mnRtdQ5R+RnuxZvec4Aj3SQQyn4Mti3/40k7r1c8bN0odCIxoaPgnM74z2GQH3FTo+M4tUUf4gO6MakVPBqh048CkUvxRI9O+T3wtEauhxPeVf/QCPsph/AP0KtPuH3FLZg1u3Vt4QqfLALYt4OLN josephterrito@res555574750155.rh.rit.edu"
+          "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIANkzjU75w7GM4w/p8MqMk028n496uAqsEH0iDsiTCov jtt9340@rit.edu"
+        ];
       };
     };
   };

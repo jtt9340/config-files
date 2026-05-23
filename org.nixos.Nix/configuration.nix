@@ -2,13 +2,6 @@
 { pkgs, ... }:
 
 {
-  programs.zsh = {
-    enable = true;
-    # If true, then compinit is called in /etc/zshrc
-    # See https://github.com/nix-community/home-manager/issues/108
-    enableCompletion = false;
-  };
-
   nixpkgs.config.allowUnfree = true;
 
   environment = {
@@ -69,6 +62,13 @@
         batman
         prettybat
       ];
+    };
+
+    zsh = {
+      enable = true;
+      # If true, then compinit is called in /etc/zshrc
+      # See https://github.com/nix-community/home-manager/issues/108
+      enableCompletion = false;
     };
   };
 
