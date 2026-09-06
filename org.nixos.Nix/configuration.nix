@@ -19,7 +19,7 @@
       # Command-line tool for working with JSON
       jq
       # Format nix files
-      nixfmt-classic
+      nixfmt
       # Generate SHA-256 sums from Git repositories
       nix-prefetch-git
       # Generate SHA-256 sums from GitHub repositories
@@ -47,14 +47,14 @@
       settings = {
         theme = "OneHalfDark";
         map-syntax = [
-          "*.plugin.zsh:'Bourne Again Shell (bash)'"
-          "*.zsh:'Bourne Again Shell (bash)'"
-          "*.sh:'Bourne Again Shell (bash)'"
-          "*.zsh-theme:'Bourne Again Shell (bash)'"
+          "*.plugin.zsh:Bourne Again Shell (bash)"
+          "*.zsh:Bourne Again Shell (bash)"
+          "*.sh:Bourne Again Shell (bash)"
+          "*.zsh-theme:Bourne Again Shell (bash)"
           "*.csproj:XML"
           "flake.lock:JSON"
         ];
-        pager = "'less --RAW-CONTROL-CHARS --quit-if-one-screen --mouse'";
+        pager = "less --RAW-CONTROL-CHARS --quit-if-one-screen --mouse";
       };
       extraPackages = with pkgs.bat-extras; [
         batdiff

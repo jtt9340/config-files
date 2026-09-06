@@ -56,46 +56,72 @@
     "usbhid"
   ];
 
-  # Enable support for the YubiKey PBA
-  boot.initrd.luks.yubikeySupport = true;
-
   # Configuration to use your Luks device
   boot.initrd.luks.devices = {
     "nixos-enc" = {
       device = "/dev/disk/by-uuid/80f05700-d1e3-4b15-84f4-1dbcfd7d0635";
+      # Enabling can theoretically improve boot time by not queueing IOPs
+      # and executing them synchronously.
+      bypassWorkqueues = true;
       preLVM = true; # Set to false if you need to start a network service first
-      yubikey = {
-        slot = 2;
-        twoFactor = false;
-        storage.device = "/dev/disk/by-uuid/E2BC-AA8C";
-      };
+      crypttabExtraOpts = [ "fido2-device=auto" ];
     };
   };
 
-  boot.initrd.postDeviceCommands = lib.mkAfter ''
-    mkdir /mnt
-    mount -t btrfs /dev/mapper/nixos-enc /mnt
-    if [[ -e /mnt/root ]]; then
-      mkdir -p /mnt/persist/old_roots
-      timestamp=$(date --date="@$(stat -c %Y /mnt/root)" "+%Y-%m-%-d_%H:%M:%S")
-      mv /mnt/root "/mnt/persist/old_roots/$timestamp"
-    fi
+  # Highly adapted from https://github.com/nix-community/impermanence/issues/320#issuecomment-4260870035
+  boot.initrd.systemd.services.delete-old-btrfs-roots = {
+    description = "Archive BTRFS root subvolume";
 
-    delete_subvolume_recursively() {
-      IFS=$'\n'
-      for i in $(btrfs subvolume list -o "$1" | cut -f 9- -d ' '); do
-        delete_subvolume_recursively "/mnt/$i"
+    # Specify dependencies explicitly
+    unitConfig.DefaultDependencies = false;
+
+    serviceConfig = {
+      Type = "oneshot";
+      StandardOutput = "journal+console";
+      StandardError = "journal+console";
+    };
+
+    # See bootup(7) for explanations of these different systemd units.
+    # This service is required for boot to succeed
+    requiredBy = [ "initrd.target" ];
+
+    # Should complete before any filesystems are mounted
+    before = [ "sysroot.mount" ];
+
+    # Wait until the root device is available
+    requires = [ "initrd-root-device.target" ];
+
+    after = [
+      "initrd-root-device.target"
+      # Allow hibernation to resume before trying to alter any data
+      "local-fs-pre.target"
+    ];
+
+    script = ''
+      mkdir /mnt
+      mount -t btrfs /dev/mapper/nixos-enc /mnt
+      if [[ -e /mnt/root ]]; then
+        mkdir -p /mnt/persist/old_roots
+        timestamp=$(date --date="@$(stat -c %Y /mnt/root)" "+%Y-%m-%-d_%H:%M:%S")
+        mv /mnt/root "/mnt/persist/old_roots/$timestamp"
+      fi
+
+      delete_subvolume_recursively() {
+        IFS=$'\n'
+        for i in $(btrfs subvolume list -o "$1" | cut -f 9- -d ' '); do
+          delete_subvolume_recursively "/mnt/$i"
+        done
+        btrfs subvolume delete "$1"
+      }
+
+      for i in $(find /mnt/persist/old_roots -maxdepth 1 -mtime +30); do
+        delete_subvolume_recursively "$i"
       done
-      btrfs subvolume delete "$1"
-    }
 
-    for i in $(find /mnt/persist/old_roots -maxdepth 1 -mtime +30); do
-      delete_subvolume_recursively "$i"
-    done
-
-    btrfs subvolume snapshot /mnt/root-blank /mnt/root
-    umount /mnt
-  '';
+      btrfs subvolume snapshot /mnt/root-blank /mnt/root
+      umount /mnt
+    '';
+  };
 
   environment.persistence."/persist" = {
     hideMounts = true;
@@ -235,8 +261,6 @@
     libheif
     # Compression algorithm used by btrbk
     lz4
-    # Remote desktop client
-    realvnc-vnc-viewer
     # Extract ZIP archives
     unzip
     # "Tool for retrieving files using HTTP, HTTPS, and FTP"
@@ -245,6 +269,9 @@
     which
     # Copy to and paste from the system clipboard from the command line
     wl-clipboard
+    # Yubikey CLI tools
+    yubikey-manager
+    yubikey-personalization
     # Create ZIP archives
     zip
   ];

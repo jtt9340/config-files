@@ -12,7 +12,13 @@ let
   xdgCacheHome = config.xdg.cacheHome;
 in
 {
-  imports = [ flakeInputs.lollypops.homeModules.default ];
+  imports = [
+    flakeInputs.lollypops.homeModules.default
+    ./git.nix
+    ./vim.nix
+    ./wezterm.nix
+    ./zsh.nix
+  ];
 
   home.stateVersion = "23.11";
 
@@ -87,14 +93,6 @@ in
       };
     };
 
-    # Git config
-    git = (import ./git.nix) {
-      inherit (pkgs.bat-extras) batman;
-      isLinux = lib.optionals pkgs.stdenv.isLinux;
-      isDarwin = lib.optionals pkgs.stdenv.isDarwin;
-      home = config.home.homeDirectory;
-    };
-
     # Use lsd, an ls clone with more colors and icons
     lsd = {
       enable = true;
@@ -114,26 +112,25 @@ in
 
     ssh = {
       enable = true;
-      matchBlocks = {
+      enableDefaultConfig = false;
+      settings = {
+        "*" = {
+          AddKeysToAgent = "no";
+          Compression = false;
+          ControlMaster = "no";
+          ControlPath = "~/.ssh/master-%r@%n:%p";
+          ControlPersist = "no";
+          ForwardAgent = false;
+          HashKnownHosts = false;
+          ServerAliveCountMax = 3;
+          ServerAliveInterval = 0;
+          UserKnownHostsFile = "~/.ssh/known_hosts";
+        };
         alpha = {
-          user = "nixos";
-          forwardAgent = true;
+          User = "nixos";
+          ForwardAgent = true;
         };
       };
-    };
-
-    # Use Vim with custom configuration and plugins
-    vim = (import ./vim.nix) {
-      inherit (pkgs) vimPlugins fetchFromGitHub;
-      inherit (pkgs.vimUtils) buildVimPlugin;
-      inherit (lib.strings) stringAsChars;
-      inherit xdgConfigHome xdgDataHome xdgCacheHome;
-    };
-
-    wezterm = (import ./wezterm.nix) {
-      inherit (pkgs) wezterm;
-      inherit (pkgs.stdenv) isDarwin;
-      inherit (lib) optionalString;
     };
 
     # Use z-lua, a program that remembers your most frequently cd-ed to directories to make
@@ -142,18 +139,6 @@ in
       enable = true;
       enableFishIntegration = false;
       enableAliases = true;
-    };
-
-    # Configure Zsh
-    zsh = (import ./zsh.nix) {
-      inherit
-        pkgs
-        lib
-        xdgConfigHome
-        xdgDataHome
-        ;
-      home = config.home.homeDirectory;
-      gitEmailPath = config.lollypops.secrets.files."git_email".path;
     };
   };
 
